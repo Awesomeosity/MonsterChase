@@ -22,7 +22,7 @@ void GetMonsterCount(unsigned int* maxMonsters)
 		else
 		{
 			std::cin.ignore(INT_MAX, '\n');
-			*maxMonsters = monsterCount + 10;
+			*maxMonsters = monsterCount;
 			break;
 		}
 	}
@@ -48,7 +48,7 @@ void GetName(char* name)
 
 void MonsterPrint(Monster* monsters, unsigned int* maxMonsters)
 {
-	for (unsigned int i = 0; i < *maxMonsters; i++)
+	for (unsigned int i = 0; i < *maxMonsters + 10; i++)
 	{
 		if (monsters[i].isInit())
 		{
@@ -63,7 +63,7 @@ void MonsterPrint(Monster* monsters, unsigned int* maxMonsters)
 
 void MoveMonsters(unsigned int* maxMonsters, Monster* monsters, Player* player)
 {
-	for (unsigned int i = 0; i < *maxMonsters; i++)
+	for (unsigned int i = 0; i < *maxMonsters + 10; i++)
 	{
 		if (monsters[i].isInit())
 		{
