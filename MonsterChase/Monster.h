@@ -1,10 +1,9 @@
 #pragma once
-#include <string>
 class Monster
 {
 private:
 	bool _init;
-	char *_name;
+	char* _name;
 	int _X;
 	int _Y;
 	int _toDie;

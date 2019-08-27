@@ -5,7 +5,7 @@
 #include "Monster.h"
 #include "Player.h"
 
-void GetMonsterCount(unsigned int *maxMonsters)
+void GetMonsterCount(unsigned int* maxMonsters)
 {
 	unsigned int monsterCount = 0;
 	while (true)
@@ -22,13 +22,13 @@ void GetMonsterCount(unsigned int *maxMonsters)
 		else
 		{
 			std::cin.ignore(INT_MAX, '\n');
-			*maxMonsters = monsterCount;
+			*maxMonsters = monsterCount + 10;
 			break;
 		}
 	}
 }
 
-void GetName(char *name)
+void GetName(char* name)
 {
 	while (true)
 	{
@@ -48,7 +48,7 @@ void GetName(char *name)
 
 void MonsterPrint(Monster* monsters, unsigned int* maxMonsters)
 {
-	for (unsigned int i = 0; i < *maxMonsters + 10; i++)
+	for (unsigned int i = 0; i < *maxMonsters; i++)
 	{
 		if (monsters[i].isInit())
 		{
@@ -121,7 +121,7 @@ void SpawnMonsters(Monster* monsters, unsigned int* maxMonsters, const int playX
 			}
 			if (monsters[i].isInit() == false)
 			{
-				std::cout <<  monsters[i].GetName() << " died!\n";
+				std::cout << monsters[i].GetName() << " died!\n";
 				monsters[i].SetTime();
 			}
 		}
@@ -205,13 +205,27 @@ int main()
 	static const int playX = 10;
 	static const int playY = 10;
 	unsigned int monsterCount = 0;
-	unsigned int *maxMonsters = &monsterCount;
+	unsigned int* maxMonsters = &monsterCount;
+	int* const count = new int;
 	std::cout << "Monster Mash by Kevin Le (u0916211)\n";
 	Monster* monsters = MonsterCreateLoop(playX, playY, maxMonsters);
 	Player* player = CreatePlayer(playX, playY);
 
 	GameLoop(monsters, player, maxMonsters, playX, playY);
 
+	delete count;
+
 	delete[] monsters;
 	delete player;
 }
+
+// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
+// Debug program: F5 or Debug > Start Debugging menu
+
+// Tips for Getting Started: 
+//   1. Use the Solution Explorer window to add/manage files
+//   2. Use the Team Explorer window to connect to source control
+//   3. Use the Output window to see build output and other messages
+//   4. Use the Error List window to view errors
+//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
+//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
