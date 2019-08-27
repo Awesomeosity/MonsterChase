@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Monster.h"
 #include "Player.h"
+#include "conio.h"
 
 void GetMonsterCount(unsigned int* maxMonsters)
 {
@@ -133,7 +134,7 @@ bool CheckPlayer(Player* player, Monster* monsters, unsigned int* maxMonsters)
 	int playerX = player->GetX();
 	int playerY = player->GetY();
 
-	for (unsigned int i = 0; i < *maxMonsters; i++)
+	for (unsigned int i = 0; i < *maxMonsters + 10; i++)
 	{
 		if (monsters[i].isInit() && monsters[i].GetX() == playerX && monsters[i].GetY() == playerY)
 		{
@@ -152,7 +153,7 @@ void GameLoop(Monster* monsters, Player* player, unsigned int* maxMonsters, cons
 		char movement = player->MoveLoop();
 		if (movement == 'q' || movement == 'Q')
 		{
-			std::cout << "Quitting game...";
+			std::cout << "Quitting game...\n";
 			break;
 		}
 		MoveMonsters(maxMonsters, monsters, player);
@@ -160,7 +161,7 @@ void GameLoop(Monster* monsters, Player* player, unsigned int* maxMonsters, cons
 		MovePlayerMain(movement, player, playX, playY);
 		if (!CheckPlayer(player, monsters, maxMonsters))
 		{
-			std::cout << "You got hit and died...";
+			std::cout << "You got hit and died...\n";
 			break;
 		}
 	}
@@ -213,10 +214,15 @@ int main()
 
 	GameLoop(monsters, player, maxMonsters, playX, playY);
 
+	std::cout << "Press any key to exit...\n";
+
+	int ret = _getch();
+
 	delete count;
 
 	delete[] monsters;
 	delete player;
+	return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
