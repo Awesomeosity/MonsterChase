@@ -207,23 +207,23 @@ int main()
 	static const int playX = 10;
 	static const int playY = 10;
 	unsigned int monsterCount = 0;
-	unsigned int* maxMonsters = &monsterCount;
-	int* const count = new int;
-	std::cout << "Monster Mash by Kevin Le (u0916211)\n";
+	//unsigned int* maxMonsters = &monsterCount;
+	//int* const count = new int;
+	//std::cout << "Monster Mash by Kevin Le (u0916211)\n";
+	//Monster* monsters = MonsterCreateLoop(playX, playY, maxMonsters);
+	//Player* player = CreatePlayer(playX, playY);
+	//
+	//GameLoop(monsters, player, maxMonsters, playX, playY);
+
 	fnEngine();
-	Monster* monsters = MonsterCreateLoop(playX, playY, maxMonsters);
-	Player* player = CreatePlayer(playX, playY);
-
-	GameLoop(monsters, player, maxMonsters, playX, playY);
-
 	std::cout << "Press any key to exit...\n";
 
 	int ret = _getch();
 
-	delete count;
-
-	delete[] monsters;
-	delete player;
+	//delete count;
+	//
+	//delete[] monsters;
+	//delete player;
 	return 0;
 }
 

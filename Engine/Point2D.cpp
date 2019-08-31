@@ -8,6 +8,12 @@ Point2D::Point2D(int x, int y)
 	_Y = y;
 }
 
+Point2D::Point2D(const Point2D& point)
+{
+	_X = point.GetX();
+	_Y = point.GetY();
+}
+
 Point2D Point2D::operator=(const Point2D point)
 {
 	if (this == &point)
