@@ -5,6 +5,7 @@
 #include "Monster.h"
 #include "Player.h"
 #include "conio.h"
+#include "../Engine/Engine.cpp"
 
 void GetMonsterCount(unsigned int* maxMonsters)
 {
@@ -209,6 +210,7 @@ int main()
 	unsigned int* maxMonsters = &monsterCount;
 	int* const count = new int;
 	std::cout << "Monster Mash by Kevin Le (u0916211)\n";
+	fnEngine();
 	Monster* monsters = MonsterCreateLoop(playX, playY, maxMonsters);
 	Player* player = CreatePlayer(playX, playY);
 
