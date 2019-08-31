@@ -5,7 +5,8 @@
 #include "Monster.h"
 #include "Player.h"
 #include "conio.h"
-#include "../Engine/Engine.cpp"
+#include "../Engine/Point2D.h"
+#include "../Engine/GameObject.h"
 
 void GetMonsterCount(unsigned int* maxMonsters)
 {
@@ -69,33 +70,106 @@ void MoveMonsters(unsigned int* maxMonsters, Monster* monsters, Player* player)
 	{
 		if (monsters[i].isInit())
 		{
-			monsters[i].MoveMonster(player->GetX(), player->GetY());
+			monsters[i].MoveMonster(player->GetPoint().GetX(), player->GetPoint().GetY());
 		}
 	}
 }
 
+void MovePlayer(char move, Player* player)
+{
+	if (move == 'W' || move == 'w')
+	{
+		int Y = player->GetPoint().GetY();
+		player->GetPoint().SetY(++Y);
+	}
+	if (move == 'A' || move == 'a')
+	{
+		int X = player->GetPoint().GetX();
+		player->GetPoint().SetX(--X);
+	}
+	if (move == 'S' || move == 's')
+	{
+		int Y = player->GetPoint().GetY();
+		player->GetPoint().SetY(--Y);
+	}
+	if (move == 'D' || move == 'd')
+	{
+		int X = player->GetPoint().GetX();
+		player->GetPoint().SetY(++X);
+	}
+}
+
+
 void MovePlayerMain(char movement, Player* player, const int playX, const int playY)
 {
-	player->MovePlayer(movement);
+	MovePlayer(movement, player);
 	//Make sure player wraps around
-	if (player->GetX() > playX)
+	if (player->GetPoint().GetX() > playX)
 	{
-		player->SetX(playX * -1);
+		player->GetPoint().SetX(playX * -1);
 	}
 
-	if (player->GetX() < playX * -1)
+	if (player->GetPoint().GetX() < playX * -1)
 	{
-		player->SetX(playX);
+		player->GetPoint().SetX(playX);
 	}
 
-	if (player->GetY() > playY)
+	if (player->GetPoint().GetY() > playY)
 	{
-		player->SetY(playY * -1);
+		player->GetPoint().SetY(playY * -1);
 	}
 
-	if (player->GetY() < playY * -1)
+	if (player->GetPoint().GetY() < playY * -1)
 	{
-		player->SetY(playY);
+		player->GetPoint().SetY(playY);
+	}
+}
+
+
+char MoveLoop()
+{
+	char playerMove;
+	while (true)
+	{
+		std::cout << "Please enter the direction you want to move in. W, A, S, D, 'Q' to quit.\n";
+		playerMove = (char)_getch();
+
+		if (std::cin.fail())
+		{
+			std::cin.clear();
+			std::cout << "Invalid input. Please try again.\n";
+		}
+		else
+		{
+			bool isValid = false;
+			switch (playerMove)
+			{
+			case 'W':
+			case 'w':
+			case 'A':
+			case 'a':
+			case 'S':
+			case 's':
+			case 'D':
+			case 'd':
+			case 'q':
+			case 'Q':
+				isValid = true;
+				break;
+			default:
+				break;
+			}
+
+			if (isValid)
+			{
+				return playerMove;
+			}
+			else
+			{
+				std::cout << "Invalid input. Please try again.\n";
+			}
+
+		}
 	}
 }
 
@@ -132,8 +206,8 @@ void SpawnMonsters(Monster* monsters, unsigned int* maxMonsters, const int playX
 
 bool CheckPlayer(Player* player, Monster* monsters, unsigned int* maxMonsters)
 {
-	int playerX = player->GetX();
-	int playerY = player->GetY();
+	int playerX = player->GetPoint().GetX();
+	int playerY = player->GetPoint().GetY();
 
 	for (unsigned int i = 0; i < *maxMonsters + 10; i++)
 	{
@@ -150,8 +224,8 @@ void GameLoop(Monster* monsters, Player* player, unsigned int* maxMonsters, cons
 	while (true)
 	{
 		MonsterPrint(monsters, maxMonsters);
-		std::cout << player->GetName() << "'s (Player) current position is: [" << player->GetX() << ", " << player->GetY() << "].\n";
-		char movement = player->MoveLoop();
+		std::cout << player->GetName() << "'s (Player) current position is: [" << player->GetPoint().GetX() << ", " << player->GetPoint().GetY() << "].\n";
+		char movement = MoveLoop();
 		if (movement == 'q' || movement == 'Q')
 		{
 			std::cout << "Quitting game...\n";
@@ -198,7 +272,7 @@ Player* CreatePlayer(int playX, int playY)
 	std::cout << "Please enter your name: ";
 	char playerName[256];
 	GetName(playerName);
-	Player* player = new Player(playerX, playerY, playerName);
+	Player* player = new Player(Point2D(playerX, playerY), playerName);
 	return player;
 }
 
@@ -207,23 +281,22 @@ int main()
 	static const int playX = 10;
 	static const int playY = 10;
 	unsigned int monsterCount = 0;
-	//unsigned int* maxMonsters = &monsterCount;
-	//int* const count = new int;
-	//std::cout << "Monster Mash by Kevin Le (u0916211)\n";
-	//Monster* monsters = MonsterCreateLoop(playX, playY, maxMonsters);
-	//Player* player = CreatePlayer(playX, playY);
-	//
-	//GameLoop(monsters, player, maxMonsters, playX, playY);
+	unsigned int* maxMonsters = &monsterCount;
+	int* const count = new int;
+	std::cout << "Monster Mash by Kevin Le (u0916211)\n";
+	Monster* monsters = MonsterCreateLoop(playX, playY, maxMonsters);
+	Player* player = CreatePlayer(playX, playY);
+	
+	GameLoop(monsters, player, maxMonsters, playX, playY);
 
-	fnEngine();
 	std::cout << "Press any key to exit...\n";
 
 	int ret = _getch();
 
-	//delete count;
-	//
-	//delete[] monsters;
-	//delete player;
+	delete count;
+	
+	delete[] monsters;
+	delete player;
 	return 0;
 }
 

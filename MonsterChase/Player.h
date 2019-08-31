@@ -1,23 +1,11 @@
 #pragma once
 #include <string>
-class Player
+#include "../Engine/GameObject.h"
+#include "../Engine/Point2D.h"
+class Player : public GameObject
 {
-private:
-	char* _name;
-	int _X;
-	int _Y;
-
 public:
-	Player(int X, int Y, char name[]);
+	Player(Point2D point, char name[]);
 	~Player();
-	char MoveLoop();
-	void MovePlayer(char move);
-	char* GetName();
-	void SetName(char name[]);
-
-	int GetX();
-	void SetX(int X);
-	int GetY();
-	void SetY(int Y);
 };
 

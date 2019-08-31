@@ -2,7 +2,7 @@
 #include "Point2D.h"
 
 
-Point2D::Point2D(int x = 0, int y = 0)
+Point2D::Point2D(int x, int y)
 {
 	_X = x;
 	_Y = y;
