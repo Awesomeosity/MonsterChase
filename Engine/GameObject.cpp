@@ -18,8 +18,12 @@ GameObject::GameObject(Point2D point, char* name)
 
 GameObject::GameObject(const GameObject& gameObject)
 {
-	_point = gameObject.GetPoint();
-	_name = gameObject.GetName();
+	_point.SetX(gameObject.GetPoint().GetX());
+	_point.SetY(gameObject.GetPoint().GetY());
+
+	char* name = gameObject.GetName();
+	_name = new char[strlen(name) + 1];
+	strcpy_s(_name, sizeof(char) * (strlen(name) + 1), name);
 }
 
 GameObject& GameObject::operator=(const GameObject& gameObject)
@@ -29,12 +33,35 @@ GameObject& GameObject::operator=(const GameObject& gameObject)
 		return *this;
 	}
 
-	_point = gameObject.GetPoint();
-	_name = gameObject.GetName();
+	delete _name;
+
+	_point.SetX(gameObject.GetPoint().GetX());
+	_point.SetY(gameObject.GetPoint().GetY());
+
+	char* name = gameObject.GetName();
+	_name = new char[strlen(name) + 1];
+	strcpy_s(_name, sizeof(char) * (strlen(name) + 1), name);
 	return *this;
 }
 
 GameObject::~GameObject()
 {
 	delete _name;
+}
+
+char* GameObject::GetName() const
+{
+	return _name;
+}
+
+void GameObject::SetName(char* name)
+{
+	delete _name;
+	_name = new char[strlen(name) + 1];
+	strcpy_s(_name, sizeof(char) * (strlen(name) + 1), name);
+}
+
+Point2D GameObject::GetPoint() const
+{
+	return _point;
 }
