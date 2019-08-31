@@ -8,7 +8,7 @@ Point2D::Point2D(int x, int y)
 	_Y = y;
 }
 
-Point2D& Point2D::operator=(const Point2D& point)
+Point2D Point2D::operator=(const Point2D point)
 {
 	if (this == &point)
 	{

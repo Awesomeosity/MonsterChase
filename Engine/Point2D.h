@@ -6,7 +6,7 @@ private:
 	int _Y;
 public:
 	Point2D(int x = 0, int y = 0);
-	Point2D& operator=(const Point2D& Point2D);
+	Point2D operator=(const Point2D Point2D);
 	int GetX() const;
 	int GetY() const;
 	void SetX(int x);
