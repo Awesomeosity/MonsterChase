@@ -8,6 +8,7 @@ private:
 public:
 	GameObject();
 	GameObject(Point2D point, char *name);
+	GameObject(const GameObject& gameObject);
 	GameObject& operator=(const GameObject& gameObject);
 	~GameObject();
 	char* GetName() const;
