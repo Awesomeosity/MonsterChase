@@ -16,16 +16,16 @@ GameObject::GameObject(Point2D point, char* name)
 	strcpy_s(_name, sizeof(char) * (strlen(name) + 1), name);
 }
 
-GameObject::GameObject(const GameObject& gameObject)
+GameObject::GameObject(GameObject& gameObject)
 {
-	_point = gameObject.GetPoint();
+	_point = *(gameObject.GetPoint());
 
 	char* name = gameObject.GetName();
 	_name = new char[strlen(name) + 1];
 	strcpy_s(_name, sizeof(char) * (strlen(name) + 1), name);
 }
 
-GameObject& GameObject::operator=(const GameObject& gameObject)
+GameObject& GameObject::operator=(GameObject& gameObject)
 {
 	if (this == &gameObject)
 	{
@@ -34,7 +34,7 @@ GameObject& GameObject::operator=(const GameObject& gameObject)
 
 	delete _name;
 
-	_point = gameObject.GetPoint();
+	_point = *(gameObject.GetPoint());
 
 	char* name = gameObject.GetName();
 	_name = new char[strlen(name) + 1];
@@ -47,7 +47,7 @@ GameObject::~GameObject()
 	delete _name;
 }
 
-char* GameObject::GetName() const
+char* GameObject::GetName()
 {
 	return _name;
 }
@@ -59,9 +59,9 @@ void GameObject::SetName(char* name)
 	strcpy_s(_name, sizeof(char) * (strlen(name) + 1), name);
 }
 
-Point2D GameObject::GetPoint() const
+Point2D* GameObject::GetPoint()
 {
-	return _point;
+	return &_point;
 }
 
 void GameObject::SetPoint(Point2D point)

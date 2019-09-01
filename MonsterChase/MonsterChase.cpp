@@ -55,8 +55,8 @@ void MonsterPrint(Monster* monsters, unsigned int* maxMonsters)
 	{
 		if (monsters[i].isInit())
 		{
-			int monX = monsters[i].GetPoint().GetX();
-			int monY = monsters[i].GetPoint().GetY();
+			int monX = monsters[i].GetPoint()->GetX();
+			int monY = monsters[i].GetPoint()->GetY();
 			char* monName = monsters[i].GetName();
 			std::cout << monName << "'s current position is: [" << monX << ", " << monY << "].\n";
 		}
@@ -70,7 +70,7 @@ void MoveMonsters(unsigned int* maxMonsters, Monster* monsters, Player* player)
 	{
 		if (monsters[i].isInit())
 		{
-			monsters[i].MoveMonster(player->GetPoint());
+			monsters[i].MoveMonster(*(player->GetPoint()));
 		}
 	}
 }
@@ -79,23 +79,23 @@ void MovePlayer(char move, Player* player)
 {
 	if (move == 'W' || move == 'w')
 	{
-		int Y = player->GetPoint().GetY();
-		player->GetPoint().SetY(++Y);
+		int Y = player->GetPoint()->GetY() + 1;
+		player->GetPoint()->SetY(Y);
 	}
 	if (move == 'A' || move == 'a')
 	{
-		int X = player->GetPoint().GetX();
-		player->GetPoint().SetX(--X);
+		int X = player->GetPoint()->GetX() - 1;
+		player->GetPoint()->SetX(X);
 	}
 	if (move == 'S' || move == 's')
 	{
-		int Y = player->GetPoint().GetY();
-		player->GetPoint().SetY(--Y);
+		int Y = player->GetPoint()->GetY() - 1;
+		player->GetPoint()->SetY(Y);
 	}
 	if (move == 'D' || move == 'd')
 	{
-		int X = player->GetPoint().GetX();
-		player->GetPoint().SetY(++X);
+		int X = player->GetPoint()->GetX() + 1;
+		player->GetPoint()->SetX(X);
 	}
 }
 
@@ -104,24 +104,24 @@ void MovePlayerMain(char movement, Player* player, const int playX, const int pl
 {
 	MovePlayer(movement, player);
 	//Make sure player wraps around
-	if (player->GetPoint().GetX() > playX)
+	if (player->GetPoint()->GetX() > playX)
 	{
-		player->GetPoint().SetX(playX * -1);
+		player->GetPoint()->SetX(playX * -1);
 	}
 
-	if (player->GetPoint().GetX() < playX * -1)
+	if (player->GetPoint()->GetX() < playX * -1)
 	{
-		player->GetPoint().SetX(playX);
+		player->GetPoint()->SetX(playX);
 	}
 
-	if (player->GetPoint().GetY() > playY)
+	if (player->GetPoint()->GetY() > playY)
 	{
-		player->GetPoint().SetY(playY * -1);
+		player->GetPoint()->SetY(playY * -1);
 	}
 
-	if (player->GetPoint().GetY() < playY * -1)
+	if (player->GetPoint()->GetY() < playY * -1)
 	{
-		player->GetPoint().SetY(playY);
+		player->GetPoint()->SetY(playY);
 	}
 }
 
@@ -184,8 +184,8 @@ void SpawnMonsters(Monster* monsters, unsigned int* maxMonsters, const int playX
 			{
 				int monX = rand() / (RAND_MAX / playX * 2) - playX;
 				int monY = rand() / (RAND_MAX / playY * 2) - playY;
-				monsters[i].GetPoint().SetX(monX);
-				monsters[i].GetPoint().SetY(monY);
+				monsters[i].GetPoint()->SetX(monX);
+				monsters[i].GetPoint()->SetY(monY);
 				char beginning[256] = "Monster #";
 				char buffer[256];
 				buffer[0] = '\0';
@@ -206,12 +206,12 @@ void SpawnMonsters(Monster* monsters, unsigned int* maxMonsters, const int playX
 
 bool CheckPlayer(Player* player, Monster* monsters, unsigned int* maxMonsters)
 {
-	int playerX = player->GetPoint().GetX();
-	int playerY = player->GetPoint().GetY();
+	int playerX = player->GetPoint()->GetX();
+	int playerY = player->GetPoint()->GetY();
 
 	for (unsigned int i = 0; i < *maxMonsters + 10; i++)
 	{
-		if (monsters[i].isInit() && monsters[i].GetPoint().GetX() == playerX && monsters[i].GetPoint().GetY() == playerY)
+		if (monsters[i].isInit() && monsters[i].GetPoint()->GetX() == playerX && monsters[i].GetPoint()->GetY() == playerY)
 		{
 			return false;
 		}
@@ -224,7 +224,7 @@ void GameLoop(Monster* monsters, Player* player, unsigned int* maxMonsters, cons
 	while (true)
 	{
 		MonsterPrint(monsters, maxMonsters);
-		std::cout << player->GetName() << "'s (Player) current position is: [" << player->GetPoint().GetX() << ", " << player->GetPoint().GetY() << "].\n";
+		std::cout << player->GetName() << "'s (Player) current position is: [" << player->GetPoint()->GetX() << ", " << player->GetPoint()->GetY() << "].\n";
 		char movement = MoveLoop();
 		if (movement == 'q' || movement == 'Q')
 		{
@@ -255,11 +255,9 @@ Monster* MonsterCreateLoop(int playX, int playY, unsigned int* maxMonsters)
 		std::cout << "Please enter Monster #" << i + 1 << "'s name: ";
 		char name[256];
 		GetName(name);
-		monsters[i] = Monster(Point2D(monX, monY), name);
-	}
-	for (; i < *maxMonsters + 10; i++)
-	{
-		monsters[i] = Monster();
+		monsters[i].SetPoint(Point2D(monX, monY));
+		monsters[i].SetName(name);
+		monsters[i].setInit(true);
 	}
 	return monsters;
 }
@@ -282,7 +280,6 @@ int main()
 	static const int playY = 10;
 	unsigned int monsterCount = 0;
 	unsigned int* maxMonsters = &monsterCount;
-	int* const count = new int;
 	std::cout << "Monster Mash by Kevin Le (u0916211)\n";
 	Monster* monsters = MonsterCreateLoop(playX, playY, maxMonsters);
 	Player* player = CreatePlayer(playX, playY);
@@ -292,8 +289,6 @@ int main()
 	std::cout << "Press any key to exit...\n";
 
 	int ret = _getch();
-
-	delete count;
 	
 	delete[] monsters;
 	delete player;

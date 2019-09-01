@@ -43,7 +43,7 @@ void Point2D::SetX(int x)
 
 void Point2D::SetY(int y)
 {
-	_X = y;
+	_Y = y;
 }
 
 Point2D operator+(const Point2D &p1, const Point2D &p2)

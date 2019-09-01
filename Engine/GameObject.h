@@ -8,12 +8,12 @@ private:
 public:
 	GameObject();
 	GameObject(Point2D point, char *name);
-	GameObject(const GameObject& gameObject);
-	GameObject& operator=(const GameObject& gameObject);
+	GameObject(GameObject& gameObject);
+	GameObject& operator=(GameObject& gameObject);
 	~GameObject();
-	char* GetName() const;
+	char* GetName();
 	void SetName(char *name);
-	Point2D GetPoint() const;
+	Point2D* GetPoint();
 	void SetPoint(Point2D point);
 };
 

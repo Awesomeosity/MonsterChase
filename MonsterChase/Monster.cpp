@@ -13,13 +13,15 @@ Monster::Monster(Point2D point, char name[]) : GameObject(point, name)
 	_toDie = rand() / (RAND_MAX / maxDuration) + 1;
 }
 
-Monster::Monster(const Monster& monster) : GameObject(monster)
+Monster::Monster(Monster& monster) : GameObject()
 {
+	SetName(monster.GetName());
+	SetPoint(*(monster.GetPoint()));
 	_init = monster._init;
 	_toDie = monster._toDie;
 }
 
-Monster& Monster::operator=(const Monster& monster)
+Monster& Monster::operator=(Monster& monster)
 {
 	if (this == &monster)
 	{
@@ -27,7 +29,7 @@ Monster& Monster::operator=(const Monster& monster)
 	}
 
 	SetName(monster.GetName());
-	SetPoint(monster.GetPoint());
+	SetPoint(*(monster.GetPoint()));
 	_init = monster._init;
 	_toDie = monster._toDie;
 	return *this;
@@ -39,26 +41,26 @@ Monster::~Monster()
 
 void Monster::MoveMonster(Point2D point)
 {
-	int x = this->GetPoint().GetX();
-	int y = this->GetPoint().GetY();
+	int x = GetPoint()->GetX();
+	int y = GetPoint()->GetY();
 	int diffX = point.GetX() - x;
 	int diffY = point.GetY() - y;
 
 	if (diffX > 0)
 	{
-		this->GetPoint().SetX(++x);
+		GetPoint()->SetX(++x);
 	}
 	else if (diffX < 0)
 	{
-		this->GetPoint().SetX(--x);
+		GetPoint()->SetX(--x);
 	}
 	else if (diffY > 0)
 	{
-		this->GetPoint().SetX(++y);
+		GetPoint()->SetX(++y);
 	}
 	else
 	{
-		this->GetPoint().SetX(--y);
+		GetPoint()->SetX(--y);
 	}
 }
 

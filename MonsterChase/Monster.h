@@ -12,8 +12,8 @@ private:
 public:
 	Monster();
 	Monster(Point2D point, char name[]);
-	Monster(const Monster& monster);
-	Monster& operator=(const Monster& monster);
+	Monster(Monster& monster);
+	Monster& operator=(Monster& monster);
 	~Monster();
 
 	void MoveMonster(Point2D);
