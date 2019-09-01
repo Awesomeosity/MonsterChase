@@ -55,8 +55,8 @@ void MonsterPrint(Monster* monsters, unsigned int* maxMonsters)
 	{
 		if (monsters[i].isInit())
 		{
-			int monX = monsters[i].GetX();
-			int monY = monsters[i].GetY();
+			int monX = monsters[i].GetPoint().GetX();
+			int monY = monsters[i].GetPoint().GetY();
 			char* monName = monsters[i].GetName();
 			std::cout << monName << "'s current position is: [" << monX << ", " << monY << "].\n";
 		}
@@ -70,7 +70,7 @@ void MoveMonsters(unsigned int* maxMonsters, Monster* monsters, Player* player)
 	{
 		if (monsters[i].isInit())
 		{
-			monsters[i].MoveMonster(player->GetPoint().GetX(), player->GetPoint().GetY());
+			monsters[i].MoveMonster(player->GetPoint());
 		}
 	}
 }
@@ -184,8 +184,8 @@ void SpawnMonsters(Monster* monsters, unsigned int* maxMonsters, const int playX
 			{
 				int monX = rand() / (RAND_MAX / playX * 2) - playX;
 				int monY = rand() / (RAND_MAX / playY * 2) - playY;
-				monsters[i].SetX(monX);
-				monsters[i].SetY(monY);
+				monsters[i].GetPoint().SetX(monX);
+				monsters[i].GetPoint().SetY(monY);
 				char beginning[256] = "Monster #";
 				char buffer[256];
 				buffer[0] = '\0';
@@ -211,7 +211,7 @@ bool CheckPlayer(Player* player, Monster* monsters, unsigned int* maxMonsters)
 
 	for (unsigned int i = 0; i < *maxMonsters + 10; i++)
 	{
-		if (monsters[i].isInit() && monsters[i].GetX() == playerX && monsters[i].GetY() == playerY)
+		if (monsters[i].isInit() && monsters[i].GetPoint().GetX() == playerX && monsters[i].GetPoint().GetY() == playerY)
 		{
 			return false;
 		}
@@ -255,7 +255,7 @@ Monster* MonsterCreateLoop(int playX, int playY, unsigned int* maxMonsters)
 		std::cout << "Please enter Monster #" << i + 1 << "'s name: ";
 		char name[256];
 		GetName(name);
-		monsters[i] = Monster(monX, monY, name);
+		monsters[i] = Monster(Point2D(monX, monY), name);
 	}
 	for (; i < *maxMonsters + 10; i++)
 	{
