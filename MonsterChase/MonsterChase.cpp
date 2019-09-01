@@ -58,34 +58,6 @@ void MoveMonsters(unsigned int* maxMonsters, Monster* monsters, Player* player)
 	}
 }
 
-
-
-void MovePlayerMain(char movement, Player* player, const int playX, const int playY)
-{
-	player->MovePlayer(movement, player);
-	//Make sure player wraps around
-	if (player->GetPoint()->GetX() > playX)
-	{
-		player->GetPoint()->SetX(playX * -1);
-	}
-
-	if (player->GetPoint()->GetX() < playX * -1)
-	{
-		player->GetPoint()->SetX(playX);
-	}
-
-	if (player->GetPoint()->GetY() > playY)
-	{
-		player->GetPoint()->SetY(playY * -1);
-	}
-
-	if (player->GetPoint()->GetY() < playY * -1)
-	{
-		player->GetPoint()->SetY(playY);
-	}
-}
-
-
 char MoveLoop()
 {
 	char playerMove;
@@ -193,7 +165,7 @@ void GameLoop(Monster* monsters, Player* player, unsigned int* maxMonsters, cons
 		}
 		MoveMonsters(maxMonsters, monsters, player);
 		SpawnMonsters(monsters, maxMonsters, playX, playY);
-		MovePlayerMain(movement, player, playX, playY);
+		player->MovePlayerMain(movement, player, playX, playY);
 		if (!CheckPlayer(player, monsters, maxMonsters))
 		{
 			std::cout << "You got hit and died...\n";

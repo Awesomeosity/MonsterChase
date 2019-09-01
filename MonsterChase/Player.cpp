@@ -34,3 +34,29 @@ void Player::MovePlayer(char move, Player* player)
 	}
 
 }
+
+void Player::MovePlayerMain(char movement, Player* player, const int playX, const int playY)
+{
+	player->MovePlayer(movement, player);
+	//Make sure player wraps around
+	if (player->GetPoint()->GetX() > playX)
+	{
+		player->GetPoint()->SetX(playX * -1);
+	}
+
+	if (player->GetPoint()->GetX() < playX * -1)
+	{
+		player->GetPoint()->SetX(playX);
+	}
+
+	if (player->GetPoint()->GetY() > playY)
+	{
+		player->GetPoint()->SetY(playY * -1);
+	}
+
+	if (player->GetPoint()->GetY() < playY * -1)
+	{
+		player->GetPoint()->SetY(playY);
+	}
+
+}
