@@ -7,6 +7,7 @@
 #include "conio.h"
 #include "../Engine/Point2D.h"
 #include "../Engine/GameObject.h"
+#include "../Engine/Engine.cpp"
 
 void GetMonsterCount(unsigned int* maxMonsters)
 {
@@ -29,24 +30,6 @@ void GetMonsterCount(unsigned int* maxMonsters)
 			break;
 		}
 	}
-}
-
-void GetName(char* name)
-{
-	while (true)
-	{
-		std::cin.getline(name, 256);
-		if (std::cin.fail())
-		{
-			std::cin.clear();
-			std::cout << "Invalid input. Please try entering a string.\n";
-		}
-		else
-		{
-			return;
-		}
-	}
-
 }
 
 void MonsterPrint(Monster* monsters, unsigned int* maxMonsters)
