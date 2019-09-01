@@ -1,33 +1,21 @@
 #include "Monster.h"
 #include <iostream>
 
-Monster::Monster()
+Monster::Monster() : GameObject()
 {
 	_init = false;
-	_X = 0;
-	_Y = 0;
-	_name = new char[1];
-	_name[0] = '\n';
 	_toDie = rand() / (RAND_MAX / maxDuration) + 1;
 }
 
-Monster::Monster(int X, int Y, char name[])
+Monster::Monster(Point2D point, char name[]) : GameObject(point, name)
 {
 	_init = true;
-	_name = new char[strlen(name) + 1];
-	strcpy_s(_name, sizeof(char) * (strlen(name) + 1), name);
-	_X = X;
-	_Y = Y;
 	_toDie = rand() / (RAND_MAX / maxDuration) + 1;
 }
 
-Monster::Monster(const Monster& monster)
+Monster::Monster(const Monster& monster) : GameObject(monster)
 {
 	_init = monster._init;
-	_X = monster._X;
-	_Y = monster._Y;
-	_name = new char[strlen(monster._name) + 1];
-	strcpy_s(_name, sizeof(char) * (strlen(monster._name) + 1), monster._name);
 	_toDie = monster._toDie;
 }
 
@@ -38,72 +26,40 @@ Monster& Monster::operator=(const Monster& monster)
 		return *this;
 	}
 
+	SetName(monster.GetName());
+	SetPoint(monster.GetPoint());
 	_init = monster._init;
-	_X = monster._X;
-	_Y = monster._Y;
-	_name = new char[strlen(monster._name) + 1];
-	strcpy_s(_name, sizeof(char) * (strlen(monster._name) + 1), monster._name);
 	_toDie = monster._toDie;
 	return *this;
 }
 
 Monster::~Monster()
 {
-	delete[] _name;
 }
 
-void Monster::MoveMonster(int X, int Y)
+void Monster::MoveMonster(Point2D point)
 {
-	int diffX = X - _X;
-	int diffY = Y - _Y;
+	int x = this->GetPoint().GetX();
+	int y = this->GetPoint().GetY();
+	int diffX = point.GetX() - x;
+	int diffY = point.GetY() - y;
 
 	if (diffX > 0)
 	{
-		_X++;
+		this->GetPoint().SetX(++x);
 	}
 	else if (diffX < 0)
 	{
-		_X--;
+		this->GetPoint().SetX(--x);
 	}
 	else if (diffY > 0)
 	{
-		_Y++;
+		this->GetPoint().SetX(++y);
 	}
 	else
 	{
-		_Y--;
+		this->GetPoint().SetX(--y);
 	}
-}
-
-char* Monster::GetName()
-{
-	return _name;
-}
-
-void Monster::SetName(char name[])
-{
-	_name = new char[strlen(name) + 1];
-	strcpy_s(_name, sizeof(char) * (strlen(name) + 1), name);
-}
-
-int Monster::GetX()
-{
-	return _X;
-}
-
-void Monster::SetX(int X)
-{
-	_X = X;
-}
-
-int Monster::GetY()
-{
-	return _Y;
-}
-
-void Monster::SetY(int Y)
-{
-	_Y = Y;
 }
 
 bool Monster::isInit()

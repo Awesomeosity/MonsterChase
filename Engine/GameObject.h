@@ -14,5 +14,6 @@ public:
 	char* GetName() const;
 	void SetName(char *name);
 	Point2D GetPoint() const;
+	void SetPoint(Point2D point);
 };
 

@@ -1,29 +1,22 @@
 #pragma once
-class Monster
+#include "../Engine/GameObject.h"
+#include "../Engine/Point2D.h"
+
+class Monster : public GameObject
 {
 private:
 	bool _init;
-	char* _name;
-	int _X;
-	int _Y;
 	int _toDie;
 	const int maxDuration = 4;
 
 public:
 	Monster();
-	Monster(int X, int Y, char name[]);
+	Monster(Point2D point, char name[]);
 	Monster(const Monster& monster);
 	Monster& operator=(const Monster& monster);
 	~Monster();
-	void MoveMonster(int X, int Y);
-	char* GetName();
 
-	void SetName(char name[]);
-
-	int GetX();
-	void SetX(int X);
-	int GetY();
-	void SetY(int Y);
+	void MoveMonster(Point2D);
 	bool isInit();
 	void setInit(bool init);
 	int DecayTime();

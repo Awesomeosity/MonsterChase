@@ -10,8 +10,8 @@ Point2D::Point2D(int x, int y)
 
 Point2D::Point2D(const Point2D& point)
 {
-	_X = point.GetX();
-	_Y = point.GetY();
+	_X = point._X;
+	_Y = point._Y;
 }
 
 Point2D Point2D::operator=(const Point2D point)
@@ -21,8 +21,8 @@ Point2D Point2D::operator=(const Point2D point)
 		return *this;
 	}
 
-	_X = point.GetX();
-	_Y = point.GetY();
+	_X = point._X;
+	_Y = point._Y;
 	return *this;
 }
 

@@ -18,8 +18,7 @@ GameObject::GameObject(Point2D point, char* name)
 
 GameObject::GameObject(const GameObject& gameObject)
 {
-	_point.SetX(gameObject.GetPoint().GetX());
-	_point.SetY(gameObject.GetPoint().GetY());
+	_point = gameObject.GetPoint();
 
 	char* name = gameObject.GetName();
 	_name = new char[strlen(name) + 1];
@@ -35,8 +34,7 @@ GameObject& GameObject::operator=(const GameObject& gameObject)
 
 	delete _name;
 
-	_point.SetX(gameObject.GetPoint().GetX());
-	_point.SetY(gameObject.GetPoint().GetY());
+	_point = gameObject.GetPoint();
 
 	char* name = gameObject.GetName();
 	_name = new char[strlen(name) + 1];
@@ -64,4 +62,9 @@ void GameObject::SetName(char* name)
 Point2D GameObject::GetPoint() const
 {
 	return _point;
+}
+
+void GameObject::SetPoint(Point2D point)
+{
+	_point = point;
 }
