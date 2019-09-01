@@ -58,34 +58,11 @@ void MoveMonsters(unsigned int* maxMonsters, Monster* monsters, Player* player)
 	}
 }
 
-void MovePlayer(char move, Player* player)
-{
-	if (move == 'W' || move == 'w')
-	{
-		int Y = player->GetPoint()->GetY() + 1;
-		player->GetPoint()->SetY(Y);
-	}
-	if (move == 'A' || move == 'a')
-	{
-		int X = player->GetPoint()->GetX() - 1;
-		player->GetPoint()->SetX(X);
-	}
-	if (move == 'S' || move == 's')
-	{
-		int Y = player->GetPoint()->GetY() - 1;
-		player->GetPoint()->SetY(Y);
-	}
-	if (move == 'D' || move == 'd')
-	{
-		int X = player->GetPoint()->GetX() + 1;
-		player->GetPoint()->SetX(X);
-	}
-}
 
 
 void MovePlayerMain(char movement, Player* player, const int playX, const int playY)
 {
-	MovePlayer(movement, player);
+	player->MovePlayer(movement, player);
 	//Make sure player wraps around
 	if (player->GetPoint()->GetX() > playX)
 	{
