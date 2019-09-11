@@ -7,6 +7,7 @@
 #include "conio.h"
 #include "../Engine/Point2D.h"
 #include "../Engine/GameObject.h"
+#include "../Engine/Engine.cpp"
 
 void GetMonsterCount(unsigned int* maxMonsters)
 {
@@ -29,24 +30,6 @@ void GetMonsterCount(unsigned int* maxMonsters)
 			break;
 		}
 	}
-}
-
-void GetName(char* name)
-{
-	while (true)
-	{
-		std::cin.getline(name, 256);
-		if (std::cin.fail())
-		{
-			std::cin.clear();
-			std::cout << "Invalid input. Please try entering a string.\n";
-		}
-		else
-		{
-			return;
-		}
-	}
-
 }
 
 void MonsterPrint(Monster* monsters, unsigned int* maxMonsters)
@@ -74,57 +57,6 @@ void MoveMonsters(unsigned int* maxMonsters, Monster* monsters, Player* player)
 		}
 	}
 }
-
-void MovePlayer(char move, Player* player)
-{
-	if (move == 'W' || move == 'w')
-	{
-		int Y = player->GetPoint()->GetY() + 1;
-		player->GetPoint()->SetY(Y);
-	}
-	if (move == 'A' || move == 'a')
-	{
-		int X = player->GetPoint()->GetX() - 1;
-		player->GetPoint()->SetX(X);
-	}
-	if (move == 'S' || move == 's')
-	{
-		int Y = player->GetPoint()->GetY() - 1;
-		player->GetPoint()->SetY(Y);
-	}
-	if (move == 'D' || move == 'd')
-	{
-		int X = player->GetPoint()->GetX() + 1;
-		player->GetPoint()->SetX(X);
-	}
-}
-
-
-void MovePlayerMain(char movement, Player* player, const int playX, const int playY)
-{
-	MovePlayer(movement, player);
-	//Make sure player wraps around
-	if (player->GetPoint()->GetX() > playX)
-	{
-		player->GetPoint()->SetX(playX * -1);
-	}
-
-	if (player->GetPoint()->GetX() < playX * -1)
-	{
-		player->GetPoint()->SetX(playX);
-	}
-
-	if (player->GetPoint()->GetY() > playY)
-	{
-		player->GetPoint()->SetY(playY * -1);
-	}
-
-	if (player->GetPoint()->GetY() < playY * -1)
-	{
-		player->GetPoint()->SetY(playY);
-	}
-}
-
 
 char MoveLoop()
 {
@@ -233,7 +165,7 @@ void GameLoop(Monster* monsters, Player* player, unsigned int* maxMonsters, cons
 		}
 		MoveMonsters(maxMonsters, monsters, player);
 		SpawnMonsters(monsters, maxMonsters, playX, playY);
-		MovePlayerMain(movement, player, playX, playY);
+		player->MovePlayerMain(movement, player, playX, playY);
 		if (!CheckPlayer(player, monsters, maxMonsters))
 		{
 			std::cout << "You got hit and died...\n";
