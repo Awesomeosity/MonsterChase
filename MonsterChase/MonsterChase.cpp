@@ -218,10 +218,15 @@ int main()
 
 	std::cout << "Press any key to exit...\n";
 
-	int ret = _getch();
 	
 	delete[] monsters;
 	delete player;
+	_CrtDumpMemoryLeaks();
+
+#pragma warning (disable: 6031)
+	_getch();
+#pragma warning (disable: 6031)
+
 	return 0;
 }
 
