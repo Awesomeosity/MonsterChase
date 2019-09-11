@@ -23,7 +23,7 @@
     <ProjectGuid>{8ADA3DD2-0965-4F98-912B-8ED6B1177398}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>MonsterChase</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
