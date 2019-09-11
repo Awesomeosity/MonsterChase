@@ -17,7 +17,7 @@ void GetMonsterCount(unsigned int* maxMonsters)
 		std::cout << "Please enter the initial amount of monsters: ";
 		std::cin >> monsterCount;
 
-		if (std::cin.fail() || monsterCount < 0 || monsterCount > UINT_MAX - 10)
+		if (std::cin.fail() || monsterCount > UINT_MAX - 10)
 		{
 			std::cin.clear();
 			std::cin.ignore(INT_MAX, '\n');
