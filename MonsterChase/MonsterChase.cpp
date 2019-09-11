@@ -60,11 +60,10 @@ void MoveMonsters(unsigned int* maxMonsters, Monster* monsters, Player* player)
 
 char MoveLoop()
 {
-	char playerMove;
 	while (true)
 	{
 		std::cout << "Please enter the direction you want to move in. W, A, S, D, 'Q' to quit.\n";
-		playerMove = (char)_getch();
+		char playerMove = (char)_getch();
 
 		if (std::cin.fail())
 		{
@@ -100,7 +99,6 @@ char MoveLoop()
 			{
 				std::cout << "Invalid input. Please try again.\n";
 			}
-
 		}
 	}
 }
