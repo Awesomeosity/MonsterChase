@@ -28,8 +28,6 @@ GameObject& GameObject::operator=(GameObject& gameObject)
 		return *this;
 	}
 
-	delete _name;
-
 	_point = *(gameObject.GetPoint());
 
 	char* name = gameObject.GetName();
@@ -40,7 +38,7 @@ GameObject& GameObject::operator=(GameObject& gameObject)
 
 GameObject::~GameObject()
 {
-	delete _name;
+	delete[] _name;
 }
 
 char* GameObject::GetName()
@@ -50,7 +48,7 @@ char* GameObject::GetName()
 
 void GameObject::SetName(char* name)
 {
-	delete _name;
+	delete[] _name;
 	_name = new char[strlen(name) + 1];
 	strcpy_s(_name, sizeof(char) * (strlen(name) + 1), name);
 }
