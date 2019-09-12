@@ -26,6 +26,13 @@ Point2D Point2D::operator=(const Point2D point)
 	return *this;
 }
 
+Point2D Point2D::operator+=(const Point2D Point2D)
+{
+	_X += Point2D._X;
+	_Y += Point2D._Y;
+	return *this;
+}
+
 int Point2D::GetX() const
 {
 	return _X;
