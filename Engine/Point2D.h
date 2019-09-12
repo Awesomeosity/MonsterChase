@@ -1,9 +1,6 @@
 #pragma once
 class Point2D
 {
-private:
-	int _X;
-	int _Y;
 public:
 	Point2D(int x = 0, int y = 0);
 	Point2D(const Point2D& point);
@@ -13,6 +10,9 @@ public:
 	int GetY() const;
 	void SetX(int x);
 	void SetY(int y);
+private:
+	int _X;
+	int _Y;
 };
 
 Point2D operator+(const Point2D &p1, const Point2D &p2);
