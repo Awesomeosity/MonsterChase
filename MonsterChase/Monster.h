@@ -4,11 +4,6 @@
 
 class Monster : public GameObject
 {
-private:
-	bool _init;
-	int _toDie;
-	const int maxDuration = 4;
-
 public:
 	Monster();
 	Monster(Point2D point, char name[]);
@@ -21,5 +16,10 @@ public:
 	void setInit(bool init);
 	int DecayTime();
 	void SetTime();
+
+private:
+	bool _init;
+	int _toDie;
+	const int maxDuration = 4;
 };
 
