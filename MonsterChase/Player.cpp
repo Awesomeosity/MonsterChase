@@ -14,28 +14,28 @@ void Player::MovePlayer(char move, Player* player)
 {
 	if (move == 'W' || move == 'w')
 	{
-		int Y = player->GetPoint()->GetY() + 1;
+		float Y = player->GetPoint()->GetY() + 1.0f;
 		player->GetPoint()->SetY(Y);
 	}
 	if (move == 'A' || move == 'a')
 	{
-		int X = player->GetPoint()->GetX() - 1;
+		float X = player->GetPoint()->GetX() - 1.0f;
 		player->GetPoint()->SetX(X);
 	}
 	if (move == 'S' || move == 's')
 	{
-		int Y = player->GetPoint()->GetY() - 1;
+		float Y = player->GetPoint()->GetY() - 1.0f;
 		player->GetPoint()->SetY(Y);
 	}
 	if (move == 'D' || move == 'd')
 	{
-		int X = player->GetPoint()->GetX() + 1;
+		float X = player->GetPoint()->GetX() + 1.0f;
 		player->GetPoint()->SetX(X);
 	}
 
 }
 
-void Player::MovePlayerMain(char movement, Player* player, const int playX, const int playY)
+void Player::MovePlayerMain(char movement, Player* player, const float playX, const float playY)
 {
 	player->MovePlayer(movement, player);
 	//Make sure player wraps around
