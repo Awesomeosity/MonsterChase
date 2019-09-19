@@ -7,8 +7,8 @@ public:
 	Point2D operator=(const Point2D Point2D);
 	Point2D operator+=(const Point2D Point2D);
 	Point2D operator-=(const Point2D Point2D);
-	Point2D operator*=(const Point2D Point2D);
-	Point2D operator/=(const Point2D Point2D);
+	Point2D operator*=(float scalar);
+	Point2D operator/=(float scalar);
 
 
 	float GetX() const;
@@ -25,7 +25,7 @@ private:
 Point2D operator+(const Point2D &p1, const Point2D &p2);
 Point2D operator-(const Point2D &Point2D);
 Point2D operator-(const Point2D &p1, const Point2D &p2);
-Point2D operator*(const Point2D& p1, const Point2D& p2);
-Point2D operator/(const Point2D& p1, const Point2D& p2);
+Point2D operator*(const Point2D& p1, float scalar);
+Point2D operator/(const Point2D& p1, float scalar);
 bool operator==(const Point2D& p1, const Point2D& p2);
 bool operator!=(const Point2D& p1, const Point2D& p2);
