@@ -41,10 +41,10 @@ Monster::~Monster()
 
 void Monster::MoveMonster(Point2D point)
 {
-	int x = GetPoint()->GetX();
-	int y = GetPoint()->GetY();
-	int diffX = point.GetX() - x;
-	int diffY = point.GetY() - y;
+	float x = GetPoint()->GetX();
+	float y = GetPoint()->GetY();
+	float diffX = point.GetX() - x;
+	float diffY = point.GetY() - y;
 
 	if (diffX > 0)
 	{
