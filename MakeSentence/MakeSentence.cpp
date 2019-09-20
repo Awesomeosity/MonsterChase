@@ -111,6 +111,16 @@ char* MakeSentence(LinkedNode* startNode)
 	return sentence;
 }
 
+void chainFree(LinkedNode* firstNode)
+{
+	if (firstNode->nextNode != NULL)
+	{
+		chainFree(firstNode->nextNode);
+	}
+	free(firstNode->string);
+	free(firstNode->nextNode);
+}
+
 // This is only a simple unit test. 
 
 int main(int i_argc, char** i_argl)
@@ -133,9 +143,11 @@ int main(int i_argc, char** i_argl)
 
 	free(pSentence);
 
+	chainFree(startNode);
+	free(startNode);
+
 #if defined(_DEBUG)
 	_CrtDumpMemoryLeaks();
 #endif // _DEBUG
-
 	return 0;
 }
