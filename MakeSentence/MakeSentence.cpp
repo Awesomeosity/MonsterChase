@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 #include <stdio.h>
+#include <iostream>
 #else
 #include <stdlib.h>
 #include "MakeSentence.h"
@@ -22,7 +23,8 @@ LinkedNode* queryLoop()
 
 	char buf[256];
 	do {
-		if (buf == "")
+		std::cin.getline(buf, 256, '\n');
+		if (buf[0] == '\0')
 		{
 			break;
 		}
@@ -41,7 +43,7 @@ LinkedNode* queryLoop()
 		{
 			i++;
 		}
-		startNode->string = (char*)malloc(sizeof(char) * (i + 1));
+		startNode->string = (char*)malloc(sizeof(char) * ((unsigned long long)i + 1));
 		int ii = 0;
 		while (ii - 1 != i)
 		{
@@ -75,6 +77,10 @@ char* MakeSentence(LinkedNode* startNode)
 		currNode = currNode->nextNode;
 		totalSize++;
 	}
+	if (startNode == nullptr)
+	{
+		totalSize++;
+	}
 	totalSize++;
 
 	char* sentence = (char *)malloc(sizeof(char) * totalSize);
@@ -94,14 +100,11 @@ char* MakeSentence(LinkedNode* startNode)
 		{
 			sentence[iter] = ' ';
 		}
-		else
-		{
-			sentence[iter] = '.';
-			sentence[iter + 1] = '\0';
-		}
 		iter++;
 		currNode = currNode->nextNode;
 	}
+	sentence[iter] = '.';
+	sentence[iter + 1] = '\0';
 	return sentence;
 }
 
