@@ -43,11 +43,11 @@ LinkedNode* queryLoop()
 		{
 			i++;
 		}
-		startNode->string = (char*)malloc(sizeof(char) * ((unsigned long long)i + 1));
+		currNode->string = (char*)malloc(sizeof(char) * ((unsigned long long)i + 1));
 		int ii = 0;
 		while (ii - 1 != i)
 		{
-			startNode->string[ii] = buf[ii];
+			currNode->string[ii] = buf[ii];
 			ii++;
 		}
 
@@ -99,12 +99,12 @@ char* MakeSentence(LinkedNode* startNode)
 			j++;
 		}
 
-		if (secondPassNode->nextNode == nullptr)
+		if (secondPassNode->nextNode != nullptr)
 		{
 			sentence[iter] = ' ';
+			iter++;
 		}
-		iter++;
-		currNode = currNode->nextNode;
+		secondPassNode = secondPassNode->nextNode;
 	}
 	sentence[iter] = '.';
 	sentence[iter + 1] = '\0';
