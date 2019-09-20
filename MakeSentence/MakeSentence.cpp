@@ -57,7 +57,7 @@ char* MakeSentence(const char** strings)
 
 // This is only a simple unit test. 
 
-void main(int i_argc, char** i_argl)
+int main(int i_argc, char** i_argl)
 {
 	const char* strings[] = {
 		"This",
@@ -76,4 +76,6 @@ void main(int i_argc, char** i_argl)
 #if defined(_DEBUG)
 	_CrtDumpMemoryLeaks();
 #endif // _DEBUG
+
+	return 0;
 }
