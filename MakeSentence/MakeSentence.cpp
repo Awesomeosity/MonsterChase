@@ -12,14 +12,14 @@
 struct LinkedNode
 {
 	char* string;
-	LinkedNode* nextNode = nullptr;
+	LinkedNode* nextNode = NULL;
 };
 
 LinkedNode* queryLoop()
 {
-	LinkedNode* startNode = nullptr;
-	LinkedNode* prevNode = nullptr;
-	LinkedNode* currNode = nullptr;
+	LinkedNode* startNode = NULL;
+	LinkedNode* prevNode = NULL;
+	LinkedNode* currNode = NULL;
 
 	char buf[256];
 	do {
@@ -53,7 +53,10 @@ LinkedNode* queryLoop()
 
 		prevNode = currNode;
 	} while (true);
-
+	if (prevNode != NULL)
+	{
+		prevNode->nextNode = NULL;
+	}
 	return startNode;
 }
 
@@ -64,7 +67,7 @@ char* MakeSentence(LinkedNode* startNode)
 	LinkedNode* secondPassNode = startNode;
 	int totalSize = 0;
 	//Per Word
-	while (currNode != nullptr)
+	while (currNode != NULL)
 	{
 		char* currStr = currNode->string;
 		int j = 0;
@@ -85,7 +88,7 @@ char* MakeSentence(LinkedNode* startNode)
 
 	char* sentence = (char *)malloc(sizeof(char) * totalSize);
 	int iter = 0;
-	while (secondPassNode != nullptr)
+	while (secondPassNode != NULL)
 	{
 		int j = 0;
 		char* currStr = secondPassNode->string;
