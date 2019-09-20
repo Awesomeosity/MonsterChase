@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{7777F181-93CC-412D-95D2-AFBB9128E54E}</ProjectGuid>
+    <ProjectGuid>{585DC7EE-01D6-4743-97FE-1F79095FB850}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>MonsterMash</RootNamespace>
+    <RootNamespace>MakeSentence</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -86,12 +86,11 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -152,13 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Monster.cpp" />
-    <ClCompile Include="MonsterMash.cpp" />
-    <ClCompile Include="Player.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Monster.h" />
-    <ClInclude Include="Player.h" />
+    <ClCompile Include="MakeSentence.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
