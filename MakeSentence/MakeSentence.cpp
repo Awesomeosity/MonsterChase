@@ -5,16 +5,66 @@
 #include <stdio.h>
 #else
 #include <stdlib.h>
+#include "MakeSentence.h"
 #endif // _DEBUG
 
-char* MakeSentence(const char** strings)
+struct LinkedNode
 {
+	char* string;
+	LinkedNode* nextNode = nullptr;
+};
+
+LinkedNode* queryLoop()
+{
+	LinkedNode* startNode = nullptr;
+	LinkedNode* prevNode = nullptr;
+	LinkedNode* currNode = nullptr;
+
+	char buf[256];
+	do {
+		if (buf == "")
+		{
+			break;
+		}
+
+		currNode = (LinkedNode*)malloc(sizeof(LinkedNode));
+		if (startNode == nullptr)
+		{
+			startNode = currNode;
+		}
+		else
+		{
+			prevNode->nextNode = currNode;
+		}
+		int i = 0;
+		while (buf[i] != '\0')
+		{
+			i++;
+		}
+		startNode->string = (char*)malloc(sizeof(char) * (i + 1));
+		int ii = 0;
+		while (ii - 1 != i)
+		{
+			startNode->string[ii] = buf[ii];
+			ii++;
+		}
+
+		prevNode = currNode;
+	} while (true);
+
+	return startNode;
+}
+
+
+char* MakeSentence(LinkedNode* startNode)
+{
+	LinkedNode* currNode = startNode;
+	LinkedNode* secondPassNode = startNode;
 	int totalSize = 0;
-	int i = 0;
 	//Per Word
-	while (strings[i] != NULL)
+	while (currNode != nullptr)
 	{
-		const char* currStr = strings[i];
+		char* currStr = currNode->string;
 		int j = 0;
 		//Per Char
 		while (currStr[j] != '\0')
@@ -22,17 +72,17 @@ char* MakeSentence(const char** strings)
 			totalSize++;
 			j++;
 		}
+		currNode = currNode->nextNode;
 		totalSize++;
-		i++;
 	}
 	totalSize++;
+
 	char* sentence = (char *)malloc(sizeof(char) * totalSize);
 	int iter = 0;
-	int ii = 0;
-	while (strings[ii] != NULL)
+	while (secondPassNode != nullptr)
 	{
 		int j = 0;
-		const char* currStr = strings[ii];
+		char* currStr = secondPassNode->string;
 		while (currStr[j] != '\0')
 		{
 			sentence[iter] = currStr[j];
@@ -40,7 +90,7 @@ char* MakeSentence(const char** strings)
 			j++;
 		}
 
-		if (ii + 1 != i)
+		if (secondPassNode->nextNode == nullptr)
 		{
 			sentence[iter] = ' ';
 		}
@@ -50,7 +100,7 @@ char* MakeSentence(const char** strings)
 			sentence[iter + 1] = '\0';
 		}
 		iter++;
-		ii++;
+		currNode = currNode->nextNode;
 	}
 	return sentence;
 }
@@ -59,6 +109,7 @@ char* MakeSentence(const char** strings)
 
 int main(int i_argc, char** i_argl)
 {
+	/*
 	const char* strings[] = {
 		"This",
 		"is",
@@ -66,8 +117,11 @@ int main(int i_argc, char** i_argl)
 		"test",
 		NULL
 	};
+	*/
 
-	char* pSentence = MakeSentence(strings);
+	LinkedNode* startNode = queryLoop();
+
+	char* pSentence = MakeSentence(startNode);
 
 	printf("The Sentence is: %s", pSentence);
 
