@@ -57,12 +57,20 @@ LinkedNode* queryLoop()
 	{
 		prevNode->nextNode = NULL;
 	}
+#if defined(_DEBUG)
+	_ASSERTE(_CrtCheckMemory());
+#endif // _DEBUG
+
 	return startNode;
 }
 
 
 char* MakeSentence(LinkedNode* startNode)
 {
+#if defined(_DEBUG)
+	_ASSERTE(_CrtIsValidPointer(startNode, sizeof(LinkedNode), true));
+#endif // _DEBUG
+
 	LinkedNode* currNode = startNode;
 	LinkedNode* secondPassNode = startNode;
 	int totalSize = 0;
