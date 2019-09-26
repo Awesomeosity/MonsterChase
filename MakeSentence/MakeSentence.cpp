@@ -113,6 +113,10 @@ char* MakeSentence(LinkedNode* startNode)
 
 void chainFree(LinkedNode* firstNode)
 {
+	if (firstNode == NULL)
+	{
+		return;
+	}
 	if (firstNode->nextNode != NULL)
 	{
 		chainFree(firstNode->nextNode);
