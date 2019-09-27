@@ -1,4 +1,5 @@
 #include "HeapManagerProxy.h"
+#include <Windows.h>
 #include <heapapi.h>
 #include <iostream>
 
@@ -43,7 +44,7 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size)
 	HeapManager* nextBlock = currBlock->nextBlock;
 	currBlock->isAllocated = true;
 	size_t targSize = i_size + i_size % 4;
-	
+
 	//If allocating this block wouldn't leave enough size for another HeapManager, allocate the whole block.
 	//In this case, we don't need to update the back and next links.
 
@@ -63,9 +64,13 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size)
 		newManager->isAllocated = false;
 
 		currBlock->nextBlock = newManager;
-		nextBlock->prevBlock = newManager;
+		if (nextBlock != nullptr)
+		{
+			nextBlock->prevBlock = newManager;
+		}
+
 	}
-	
+
 	void* userPointer = (void*)(currBlock + 1);
 	return userPointer;
 }
@@ -107,7 +112,11 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size, unsigned i
 		newManager->isAllocated = false;
 
 		currBlock->nextBlock = newManager;
-		nextBlock->prevBlock = newManager;
+		//Covers 
+		if (nextBlock != nullptr)
+		{
+			nextBlock->prevBlock = newManager;
+		}
 	}
 
 	void* userPointer = (void*)(currBlock + 1);
@@ -140,7 +149,7 @@ size_t HeapManagerProxy::GetLargestFreeBlock(const HeapManager* i_pManager)
 {
 	const HeapManager* currP = i_pManager;
 	size_t largest = 0;
-	if (currP = nullptr)
+	if (currP == nullptr)
 	{
 		return size_t(0);
 	}
@@ -158,7 +167,7 @@ size_t HeapManagerProxy::GetTotalFreeMemory(const HeapManager* i_pManager)
 {
 	const HeapManager* currP = i_pManager;
 	size_t total = 0;
-	if (currP = nullptr)
+	if (currP == nullptr)
 	{
 		return size_t(0);
 	}
@@ -175,16 +184,17 @@ size_t HeapManagerProxy::GetTotalFreeMemory(const HeapManager* i_pManager)
 void HeapManagerProxy::ShowFreeBlocks(const HeapManager* i_pManager)
 {
 	const HeapManager* currP = i_pManager;
-	if (currP = nullptr)
+	if (currP == nullptr)
 	{
 		return;
 	}
-	while (currP->nextBlock != nullptr)
+	while (currP != nullptr)
 	{
 		if (!currP->isAllocated)
 		{
-			printf("Free Block: %p, Next Block: %p, Previous Block: %p, Space: %zu", currP, currP->nextBlock, currP->prevBlock, currP->sizeOf);
+			printf("Free Block: %p, Next Block: %p, Previous Block: %p, Space: %zu\n", currP, currP->nextBlock, currP->prevBlock, currP->sizeOf);
 		}
+		currP = currP->nextBlock;
 	}
 	return;
 }
@@ -192,16 +202,18 @@ void HeapManagerProxy::ShowFreeBlocks(const HeapManager* i_pManager)
 void HeapManagerProxy::ShowOutstandingAllocations(const HeapManager* i_pManager)
 {
 	const HeapManager* currP = i_pManager;
-	if (currP = nullptr)
+	if (currP == nullptr)
 	{
 		return;
 	}
-	while (currP->nextBlock != nullptr)
+	while (currP != nullptr)
 	{
 		if (currP->isAllocated)
 		{
-			printf("Allocated Block: %p, Next Block: %p, Previous Block: %p, Space: %zu", currP, currP->nextBlock, currP->prevBlock, currP->sizeOf);
+			printf("Allocated Block: %p, Next Block: %p, Previous Block: %p, Space: %zu\n", currP, currP->nextBlock, currP->prevBlock, currP->sizeOf);
 		}
+		currP = currP->nextBlock;
+
 	}
 	return;
 }
