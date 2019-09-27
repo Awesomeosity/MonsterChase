@@ -154,6 +154,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Externals\HeapManagerProxy.cpp" />
+    <ClCompile Include="HeapManager.cpp" />
     <ClCompile Include="HeapManager_UnitTest.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>

@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <vector>
 
+#define USE_HEAP_ALLOC
 #define SUPPORTS_ALIGNMENT
 #define SUPPORTS_SHOWFREEBLOCKS
 #define SUPPORTS_SHOWOUTSTANDINGALLOCATIONS
@@ -14,7 +15,7 @@ bool HeapManager_UnitTest()
 	using namespace HeapManagerProxy;
 
 	const size_t 		sizeHeap = 1024 * 1024;
-	const unsigned int 	numDescriptors = 2048;
+	const unsigned int 	numDescriptors = 0;
 
 #ifdef USE_HEAP_ALLOC
 	void* pHeapMemory = HeapAlloc(GetProcessHeap(), 0, sizeHeap);

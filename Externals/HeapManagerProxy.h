@@ -28,4 +28,6 @@ void			ShowOutstandingAllocations( const HeapManager * i_pManager );
 
 } // namespace HeapManagerProxy
 
+
+
 #endif // __HEAP_MANAGER_PROXY_H
