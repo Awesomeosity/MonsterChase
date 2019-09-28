@@ -115,6 +115,12 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size, unsigned i
 	return userPointer;
 }
 
+bool HeapManagerProxy::free(HeapManager* i_pManager, void* i_ptr)
+{
+	HeapManager* thisBlock = (HeapManager*)i_ptr - 1;
+	return false;
+}
+
 bool HeapManagerProxy::Contains(const HeapManager* i_pManager, void* i_ptr)
 {
 	const HeapManager* currP = i_pManager;

@@ -44,6 +44,7 @@ int main()
 		}
 		AllocatedAddresses.push_back(pPtr);
 		numAllocs++;
+
 	} while (1);
 
 	printf("After exhausting allocations:\n");
