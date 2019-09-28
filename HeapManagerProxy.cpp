@@ -1,6 +1,4 @@
 #include "HeapManagerProxy.h"
-#include <Windows.h>
-#include <heapapi.h>
 #include <iostream>
 
 class HeapManager {
