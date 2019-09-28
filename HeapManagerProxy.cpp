@@ -38,7 +38,6 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size)
 		currBlock = currBlock->nextBlock;
 	}
 
-	HeapManager* lastBlock = currBlock->prevBlock;
 	HeapManager* nextBlock = currBlock->nextBlock;
 	currBlock->isAllocated = true;
 	size_t targSize = i_size + i_size % 4;
