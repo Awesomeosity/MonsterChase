@@ -10,12 +10,9 @@
 int main()
 {
 	using namespace HeapManagerProxy;
-	const size_t 		sizeHeap = 64 * 64;
+	const size_t 		sizeHeap = 1024 * 1024;
 	const unsigned int 	numDescriptors = 0;
 
-	// Get SYSTEM_INFO, which includes the memory page size
-	SYSTEM_INFO SysInfo;
-	GetSystemInfo(&SysInfo);
 	// round our size to a multiple of memory page size
 	void* pHeapMemory = HeapAlloc(GetProcessHeap(), 0, sizeHeap);
 	assert(pHeapMemory);
@@ -47,6 +44,7 @@ int main()
 		}
 		AllocatedAddresses.push_back(pPtr);
 		numAllocs++;
+
 	} while (1);
 
 	printf("After exhausting allocations:\n");
