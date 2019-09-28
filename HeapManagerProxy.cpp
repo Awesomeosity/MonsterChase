@@ -48,16 +48,15 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size)
 	//Otherwise we have to set the size of the currBlock to the user-block, and update the links
 	if (currBlock->sizeOf - targSize > sizeof(HeapManager) + 4) //Might need to change this later to account for padding and such
 	{
-		size_t prevSize = currBlock->sizeOf;
+		size_t prevSize = currBlock->sizeOf - targSize - sizeof(HeapManager);
 		currBlock->sizeOf = targSize;
-		prevSize -= targSize;
 
 		//Need to perform pointer arithmetic to get to where the new Manager will be setup.
-		char* newManagerLocation = (char*)currBlock + targSize;
+		char* newManagerLocation = (char*)currBlock + targSize + sizeof(HeapManager);
 		HeapManager* newManager = (HeapManager*)newManagerLocation;
 		newManager->prevBlock = currBlock;
 		newManager->nextBlock = nextBlock;
-		newManager->sizeOf = prevSize - sizeof(HeapManager);
+		newManager->sizeOf = prevSize;
 		newManager->isAllocated = false;
 
 		currBlock->nextBlock = newManager;
@@ -65,7 +64,6 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size)
 		{
 			nextBlock->prevBlock = newManager;
 		}
-
 	}
 
 	void* userPointer = (void*)(currBlock + 1);
@@ -85,7 +83,6 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size, unsigned i
 		currBlock = currBlock->nextBlock;
 	}
 
-	HeapManager* lastBlock = currBlock->prevBlock;
 	HeapManager* nextBlock = currBlock->nextBlock;
 	currBlock->isAllocated = true;
 	size_t targSize = i_size + i_size % i_alignment;
@@ -96,20 +93,18 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size, unsigned i
 	//Otherwise we have to set the size of the currBlock to the user-block, and update the links
 	if (currBlock->sizeOf - targSize > sizeof(HeapManager) + i_alignment) //Might need to change this later to account for padding and such
 	{
-		size_t prevSize = currBlock->sizeOf;
+		size_t prevSize = currBlock->sizeOf - targSize - sizeof(HeapManager);
 		currBlock->sizeOf = targSize;
-		prevSize -= targSize;
 
 		//Need to perform pointer arithmetic to get to where the new Manager will be setup.
-		char* newManagerLocation = (char*)currBlock + targSize;
+		char* newManagerLocation = (char*)currBlock + targSize + sizeof(HeapManager);
 		HeapManager* newManager = (HeapManager*)newManagerLocation;
 		newManager->prevBlock = currBlock;
 		newManager->nextBlock = nextBlock;
-		newManager->sizeOf = prevSize - sizeof(HeapManager);
+		newManager->sizeOf = prevSize;
 		newManager->isAllocated = false;
 
 		currBlock->nextBlock = newManager;
-		//Covers 
 		if (nextBlock != nullptr)
 		{
 			nextBlock->prevBlock = newManager;
