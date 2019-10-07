@@ -178,7 +178,9 @@ void HeapManagerProxy::CollectHelper(HeapManager* i_pManager)
 	{
 		if (!i_pManager->nextBlock->isAllocated)
 		{
+			i_pManager->sizeOf += sizeof(int) + sizeof(HeapManager) + i_pManager->nextBlock->sizeOf;
 			i_pManager->nextBlock = i_pManager->nextBlock->nextBlock;
+			
 		}
 	}
 
@@ -186,6 +188,7 @@ void HeapManagerProxy::CollectHelper(HeapManager* i_pManager)
 	{
 		if (!i_pManager->prevBlock->isAllocated)
 		{
+			i_pManager->prevBlock->sizeOf += sizeof(int) + sizeof(HeapManager) + i_pManager->sizeOf;
 			i_pManager->prevBlock->nextBlock = i_pManager->nextBlock;
 		}
 	}
