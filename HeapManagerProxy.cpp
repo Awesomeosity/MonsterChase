@@ -154,6 +154,16 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size, unsigned i
 bool HeapManagerProxy::free(HeapManager* i_pManager, void* i_ptr)
 {
 	HeapManager* thisBlock = (HeapManager*)i_ptr - 1;
+	thisBlock->isAllocated = false;
+	int* fp = (int*)i_ptr;
+	size_t totalSize = thisBlock->sizeOf;
+	while (totalSize > 0)
+	{
+		*fp = 3722304989;
+		totalSize -= sizeof(int);
+	}
+
+	CollectHelper(thisBlock);
 	return false;
 }
 
