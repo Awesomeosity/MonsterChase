@@ -12,6 +12,7 @@
 #define SUPPORTS_ALIGNMENT
 #define SUPPORTS_SHOWFREEBLOCKS
 #define SUPPORTS_SHOWOUTSTANDINGALLOCATIONS
+#define TEST_SINGLE_LARGE_ALLOCATION
 
 bool HeapManager_UnitTest()
 {
@@ -145,13 +146,13 @@ bool HeapManager_UnitTest()
 
 		if (!AllocatedAddresses.empty() && ((rand() % freeAboutEvery) == 0))
 		{
-			void* pPtr = AllocatedAddresses.back();
+			void* pointPtr = AllocatedAddresses.back();
 			AllocatedAddresses.pop_back();
 
-			bool success = Contains(pHeapManager, pPtr) && IsAllocated(pHeapManager, pPtr);
+			bool success = Contains(pHeapManager, pointPtr) && IsAllocated(pHeapManager, pointPtr);
 			assert(success);
 
-			success = free(pHeapManager, pPtr);
+			success = free(pHeapManager, pointPtr);
 			assert(success);
 
 			numFrees++;
@@ -303,6 +304,9 @@ int main()
 	printf("\n");
 	*/
 	HeapManager_UnitTest();
+
+#pragma warning (disable: 6031)
 	_getch();
+#pragma warning (disable: 6031)
 }
 
