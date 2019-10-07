@@ -111,20 +111,23 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size, unsigned i
 
 	HeapManager* nextBlock = currBlock->nextBlock;
 	currBlock->isAllocated = true;
-	size_t targSize = i_size + i_size % i_alignment;
+	size_t targSize = i_size + (i_alignment - i_size % i_alignment);
+	void* userPointer = (void*)((char*)(currBlock + 1) + (i_alignment - i_size % i_alignment));
 
 	//If allocating this block wouldn't leave enough size for another HeapManager, allocate the whole block.
 	//In this case, we don't need to update the back and next links.
 
 	//Otherwise we have to set the size of the currBlock to the user-block, and update the links
-	if (currBlock->sizeOf - targSize > sizeof(HeapManager) + i_alignment) //Might need to change this later to account for padding and such
+	if (currBlock->sizeOf - targSize > sizeof(HeapManager) + sizeof(int)) //Might need to change this later to account for padding and such
 	{
-		size_t prevSize = currBlock->sizeOf - targSize - sizeof(HeapManager);
+		size_t prevSize = currBlock->sizeOf - targSize - sizeof(HeapManager) - sizeof(int);
 		currBlock->sizeOf = targSize;
 
 		//Need to perform pointer arithmetic to get to where the new Manager will be setup.
-		char* newManagerLocation = (char*)currBlock + targSize + sizeof(HeapManager);
-		HeapManager* newManager = (HeapManager*)newManagerLocation;
+		int* guardPointer = (int*)((char*)(currBlock + 1) + targSize);
+		*guardPointer = 4261281277; //Should convert into 0xFDFDFDFD?
+
+		HeapManager* newManager = (HeapManager*)(guardPointer + 1);
 		newManager->prevBlock = currBlock;
 		newManager->nextBlock = nextBlock;
 		newManager->sizeOf = prevSize;
@@ -137,7 +140,14 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size, unsigned i
 		}
 	}
 
-	void* userPointer = (void*)(currBlock + 1);
+	int* fillPointer = (int*)(currBlock + 1);
+	while (targSize > 0)
+	{
+		*fillPointer = 3452816845;
+		fillPointer++;
+		targSize -= sizeof(int);
+	}
+
 	return userPointer;
 }
 
