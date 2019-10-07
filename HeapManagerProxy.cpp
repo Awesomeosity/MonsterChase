@@ -69,7 +69,7 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size)
 		currBlock->sizeOf = targSize;
 
 		//Need to perform pointer arithmetic to get to where the new Manager will be setup.
-		int* guardPointer = (int*)((char*)userPointer + targSize);
+		int* guardPointer = (int*)((char*)(currBlock + 1) + targSize);
 		*guardPointer = 4261281277; //Should convert into 0xFDFDFDFD?
 
 		HeapManager* newManager = (HeapManager*)(guardPointer + 1);
@@ -85,7 +85,7 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size)
 		}
 	}
 
-	int* fillPointer = (int*)userPointer;
+	int* fillPointer = (int*)(currBlock + 1);
 	while (targSize > 0)
 	{
 		*fillPointer = 3452816845;
