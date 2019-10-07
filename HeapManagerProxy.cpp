@@ -12,11 +12,27 @@ public:
 HeapManager* HeapManagerProxy::CreateHeapManager(void* i_pMemory, size_t i_sizeMemory, unsigned int i_numDescriptors)
 {
 	HeapManager* currMem = (HeapManager*)i_pMemory;
-	size_t initMem = i_sizeMemory - sizeof(HeapManager);
+	size_t initMem = i_sizeMemory - sizeof(HeapManager) - sizeof(int);
 	currMem->prevBlock = nullptr;
 	currMem->nextBlock = nullptr;
 	currMem->sizeOf = initMem;
 	currMem->isAllocated = false;
+
+	//Establishing Guard Band
+	char* guardPoint = (char*)(currMem + 1);
+	guardPoint += initMem;
+	int* gp = (int*)guardPoint;
+	*gp = 4261281277;
+
+	int* filler = (int*)(currMem + 1);
+	//Filling internals
+	while (initMem > 4)
+	{
+		*filler = 3722304989;
+		filler++;
+		initMem -= sizeof(int);
+	}
+
 	return currMem;
 }
 
@@ -40,20 +56,23 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size)
 
 	HeapManager* nextBlock = currBlock->nextBlock;
 	currBlock->isAllocated = true;
-	size_t targSize = i_size + i_size % 4;
+	size_t targSize = i_size + (4 - i_size % 4);
+	void* userPointer = (void*)(currBlock + 1);
 
 	//If allocating this block wouldn't leave enough size for another HeapManager, allocate the whole block.
 	//In this case, we don't need to update the back and next links.
 
 	//Otherwise we have to set the size of the currBlock to the user-block, and update the links
-	if (currBlock->sizeOf - targSize > sizeof(HeapManager) + 4) //Might need to change this later to account for padding and such
+	if (currBlock->sizeOf - targSize > sizeof(HeapManager) + sizeof(int)) //Might need to change this later to account for padding and such
 	{
-		size_t prevSize = currBlock->sizeOf - targSize - sizeof(HeapManager);
+		size_t prevSize = currBlock->sizeOf - targSize - sizeof(HeapManager) - sizeof(int);
 		currBlock->sizeOf = targSize;
 
 		//Need to perform pointer arithmetic to get to where the new Manager will be setup.
-		char* newManagerLocation = (char*)currBlock + targSize + sizeof(HeapManager);
-		HeapManager* newManager = (HeapManager*)newManagerLocation;
+		int* guardPointer = (int*)((char*)userPointer + targSize);
+		*guardPointer = 4261281277; //Should convert into 0xFDFDFDFD?
+
+		HeapManager* newManager = (HeapManager*)(guardPointer + 1);
 		newManager->prevBlock = currBlock;
 		newManager->nextBlock = nextBlock;
 		newManager->sizeOf = prevSize;
@@ -66,7 +85,14 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size)
 		}
 	}
 
-	void* userPointer = (void*)(currBlock + 1);
+	int* fillPointer = (int*)userPointer;
+	while (targSize > 0)
+	{
+		*fillPointer = 3452816845;
+		fillPointer++;
+		targSize -= sizeof(int);
+	}
+
 	return userPointer;
 }
 
