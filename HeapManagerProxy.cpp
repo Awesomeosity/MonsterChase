@@ -172,6 +172,25 @@ void HeapManagerProxy::Collect(HeapManager* i_pManager)
 	return;
 }
 
+void HeapManagerProxy::CollectHelper(HeapManager* i_pManager)
+{
+	if (i_pManager->nextBlock != nullptr)
+	{
+		if (!i_pManager->nextBlock->isAllocated)
+		{
+			i_pManager->nextBlock = i_pManager->nextBlock->nextBlock;
+		}
+	}
+
+	if (i_pManager->prevBlock != nullptr)
+	{
+		if (!i_pManager->prevBlock->isAllocated)
+		{
+			i_pManager->prevBlock->nextBlock = i_pManager->nextBlock;
+		}
+	}
+}
+
 bool HeapManagerProxy::Contains(const HeapManager* i_pManager, void* i_ptr)
 {
 	const HeapManager* currP = i_pManager;
