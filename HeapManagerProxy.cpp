@@ -157,6 +157,11 @@ bool HeapManagerProxy::free(HeapManager* i_pManager, void* i_ptr)
 	return false;
 }
 
+void HeapManagerProxy::Collect(HeapManager* i_pManager)
+{
+	return;
+}
+
 bool HeapManagerProxy::Contains(const HeapManager* i_pManager, void* i_ptr)
 {
 	const HeapManager* currP = i_pManager;
