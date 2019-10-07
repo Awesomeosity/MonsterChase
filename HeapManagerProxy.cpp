@@ -57,7 +57,7 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size)
 	HeapManager* nextBlock = currBlock->nextBlock;
 	currBlock->isAllocated = true;
 	size_t targSize = i_size + (4 - i_size % 4);
-	void* userPointer = (void*)(currBlock + 1);
+	void* userPointer = (void*)((char*)(currBlock + 1) + (4 - i_size % 4));
 
 	//If allocating this block wouldn't leave enough size for another HeapManager, allocate the whole block.
 	//In this case, we don't need to update the back and next links.
