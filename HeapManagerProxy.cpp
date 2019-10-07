@@ -169,6 +169,19 @@ bool HeapManagerProxy::free(HeapManager* i_pManager, void* i_ptr)
 
 void HeapManagerProxy::Collect(HeapManager* i_pManager)
 {
+	HeapManager* currManager = i_pManager;
+	while (currManager->nextBlock != nullptr)
+	{
+		CollectHelper(currManager);
+		if (currManager->nextBlock == nullptr)
+		{
+			return;
+		}
+		else
+		{
+			currManager = currManager->nextBlock;
+		}
+	}
 	return;
 }
 
