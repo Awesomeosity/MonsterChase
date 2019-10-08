@@ -117,7 +117,9 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size, unsigned i
 	HeapManager* nextBlock = currBlock->nextBlock;
 	currBlock->isAllocated = true;
 	size_t targSize = i_size + (i_alignment - i_size % i_alignment) % i_alignment;
-	currBlock->userPointer = (void*)((char*)(currBlock + 1) + (i_alignment - i_size % i_alignment));
+
+	char* up = (char*)(currBlock + 1);
+	currBlock->userPointer = (void*)(up + (i_alignment - (uintptr_t)up % i_alignment) % i_alignment); //Need to check if align is okay later
 
 	//If allocating this block wouldn't leave enough size for another HeapManager, allocate the whole block.
 	//In this case, we don't need to update the back and next links.
