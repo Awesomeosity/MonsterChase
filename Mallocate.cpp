@@ -34,7 +34,7 @@ bool HeapManager_UnitTest()
 	assert(pHeapMemory);
 
 	// Create a heap manager for my test heap.
-	HeapManager* pHeapManager = CreateHeapManager(pHeapMemory, sizeHeap, numDescriptors);
+	HeapManager* pHeapManager = CreateHeapManager(pHeapMemory, sizeHeap);
 	assert(pHeapManager);
 
 	if (pHeapManager == nullptr)
@@ -51,7 +51,7 @@ bool HeapManager_UnitTest()
 #endif // SUPPORTS_SHOWFREEBLOCKS
 
 		size_t largestBeforeAlloc = GetLargestFreeBlock(pHeapManager);
-		void* pPtr = alloc(pHeapManager, largestBeforeAlloc - HeapManager::s_MinumumToLeave);
+		void* pPtr = alloc(pHeapManager, largestBeforeAlloc);
 
 		if (pPtr)
 		{
@@ -66,11 +66,11 @@ bool HeapManager_UnitTest()
 			printf("\n");
 #endif
 
-			size_t largestAfterAlloc = GetLargestFreeBlock(pHeapManager);
-			bool success = Contains(pHeapManager, pPtr) && IsAllocated(pHeapManager, pPtr);
+			//size_t largestAfterAlloc = GetLargestFreeBlock(pHeapManager);
+			bool success = Contains(pHeapManager, pPtr) && IsAllocated(pPtr);
 			assert(success);
 
-			success = free(pHeapManager, pPtr);
+			success = HeapManagerProxy::free(pPtr);
 			assert(success);
 
 			Collect(pHeapManager);
@@ -86,7 +86,7 @@ bool HeapManager_UnitTest()
 			printf("\n");
 #endif
 
-			size_t largestAfterCollect = GetLargestFreeBlock(pHeapManager);
+			//size_t largestAfterCollect = GetLargestFreeBlock(pHeapManager);
 		}
 	}
 #endif
@@ -149,10 +149,10 @@ bool HeapManager_UnitTest()
 			void* pointPtr = AllocatedAddresses.back();
 			AllocatedAddresses.pop_back();
 
-			bool success = Contains(pHeapManager, pointPtr) && IsAllocated(pHeapManager, pointPtr);
+			bool success = Contains(pHeapManager, pointPtr) && IsAllocated(pointPtr);
 			assert(success);
 
-			success = free(pHeapManager, pointPtr);
+			success = HeapManagerProxy::free(pointPtr);
 			assert(success);
 
 			numFrees++;
@@ -190,10 +190,10 @@ bool HeapManager_UnitTest()
 			void* pPtr = AllocatedAddresses.back();
 			AllocatedAddresses.pop_back();
 
-			bool success = Contains(pHeapManager, pPtr) && IsAllocated(pHeapManager, pPtr);
+			bool success = Contains(pHeapManager, pPtr) && IsAllocated(pPtr);
 			assert(success);
 
-			success = free(pHeapManager, pPtr);
+			success = HeapManagerProxy::free(pPtr);
 			assert(success);
 		}
 
@@ -231,16 +231,16 @@ bool HeapManager_UnitTest()
 
 		if (pPtr)
 		{
-			bool success = Contains(pHeapManager, pPtr) && IsAllocated(pHeapManager, pPtr);
+			bool success = Contains(pHeapManager, pPtr) && IsAllocated(pPtr);
 			assert(success);
 
-			success = free(pHeapManager, pPtr);
+			success = HeapManagerProxy::free(pPtr);
 			assert(success);
 
 		}
 	}
 
-	Destroy(pHeapManager);
+	Destroy();
 	pHeapManager = nullptr;
 
 	if (pHeapMemory)

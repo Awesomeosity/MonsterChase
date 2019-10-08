@@ -9,7 +9,7 @@ public:
 	bool isAllocated = false;
 };
 
-HeapManager* HeapManagerProxy::CreateHeapManager(void* i_pMemory, size_t i_sizeMemory, unsigned int i_numDescriptors)
+HeapManager* HeapManagerProxy::CreateHeapManager(void* i_pMemory, size_t i_sizeMemory)
 {
 	HeapManager* currMem = (HeapManager*)i_pMemory;
 	size_t initMem = i_sizeMemory - sizeof(HeapManager) - sizeof(int);
@@ -36,9 +36,9 @@ HeapManager* HeapManagerProxy::CreateHeapManager(void* i_pMemory, size_t i_sizeM
 	return currMem;
 }
 
-void HeapManagerProxy::Destroy(HeapManager* i_pManager)
+void HeapManagerProxy::Destroy()
 {
-
+	return;
 }
 
 void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size)
@@ -151,7 +151,7 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size, unsigned i
 	return userPointer;
 }
 
-bool HeapManagerProxy::free(HeapManager* i_pManager, void* i_ptr)
+bool HeapManagerProxy::free(void* i_ptr)
 {
 	HeapManager* thisBlock = (HeapManager*)i_ptr - 1;
 	if (thisBlock->isAllocated)
@@ -228,7 +228,7 @@ bool HeapManagerProxy::Contains(const HeapManager* i_pManager, void* i_ptr)
 	return true;
 }
 
-bool HeapManagerProxy::IsAllocated(const HeapManager* i_pManager, void* i_ptr)
+bool HeapManagerProxy::IsAllocated(void* i_ptr)
 {
 	HeapManager* thisBlock = (HeapManager*)i_ptr;
 	thisBlock--;
