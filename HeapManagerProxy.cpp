@@ -243,12 +243,14 @@ size_t HeapManagerProxy::GetLargestFreeBlock(const HeapManager* i_pManager)
 	{
 		return size_t(0);
 	}
-	while (currP->nextBlock != nullptr)
+	while (currP != nullptr)
 	{
 		if (currP->sizeOf > largest && !currP->isAllocated)
 		{
 			largest = currP->sizeOf;
 		}
+		currP = currP->nextBlock;
+
 	}
 	return largest;
 }
@@ -261,12 +263,13 @@ size_t HeapManagerProxy::GetTotalFreeMemory(const HeapManager* i_pManager)
 	{
 		return size_t(0);
 	}
-	while (currP->nextBlock != nullptr)
+	while (currP != nullptr)
 	{
 		if (!currP->isAllocated)
 		{
 			total += currP->sizeOf;
 		}
+		currP = currP->nextBlock;
 	}
 	return total;
 }
