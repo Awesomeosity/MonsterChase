@@ -264,7 +264,7 @@ bool HeapManagerProxy::Contains(const HeapManager* i_pManager, void* i_ptr)
 {
 	if (i_pManager == nullptr)
 	{
-		return;
+		return false;
 	}
 
 	const HeapManager* currP = i_pManager;
@@ -284,7 +284,7 @@ bool HeapManagerProxy::IsAllocated(const HeapManager* i_pManager, void* i_ptr)
 {
 	if (i_pManager == nullptr)
 	{
-		return;
+		return false;
 	}
 
 	const HeapManager* curr = i_pManager;
@@ -303,7 +303,7 @@ size_t HeapManagerProxy::GetLargestFreeBlock(const HeapManager* i_pManager)
 {
 	if (i_pManager == nullptr)
 	{
-		return;
+		return size_t(0);
 	}
 
 	const HeapManager* currP = i_pManager;
@@ -328,7 +328,7 @@ size_t HeapManagerProxy::GetTotalFreeMemory(const HeapManager* i_pManager)
 {
 	if (i_pManager == nullptr)
 	{
-		return;
+		return size_t(0);
 	}
 
 	const HeapManager* currP = i_pManager;

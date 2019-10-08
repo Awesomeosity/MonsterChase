@@ -67,10 +67,10 @@ bool HeapManager_UnitTest()
 #endif
 
 			//size_t largestAfterAlloc = GetLargestFreeBlock(pHeapManager);
-			bool success = Contains(pHeapManager, pPtr) && IsAllocated(pPtr);
+			bool success = Contains(pHeapManager, pPtr) && IsAllocated(pHeapManager, pPtr);
 			assert(success);
 
-			success = HeapManagerProxy::free(pPtr);
+			success = HeapManagerProxy::free(pHeapManager, pPtr);
 			assert(success);
 
 			Collect(pHeapManager);
@@ -149,10 +149,10 @@ bool HeapManager_UnitTest()
 			void* pointPtr = AllocatedAddresses.back();
 			AllocatedAddresses.pop_back();
 
-			bool success = Contains(pHeapManager, pointPtr) && IsAllocated(pointPtr);
+			bool success = Contains(pHeapManager, pointPtr) && IsAllocated(pHeapManager, pointPtr);
 			assert(success);
 
-			success = HeapManagerProxy::free(pointPtr);
+			success = HeapManagerProxy::free(pHeapManager, pointPtr);
 			assert(success);
 
 			numFrees++;
@@ -190,10 +190,10 @@ bool HeapManager_UnitTest()
 			void* pPtr = AllocatedAddresses.back();
 			AllocatedAddresses.pop_back();
 
-			bool success = Contains(pHeapManager, pPtr) && IsAllocated(pPtr);
+			bool success = Contains(pHeapManager, pPtr) && IsAllocated(pHeapManager, pPtr);
 			assert(success);
 
-			success = HeapManagerProxy::free(pPtr);
+			success = HeapManagerProxy::free(pHeapManager, pPtr);
 			assert(success);
 		}
 
@@ -231,10 +231,10 @@ bool HeapManager_UnitTest()
 
 		if (pPtr)
 		{
-			bool success = Contains(pHeapManager, pPtr) && IsAllocated(pPtr);
+			bool success = Contains(pHeapManager, pPtr) && IsAllocated(pHeapManager, pPtr);
 			assert(success);
 
-			success = HeapManagerProxy::free(pPtr);
+			success = HeapManagerProxy::free(pHeapManager, pPtr);
 			assert(success);
 
 		}
