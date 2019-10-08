@@ -3,10 +3,11 @@
 
 class HeapManager {
 public:
-	HeapManager* nextBlock;
-	HeapManager* prevBlock;
-	size_t sizeOf;
-	bool isAllocated = false;
+	HeapManager*	nextBlock;
+	HeapManager*	prevBlock;
+	void*			userPointer;
+	size_t			sizeOf;
+	bool			isAllocated = false;
 };
 
 HeapManager* HeapManagerProxy::CreateHeapManager(void* i_pMemory, size_t i_sizeMemory)
@@ -15,6 +16,7 @@ HeapManager* HeapManagerProxy::CreateHeapManager(void* i_pMemory, size_t i_sizeM
 	size_t initMem = i_sizeMemory - sizeof(HeapManager) - sizeof(int);
 	currMem->prevBlock = nullptr;
 	currMem->nextBlock = nullptr;
+	currMem->userPointer = nullptr;
 	currMem->sizeOf = initMem;
 	currMem->isAllocated = false;
 
@@ -57,7 +59,9 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size)
 	HeapManager* nextBlock = currBlock->nextBlock;
 	currBlock->isAllocated = true;
 	size_t targSize = i_size + (4 - i_size % 4) % 4;
-	void* userPointer = (void*)((char*)(currBlock + 1) + (4 - i_size % 4));
+	
+	char* up = (char*)(currBlock + 1);
+	currBlock->userPointer = (void*)(up + (4 - (uintptr_t)up % 4) % 4); //Need to check if align is okay later
 
 	//If allocating this block wouldn't leave enough size for another HeapManager, allocate the whole block.
 	//In this case, we don't need to update the back and next links.
@@ -75,6 +79,7 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size)
 		HeapManager* newManager = (HeapManager*)(guardPointer + 1);
 		newManager->prevBlock = currBlock;
 		newManager->nextBlock = nextBlock;
+		newManager->userPointer = nullptr;
 		newManager->sizeOf = prevSize;
 		newManager->isAllocated = false;
 
@@ -93,7 +98,7 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size)
 		targSize -= sizeof(int);
 	}
 
-	return userPointer;
+	return currBlock->userPointer;
 }
 
 void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size, unsigned int i_alignment)
@@ -112,7 +117,7 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size, unsigned i
 	HeapManager* nextBlock = currBlock->nextBlock;
 	currBlock->isAllocated = true;
 	size_t targSize = i_size + (i_alignment - i_size % i_alignment) % i_alignment;
-	void* userPointer = (void*)((char*)(currBlock + 1) + (i_alignment - i_size % i_alignment));
+	currBlock->userPointer = (void*)((char*)(currBlock + 1) + (i_alignment - i_size % i_alignment));
 
 	//If allocating this block wouldn't leave enough size for another HeapManager, allocate the whole block.
 	//In this case, we don't need to update the back and next links.
@@ -130,6 +135,7 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size, unsigned i
 		HeapManager* newManager = (HeapManager*)(guardPointer + 1);
 		newManager->prevBlock = currBlock;
 		newManager->nextBlock = nextBlock;
+		newManager->userPointer = nullptr;
 		newManager->sizeOf = prevSize;
 		newManager->isAllocated = false;
 
@@ -148,10 +154,10 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size, unsigned i
 		targSize -= sizeof(int);
 	}
 
-	return userPointer;
+	return currBlock->userPointer;
 }
 
-bool HeapManagerProxy::free(void* i_ptr)
+bool HeapManagerProxy::free(HeapManager* i_pManager, void* i_ptr)
 {
 	HeapManager* thisBlock = (HeapManager*)i_ptr - 1;
 	if (thisBlock->isAllocated)
@@ -216,7 +222,6 @@ void HeapManagerProxy::CollectHelper(HeapManager* i_pManager)
 bool HeapManagerProxy::Contains(const HeapManager* i_pManager, void* i_ptr)
 {
 	const HeapManager* currP = i_pManager;
-	HeapManager* heapP = (HeapManager*)((char*)i_ptr) - sizeof(HeapManager);
 	while (currP != heapP)
 	{
 		if (currP->nextBlock == nullptr)
@@ -229,7 +234,7 @@ bool HeapManagerProxy::Contains(const HeapManager* i_pManager, void* i_ptr)
 	return true;
 }
 
-bool HeapManagerProxy::IsAllocated(void* i_ptr)
+bool HeapManagerProxy::IsAllocated(const HeapManager* i_pManager, void* i_ptr)
 {
 	HeapManager* thisBlock = (HeapManager*)i_ptr;
 	thisBlock--;

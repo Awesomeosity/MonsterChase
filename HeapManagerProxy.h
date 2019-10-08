@@ -11,13 +11,13 @@ namespace HeapManagerProxy
 
 	void*			alloc(HeapManager* i_pManager, size_t i_size);
 	void*			alloc(HeapManager* i_pManager, size_t i_size, unsigned int i_alignment);
-	bool			free(void* i_ptr);
+	bool			free(HeapManager* i_pManager, void* i_ptr);
 
 	void			Collect(HeapManager* i_pManager);
 	void			CollectHelper(HeapManager* i_pManager);
 
 	bool			Contains(const HeapManager* i_pManager, void* i_ptr);
-	bool			IsAllocated(void* i_ptr);
+	bool			IsAllocated(const HeapManager* i_pManager, void* i_ptr);
 
 	size_t			GetLargestFreeBlock(const HeapManager* i_pManager);
 	size_t			GetTotalFreeMemory(const HeapManager* i_pManager);
