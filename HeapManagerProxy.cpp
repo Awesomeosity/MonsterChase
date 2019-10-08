@@ -233,7 +233,7 @@ void HeapManagerProxy::CollectHelper(HeapManager* i_pManager)
 bool HeapManagerProxy::Contains(const HeapManager* i_pManager, void* i_ptr)
 {
 	const HeapManager* currP = i_pManager;
-	while (currP != heapP)
+	while (currP->userPointer != i_ptr)
 	{
 		if (currP->nextBlock == nullptr)
 		{
