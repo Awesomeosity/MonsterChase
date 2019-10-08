@@ -247,9 +247,16 @@ bool HeapManagerProxy::Contains(const HeapManager* i_pManager, void* i_ptr)
 
 bool HeapManagerProxy::IsAllocated(const HeapManager* i_pManager, void* i_ptr)
 {
-	HeapManager* thisBlock = (HeapManager*)i_ptr;
-	thisBlock--;
-	return thisBlock->isAllocated;
+	const HeapManager* curr = i_pManager;
+	while (curr->userPointer != i_ptr)
+	{
+		if (curr->nextBlock == nullptr)
+		{
+			return false;
+		}
+		curr = curr->nextBlock;
+	}
+	return curr->isAllocated;
 }
 
 size_t HeapManagerProxy::GetLargestFreeBlock(const HeapManager* i_pManager)
