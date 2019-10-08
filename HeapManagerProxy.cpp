@@ -309,7 +309,7 @@ void HeapManagerProxy::ShowFreeBlocks(const HeapManager* i_pManager)
 	{
 		if (!currP->isAllocated)
 		{
-			printf("Free Block: %p, Next Block: %p, Previous Block: %p, Space: %zu\n", currP, currP->nextBlock, currP->prevBlock, currP->sizeOf);
+			printf("Free Block: %p, Next Block: %p, Previous Block: %p, Space: %zu, User Pointer: %p\n", currP, currP->nextBlock, currP->prevBlock, currP->sizeOf, currP->userPointer);
 		}
 		currP = currP->nextBlock;
 	}
@@ -327,7 +327,7 @@ void HeapManagerProxy::ShowOutstandingAllocations(const HeapManager* i_pManager)
 	{
 		if (currP->isAllocated)
 		{
-			printf("Allocated Block: %p, Next Block: %p, Previous Block: %p, Space: %zu\n", currP, currP->nextBlock, currP->prevBlock, currP->sizeOf);
+			printf("Allocated Block: %p, Next Block: %p, Previous Block: %p, Space: %zu, User Pointer: %p\n", currP, currP->nextBlock, currP->prevBlock, currP->sizeOf, currP->userPointer);
 		}
 		currP = currP->nextBlock;
 
