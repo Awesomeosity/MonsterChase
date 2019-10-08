@@ -12,6 +12,11 @@ public:
 
 HeapManager* HeapManagerProxy::CreateHeapManager(void* i_pMemory, size_t i_sizeMemory)
 {
+	if (i_sizeMemory < sizeof(HeapManager) + sizeof(int) + 4)
+	{
+		return nullptr;
+	}
+
 	HeapManager* currMem = (HeapManager*)i_pMemory;
 	size_t initMem = i_sizeMemory - sizeof(HeapManager) - sizeof(int);
 	currMem->prevBlock = nullptr;
@@ -45,6 +50,11 @@ void HeapManagerProxy::Destroy()
 
 void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size)
 {
+	if (i_pManager == nullptr || i_size < sizeof(HeapManager) + sizeof(int) + 4)
+	{
+		return nullptr;
+	}
+
 	HeapManager* currBlock = i_pManager;
 	while (currBlock->isAllocated || currBlock->sizeOf < i_size)
 	{
@@ -103,6 +113,11 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size)
 
 void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size, unsigned int i_alignment)
 {
+	if (i_pManager == nullptr || i_size < sizeof(HeapManager) + sizeof(int) + 4 || i_alignment % 2 != 0)
+	{
+		return nullptr;
+	}
+
 	HeapManager* currBlock = i_pManager;
 	while (currBlock->isAllocated || currBlock->sizeOf < i_size)
 	{
@@ -161,6 +176,11 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size, unsigned i
 
 bool HeapManagerProxy::free(HeapManager* i_pManager, void* i_ptr)
 {
+	if (i_pManager == nullptr)
+	{
+		return false;
+	}
+
 	HeapManager* currManager = i_pManager;
 	while (currManager->userPointer != i_ptr)
 	{
@@ -192,6 +212,11 @@ bool HeapManagerProxy::free(HeapManager* i_pManager, void* i_ptr)
 }
 void HeapManagerProxy::Collect(HeapManager* i_pManager)
 {
+	if (i_pManager == nullptr)
+	{
+		return;
+	}
+
 	HeapManager* currManager = i_pManager;
 	while (currManager->nextBlock != nullptr)
 	{
@@ -210,6 +235,11 @@ void HeapManagerProxy::Collect(HeapManager* i_pManager)
 
 void HeapManagerProxy::CollectHelper(HeapManager* i_pManager)
 {
+	if (i_pManager == nullptr)
+	{
+		return;
+	}
+
 	if (i_pManager->nextBlock != nullptr)
 	{
 		if (!i_pManager->nextBlock->isAllocated)
@@ -232,6 +262,11 @@ void HeapManagerProxy::CollectHelper(HeapManager* i_pManager)
 
 bool HeapManagerProxy::Contains(const HeapManager* i_pManager, void* i_ptr)
 {
+	if (i_pManager == nullptr)
+	{
+		return;
+	}
+
 	const HeapManager* currP = i_pManager;
 	while (currP->userPointer != i_ptr)
 	{
@@ -247,6 +282,11 @@ bool HeapManagerProxy::Contains(const HeapManager* i_pManager, void* i_ptr)
 
 bool HeapManagerProxy::IsAllocated(const HeapManager* i_pManager, void* i_ptr)
 {
+	if (i_pManager == nullptr)
+	{
+		return;
+	}
+
 	const HeapManager* curr = i_pManager;
 	while (curr->userPointer != i_ptr)
 	{
@@ -261,6 +301,11 @@ bool HeapManagerProxy::IsAllocated(const HeapManager* i_pManager, void* i_ptr)
 
 size_t HeapManagerProxy::GetLargestFreeBlock(const HeapManager* i_pManager)
 {
+	if (i_pManager == nullptr)
+	{
+		return;
+	}
+
 	const HeapManager* currP = i_pManager;
 	size_t largest = 0;
 	if (currP == nullptr)
@@ -281,6 +326,11 @@ size_t HeapManagerProxy::GetLargestFreeBlock(const HeapManager* i_pManager)
 
 size_t HeapManagerProxy::GetTotalFreeMemory(const HeapManager* i_pManager)
 {
+	if (i_pManager == nullptr)
+	{
+		return;
+	}
+
 	const HeapManager* currP = i_pManager;
 	size_t total = 0;
 	if (currP == nullptr)
@@ -300,6 +350,11 @@ size_t HeapManagerProxy::GetTotalFreeMemory(const HeapManager* i_pManager)
 
 void HeapManagerProxy::ShowFreeBlocks(const HeapManager* i_pManager)
 {
+	if (i_pManager == nullptr)
+	{
+		return;
+	}
+
 	const HeapManager* currP = i_pManager;
 	if (currP == nullptr)
 	{
@@ -318,6 +373,11 @@ void HeapManagerProxy::ShowFreeBlocks(const HeapManager* i_pManager)
 
 void HeapManagerProxy::ShowOutstandingAllocations(const HeapManager* i_pManager)
 {
+	if (i_pManager == nullptr)
+	{
+		return;
+	}
+
 	const HeapManager* currP = i_pManager;
 	if (currP == nullptr)
 	{
