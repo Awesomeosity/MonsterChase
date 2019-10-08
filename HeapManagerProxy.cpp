@@ -194,7 +194,7 @@ bool HeapManagerProxy::free(HeapManager* i_pManager, void* i_ptr)
 	if (currManager->isAllocated)
 	{
 		currManager->isAllocated = false;
-		int* fp = (int*)i_ptr;
+		int* fp = (int*)(currManager + 1);
 		size_t totalSize = currManager->sizeOf;
 		while (totalSize > 0)
 		{
@@ -225,10 +225,7 @@ void HeapManagerProxy::Collect(HeapManager* i_pManager)
 		{
 			return;
 		}
-		else
-		{
-			currManager = currManager->nextBlock;
-		}
+		currManager = currManager->nextBlock;
 	}
 	return;
 }
@@ -246,7 +243,10 @@ void HeapManagerProxy::CollectHelper(HeapManager* i_pManager)
 		{
 			i_pManager->sizeOf += sizeof(int) + sizeof(HeapManager) + i_pManager->nextBlock->sizeOf;
 			i_pManager->nextBlock = i_pManager->nextBlock->nextBlock;
-			
+			if (i_pManager->nextBlock != nullptr)
+			{
+				i_pManager->nextBlock->prevBlock = i_pManager;
+			}
 		}
 	}
 
@@ -256,6 +256,10 @@ void HeapManagerProxy::CollectHelper(HeapManager* i_pManager)
 		{
 			i_pManager->prevBlock->sizeOf += sizeof(int) + sizeof(HeapManager) + i_pManager->sizeOf;
 			i_pManager->prevBlock->nextBlock = i_pManager->nextBlock;
+			if (i_pManager->nextBlock != nullptr)
+			{
+				i_pManager->nextBlock->prevBlock = i_pManager->prevBlock;
+			}
 		}
 	}
 }

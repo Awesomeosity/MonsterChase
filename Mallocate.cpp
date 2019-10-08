@@ -306,6 +306,7 @@ int main()
 	HeapManager_UnitTest();
 
 #pragma warning (disable: 6031)
+	printf("Test is done. Press any key to exit...\n");
 	_getch();
 #pragma warning (disable: 6031)
 }
