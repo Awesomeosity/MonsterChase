@@ -47,18 +47,18 @@ bool HeapManager_UnitTest()
 	// an allocation worked. Also helped test my ShowFreeBlocks() and ShowOutstandingAllocations().
 	{
 #ifdef SUPPORTS_SHOWFREEBLOCKS
-		ShowFreeBlocks(pHeapManager);
+		HeapManagerProxy::ShowFreeBlocks(pHeapManager);
 #endif // SUPPORTS_SHOWFREEBLOCKS
 
 		size_t largestBeforeAlloc = GetLargestFreeBlock(pHeapManager);
-		void* pPtr = alloc(pHeapManager, largestBeforeAlloc);
+		void* pPtr = alloc(pHeapManager, largestBeforeAlloc - largestBeforeAlloc % 4);
 
 		if (pPtr)
 		{
 #if defined(SUPPORTS_SHOWFREEBLOCKS) || defined(SUPPORTS_SHOWOUTSTANDINGALLOCATIONS)
 			printf("After large allocation:\n");
 #ifdef SUPPORTS_SHOWFREEBLOCKS
-			ShowFreeBlocks(pHeapManager);
+			HeapManagerProxy::ShowFreeBlocks(pHeapManager);
 #endif // SUPPORTS_SHOWFREEBLOCKS
 #ifdef SUPPORTS_SHOWOUTSTANDINGALLOCATIONS
 			ShowOutstandingAllocations(pHeapManager);

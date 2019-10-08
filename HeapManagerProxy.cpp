@@ -56,7 +56,7 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size)
 
 	HeapManager* nextBlock = currBlock->nextBlock;
 	currBlock->isAllocated = true;
-	size_t targSize = i_size + (4 - i_size % 4);
+	size_t targSize = i_size + (4 - i_size % 4) % 4;
 	void* userPointer = (void*)((char*)(currBlock + 1) + (4 - i_size % 4));
 
 	//If allocating this block wouldn't leave enough size for another HeapManager, allocate the whole block.
@@ -111,7 +111,7 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size, unsigned i
 
 	HeapManager* nextBlock = currBlock->nextBlock;
 	currBlock->isAllocated = true;
-	size_t targSize = i_size + (i_alignment - i_size % i_alignment);
+	size_t targSize = i_size + (i_alignment - i_size % i_alignment) % i_alignment;
 	void* userPointer = (void*)((char*)(currBlock + 1) + (i_alignment - i_size % i_alignment));
 
 	//If allocating this block wouldn't leave enough size for another HeapManager, allocate the whole block.
@@ -216,7 +216,8 @@ void HeapManagerProxy::CollectHelper(HeapManager* i_pManager)
 bool HeapManagerProxy::Contains(const HeapManager* i_pManager, void* i_ptr)
 {
 	const HeapManager* currP = i_pManager;
-	while (currP != i_ptr)
+	HeapManager* heapP = (HeapManager*)((char*)i_ptr) - sizeof(HeapManager);
+	while (currP != heapP)
 	{
 		if (currP->nextBlock == nullptr)
 		{
