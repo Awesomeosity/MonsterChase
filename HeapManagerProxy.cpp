@@ -50,7 +50,7 @@ void HeapManagerProxy::Destroy()
 
 void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size)
 {
-	if (i_pManager == nullptr || i_size < sizeof(HeapManager) + sizeof(int) + 4)
+	if (i_pManager == nullptr)
 	{
 		return nullptr;
 	}
@@ -115,7 +115,7 @@ void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size)
 
 void* HeapManagerProxy::alloc(HeapManager* i_pManager, size_t i_size, unsigned int i_alignment)
 {
-	if (i_pManager == nullptr || i_size < sizeof(HeapManager) + sizeof(int) + 4 || i_alignment % 2 != 0)
+	if (i_pManager == nullptr || i_alignment % 2 != 0)
 	{
 		return nullptr;
 	}
