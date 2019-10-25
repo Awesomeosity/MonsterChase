@@ -14,12 +14,12 @@ Point2D::Point2D(const Point2D& point)
 	_Y = point._Y;
 }
 
-void Point2D::SetX(float x)
+void Point2D::SetX(const float x)
 {
 	_X = x;
 }
 
-void Point2D::SetY(float y)
+void Point2D::SetY(const float y)
 {
 	_Y = y;
 }

@@ -25,14 +25,14 @@ inline Point2D Point2D::operator-=(const Point2D Point2D)
 	return *this;
 }
 
-inline Point2D Point2D::operator*=(float scalar)
+inline Point2D Point2D::operator*=(const float scalar)
 {
 	_X *= scalar;
 	_Y *= scalar;
 	return *this;
 }
 
-inline Point2D Point2D::operator/=(float scalar)
+inline Point2D Point2D::operator/=(const float scalar)
 {
 	if (scalar != 0)
 	{
@@ -72,12 +72,12 @@ inline Point2D operator-(const Point2D& p1, const Point2D& p2)
 	return Point2D(p1.GetX() - p2.GetX(), p1.GetY() - p2.GetY());
 }
 
-inline Point2D operator*(const Point2D& p1, float scalar)
+inline Point2D operator*(const Point2D& p1, const float scalar)
 {
 	return Point2D(p1.GetX() * scalar, p1.GetY() * scalar);
 }
 
-inline Point2D operator/(const Point2D& p1, float scalar)
+inline Point2D operator/(const Point2D& p1, const float scalar)
 {
 	if (scalar != 0.0f)
 	{

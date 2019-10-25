@@ -9,7 +9,7 @@
 #include "../Engine/GameObject.h"
 #include "../Engine/Engine.cpp"
 
-void GetMonsterCount(unsigned int* maxMonsters)
+void GetMonsterCount(unsigned int* const maxMonsters)
 {
 	unsigned int monsterCount = 0;
 	while (true)
@@ -32,7 +32,7 @@ void GetMonsterCount(unsigned int* maxMonsters)
 	}
 }
 
-void MonsterPrint(Monster* monsters, unsigned int* maxMonsters)
+void MonsterPrint(Monster* const monsters, unsigned int* const maxMonsters)
 {
 	for (unsigned int i = 0; i < *maxMonsters + 10; i++)
 	{
@@ -47,7 +47,7 @@ void MonsterPrint(Monster* monsters, unsigned int* maxMonsters)
 
 }
 
-void MoveMonsters(unsigned int* maxMonsters, Monster* monsters, Player* player)
+void MoveMonsters(unsigned int* const maxMonsters, Monster* const monsters, Player* const player)
 {
 	for (unsigned int i = 0; i < *maxMonsters + 10; i++)
 	{
@@ -103,7 +103,7 @@ char MoveLoop()
 	}
 }
 
-void SpawnMonsters(Monster* monsters, unsigned int* maxMonsters, const float playX, const float playY)
+void SpawnMonsters(Monster* const monsters, unsigned int* const maxMonsters, const float playX, const float playY)
 {
 	for (unsigned int i = 0; i < *maxMonsters + 10; i++)
 	{
@@ -134,7 +134,7 @@ void SpawnMonsters(Monster* monsters, unsigned int* maxMonsters, const float pla
 	}
 }
 
-bool CheckPlayer(Player* player, Monster* monsters, unsigned int* maxMonsters)
+bool CheckPlayer(Player* const player, Monster* const monsters, unsigned int* const maxMonsters)
 {
 	float playerX = player->GetPoint()->GetX();
 	float playerY = player->GetPoint()->GetY();
@@ -149,7 +149,7 @@ bool CheckPlayer(Player* player, Monster* monsters, unsigned int* maxMonsters)
 	return true;
 }
 
-void GameLoop(Monster* monsters, Player* player, unsigned int* maxMonsters, const float playX, const float playY)
+void GameLoop(Monster* const monsters, Player* const player, unsigned int* const maxMonsters, const float playX, const float playY)
 {
 	while (true)
 	{
@@ -172,7 +172,7 @@ void GameLoop(Monster* monsters, Player* player, unsigned int* maxMonsters, cons
 	}
 }
 
-Monster* MonsterCreateLoop(int playX, int playY, unsigned int* maxMonsters)
+Monster* MonsterCreateLoop(const int playX, const int playY, unsigned int* const maxMonsters)
 {
 	unsigned int i = 0;
 	GetMonsterCount(maxMonsters);
@@ -192,7 +192,7 @@ Monster* MonsterCreateLoop(int playX, int playY, unsigned int* maxMonsters)
 	return monsters;
 }
 
-Player* CreatePlayer(int playX, int playY)
+Player* CreatePlayer(const int playX, const int playY)
 {
 	float playerX = rand() / (RAND_MAX / playX * 2.0f) - playX;
 	float playerY = rand() / (RAND_MAX / playY * 2.0f) - playY;

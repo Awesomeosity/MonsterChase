@@ -6,24 +6,24 @@ class HeapManager;
 namespace HeapManagerProxy
 {
 
-	HeapManager*	CreateHeapManager(void* i_pMemory, size_t i_sizeMemory);
+	HeapManager*	CreateHeapManager(void* const i_pMemory, const size_t i_sizeMemory);
 	void			Destroy();
 
-	void*			alloc(HeapManager* i_pManager, size_t i_size);
-	void*			alloc(HeapManager* i_pManager, size_t i_size, unsigned int i_alignment);
-	bool			free(HeapManager* i_pManager, void* i_ptr);
+	void*			alloc(HeapManager* const i_pManager, const size_t i_size);
+	void*			alloc(HeapManager* const i_pManager, const size_t i_size, const unsigned int i_alignment);
+	bool			free(HeapManager* const i_pManager, void* const i_ptr);
 
-	void			Collect(HeapManager* i_pManager);
-	void			CollectHelper(HeapManager* i_pManager);
+	void			Collect(HeapManager* const i_pManager);
+	void			CollectHelper(HeapManager* const i_pManager);
 
-	bool			Contains(const HeapManager* i_pManager, void* i_ptr);
-	bool			IsAllocated(const HeapManager* i_pManager, void* i_ptr);
+	bool			Contains(const HeapManager* const i_pManager, void* const i_ptr);
+	bool			IsAllocated(const HeapManager* const i_pManager, void* const i_ptr);
 
-	size_t			GetLargestFreeBlock(const HeapManager* i_pManager);
-	size_t			GetTotalFreeMemory(const HeapManager* i_pManager);
+	size_t			GetLargestFreeBlock(const HeapManager* const i_pManager);
+	size_t			GetTotalFreeMemory(const HeapManager* const i_pManager);
 
-	void			ShowFreeBlocks(const HeapManager* i_pManager);
-	void			ShowOutstandingAllocations(const HeapManager* i_pManager);
+	void			ShowFreeBlocks(const HeapManager* const i_pManager);
+	void			ShowOutstandingAllocations(const HeapManager* const i_pManager);
 
 } // namespace HeapManagerProxy
 
