@@ -4,15 +4,15 @@ class Point2D
 public:
 	Point2D(float x = 0, float y = 0);
 	Point2D(const Point2D& point);
-	Point2D operator=(const Point2D Point2D);
-	Point2D operator+=(const Point2D Point2D);
-	Point2D operator-=(const Point2D Point2D);
-	Point2D operator*=(float scalar);
-	Point2D operator/=(float scalar);
+	inline Point2D operator=(const Point2D Point2D);
+	inline Point2D operator+=(const Point2D Point2D);
+	inline Point2D operator-=(const Point2D Point2D);
+	inline Point2D operator*=(float scalar);
+	inline Point2D operator/=(float scalar);
 
 
-	float GetX() const;
-	float GetY() const;
+	inline float GetX() const;
+	inline float GetY() const;
 	void SetX(float x);
 	void SetY(float y);
 
@@ -22,10 +22,12 @@ private:
 	float _Y;
 };
 
-Point2D operator+(const Point2D &p1, const Point2D &p2);
-Point2D operator-(const Point2D &Point2D);
-Point2D operator-(const Point2D &p1, const Point2D &p2);
-Point2D operator*(const Point2D& p1, float scalar);
-Point2D operator/(const Point2D& p1, float scalar);
-bool operator==(const Point2D& p1, const Point2D& p2);
-bool operator!=(const Point2D& p1, const Point2D& p2);
+inline Point2D operator+(const Point2D &p1, const Point2D &p2);
+inline Point2D operator-(const Point2D &Point2D);
+inline Point2D operator-(const Point2D &p1, const Point2D &p2);
+inline Point2D operator*(const Point2D& p1, float scalar);
+inline Point2D operator/(const Point2D& p1, float scalar);
+inline bool operator==(const Point2D& p1, const Point2D& p2);
+inline bool operator!=(const Point2D& p1, const Point2D& p2);
+
+#include "Point2D-inl.h"
