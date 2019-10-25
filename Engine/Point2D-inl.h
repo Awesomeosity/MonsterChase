@@ -1,7 +1,7 @@
 #pragma once
-inline Point2D Point2D::operator=(const Point2D point)
+inline Point2D Point2D::operator=(const Point2D& point)
 {
-	if (this == &point)
+	if (*this == point)
 	{
 		return *this;
 	}
@@ -11,14 +11,14 @@ inline Point2D Point2D::operator=(const Point2D point)
 	return *this;
 }
 
-inline Point2D Point2D::operator+=(const Point2D Point2D)
+inline Point2D Point2D::operator+=(const Point2D& Point2D)
 {
 	_X += Point2D._X;
 	_Y += Point2D._Y;
 	return *this;
 }
 
-inline Point2D Point2D::operator-=(const Point2D Point2D)
+inline Point2D Point2D::operator-=(const Point2D& Point2D)
 {
 	_X -= Point2D._X;
 	_Y -= Point2D._Y;
