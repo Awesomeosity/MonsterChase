@@ -30,7 +30,7 @@
     <ClInclude Include="Point2D-inl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\MonsterChase\IGameObjectController.h">
+    <ClInclude Include="IGameObjectController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -47,7 +47,7 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\MonsterChase\IGameObjectController.cpp">
+    <ClCompile Include="IGameObjectController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

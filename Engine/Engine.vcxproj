@@ -155,17 +155,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\MonsterChase\IGameObjectController.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="IGameObjectController.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Point2D-inl.h" />
     <ClInclude Include="Point2D.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\MonsterChase\IGameObjectController.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="IGameObjectController.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

@@ -33,7 +33,7 @@ void GetMonsterCount(unsigned int* const maxMonsters)
 	}
 }
 
-void MonsterPrint(Monster* const monsters, unsigned int* const maxMonsters)
+void MonsterPrint(MonsterController* const monsters, unsigned int* const maxMonsters)
 {
 	for (unsigned int i = 0; i < *maxMonsters + 10; i++)
 	{
