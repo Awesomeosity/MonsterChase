@@ -158,10 +158,12 @@
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="MonsterChase.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerController.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
