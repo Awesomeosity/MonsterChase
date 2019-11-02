@@ -6,7 +6,7 @@ class MonsterController :
 public:
 	MonsterController(GameObject* monster);
 	virtual void Move(Point2D point);
-	
+	void MonsterPrint();
 private:
 	GameObject* monster;
 	bool isActive;

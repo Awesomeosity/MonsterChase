@@ -1,5 +1,6 @@
 #include "MonsterController.h"
 #include <cstdlib>
+#include <iostream>
 MonsterController::MonsterController(GameObject* monster) :
 	monster(monster)
 {
@@ -42,6 +43,14 @@ void MonsterController::Move(Point2D point)
 		}
 	}
 	checkAndSetTime();
+}
+
+void MonsterController::MonsterPrint()
+{
+	float monX = monster->GetPoint()->GetX();
+	float monY = monster->GetPoint()->GetY();
+	char* monName = monster->GetName();
+	std::cout << monName << "'s current position is: [" << monX << ", " << monY << "].\n";
 }
 
 void MonsterController::checkAndSetTime()

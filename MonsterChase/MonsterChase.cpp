@@ -2,8 +2,9 @@
 //
 
 #include <iostream>
-#include "Monster.h"
-#include "Player.h"
+#include "MonsterController.h"
+#include "PlayerController.h"
+#include "RandomController.h"
 #include "conio.h"
 #include "../Engine/Point2D.h"
 #include "../Engine/GameObject.h"
@@ -172,12 +173,12 @@ void GameLoop(Monster* const monsters, Player* const player, unsigned int* const
 	}
 }
 
-Monster* MonsterCreateLoop(const int playX, const int playY, unsigned int* const maxMonsters)
+MonsterController* MonsterCreateLoop(const int playX, const int playY, unsigned int* const maxMonsters)
 {
 	unsigned int i = 0;
 	GetMonsterCount(maxMonsters);
 	std::cout << *maxMonsters << " is the initial amount of monsters.\n";
-	Monster* monsters = new Monster[*maxMonsters + 10];
+	GameObject* monsters = new GameObject[*maxMonsters + 10];
 	for (; i < *maxMonsters; i++)
 	{
 		float monX = rand() / (RAND_MAX / playX * 2.0f) - playX;
@@ -187,7 +188,7 @@ Monster* MonsterCreateLoop(const int playX, const int playY, unsigned int* const
 		GetName(name);
 		monsters[i].SetPoint(Point2D(monX, monY));
 		monsters[i].SetName(name);
-		monsters[i].setInit(true);
+
 	}
 	return monsters;
 }
@@ -213,7 +214,7 @@ int main()
 	unsigned int monsterCount = 0;
 	unsigned int* maxMonsters = &monsterCount;
 	std::cout << "Monster Mash by Kevin Le (u0916211)\n";
-	Monster* monsters = MonsterCreateLoop(playX, playY, maxMonsters);
+	GameObject* monsters = MonsterCreateLoop(playX, playY, maxMonsters);
 	Player* player = CreatePlayer(playX, playY);
 	
 	GameLoop(monsters, player, maxMonsters, playX, playY);
