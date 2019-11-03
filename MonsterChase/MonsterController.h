@@ -6,12 +6,13 @@ class MonsterController :
 public:
 	MonsterController(GameObject* monster);
 	virtual void Move(Point2D point);
-	void MonsterPrint();
 private:
-	GameObject* monster;
-	bool isActive;
+	void checkAndSetTime();
 	unsigned int deathTime;
 	const unsigned int maxTime = 4;
-	void checkAndSetTime();
+	int maxX;
+	int maxY;
+	GameObject* monster;
+	bool isActive;
 };
 

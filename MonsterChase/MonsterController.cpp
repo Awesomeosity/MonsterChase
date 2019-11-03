@@ -43,6 +43,11 @@ void MonsterController::Move(Point2D point)
 		}
 	}
 	checkAndSetTime();
+	if (isActive)
+	{
+		char* monName = monster->GetName();
+		std::cout << monName << "'s current position is: [" << monster->GetPoint()->GetX() << ", " << monster->GetPoint()->GetY() << "].\n";
+	}
 }
 
 void MonsterController::MonsterPrint()
@@ -50,7 +55,6 @@ void MonsterController::MonsterPrint()
 	float monX = monster->GetPoint()->GetX();
 	float monY = monster->GetPoint()->GetY();
 	char* monName = monster->GetName();
-	std::cout << monName << "'s current position is: [" << monX << ", " << monY << "].\n";
 }
 
 void MonsterController::checkAndSetTime()
