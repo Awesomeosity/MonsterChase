@@ -1,29 +1,38 @@
 #include "MonsterController.h"
 #include <cstdlib>
 #include <iostream>
-MonsterController::MonsterController(GameObject* monster) :
-	monster(monster)
+
+
+MonsterController::MonsterController(bool active, float x, float y, GameObject* _monster, GameObject* _player)
+	: isActive(active), maxX(x), maxY(y)  
 {
-	deathTime = (rand() / (RAND_MAX / maxTime)) + 1;
-	unsigned int randomVal = (rand() / (RAND_MAX / 2));
-	if (randomVal == 0)
-	{
-		isActive = true;
-	}
-	else
-	{
-		isActive = false;
-	}
 }
 
-void MonsterController::Move(Point2D point)
+void MonsterController::Setup(GameObject* _monster, GameObject* _player)
+{
+	deathTime = (rand() / (RAND_MAX / maxTime)) + 1;
+	SetGameObject(_monster);
+	GetFocus(_player);
+}
+
+void MonsterController::SetGameObject(GameObject* object)
+{
+	monster = object;
+}
+
+void MonsterController::GetFocus(GameObject* object)
+{
+	player = object;
+}
+
+void MonsterController::UpdateGameObject()
 {
 	if (isActive)
 	{
 		float x = monster->GetPoint()->GetX();
 		float y = monster->GetPoint()->GetY();
-		float diffX = point.GetX() - x;
-		float diffY = point.GetY() - y;
+		float diffX = player->GetPoint->GetX() - x;
+		float diffY = player->GetPoint->GetY() - y;
 
 		if (diffX > 0)
 		{
@@ -35,26 +44,14 @@ void MonsterController::Move(Point2D point)
 		}
 		else if (diffY > 0)
 		{
-			monster->GetPoint()->SetX(++y);
+			monster->GetPoint()->SetY(++y);
 		}
 		else
 		{
-			monster->GetPoint()->SetX(--y);
+			monster->GetPoint()->SetY(--y);
 		}
 	}
 	checkAndSetTime();
-	if (isActive)
-	{
-		char* monName = monster->GetName();
-		std::cout << monName << "'s current position is: [" << monster->GetPoint()->GetX() << ", " << monster->GetPoint()->GetY() << "].\n";
-	}
-}
-
-void MonsterController::MonsterPrint()
-{
-	float monX = monster->GetPoint()->GetX();
-	float monY = monster->GetPoint()->GetY();
-	char* monName = monster->GetName();
 }
 
 void MonsterController::checkAndSetTime()
@@ -63,6 +60,25 @@ void MonsterController::checkAndSetTime()
 	if (deathTime == 0)
 	{
 		isActive = !isActive;
+
+		if (isActive)
+		{
+			float monX = rand() / (RAND_MAX / maxX * 2.0f) - maxX;
+			float monY = rand() / (RAND_MAX / maxY * 2.0f) - maxY;
+			monster->GetPoint()->SetX(monX);
+			monster->GetPoint()->SetY(monY);
+			std::cout << monster->GetName() << " has revived at [" << monX << ", " << monY << "]!\n";
+		}
+		if (!isActive)
+		{
+			std::cout << monster->GetName() << " has died.\n";
+		}
+
+		deathTime = (rand() / (RAND_MAX / maxTime)) + 1;
 	}
-	deathTime = (rand() / (RAND_MAX / maxTime)) + 1;
+
+	else if (isActive)
+	{
+		std::cout << monster->GetName() << "'s current position is: [" << monster->GetPoint()->GetX() << ", " << monster->GetPoint()->GetY() << "].\n";
+	}
 }
