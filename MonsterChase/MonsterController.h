@@ -4,7 +4,7 @@ class MonsterController :
 	public IGameObjectController
 {
 public:
-	MonsterController(bool active, float x, float y, char* _name);
+	MonsterController(bool active, float x, float y, GameObject* monster, GameObject* player, char* _name);
 	~MonsterController();
 	void SetGameObject(GameObject* object) override;
 	void GetFocus(GameObject* object);
