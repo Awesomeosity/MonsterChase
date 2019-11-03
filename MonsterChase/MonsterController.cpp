@@ -3,16 +3,15 @@
 #include <iostream>
 
 
-MonsterController::MonsterController(bool active, float x, float y, GameObject* _monster, GameObject* _player)
-	: isActive(active), maxX(x), maxY(y)  
-{
-}
-
-void MonsterController::Setup(GameObject* _monster, GameObject* _player)
+MonsterController::MonsterController(bool active, float x, float y, char* _name)
+	: isActive(active), maxX(x), maxY(y), name(_name)
 {
 	deathTime = (rand() / (RAND_MAX / maxTime)) + 1;
-	SetGameObject(_monster);
-	GetFocus(_player);
+}
+
+MonsterController::~MonsterController()
+{
+	delete name;
 }
 
 void MonsterController::SetGameObject(GameObject* object)
@@ -67,11 +66,11 @@ void MonsterController::checkAndSetTime()
 			float monY = rand() / (RAND_MAX / maxY * 2.0f) - maxY;
 			monster->GetPoint()->SetX(monX);
 			monster->GetPoint()->SetY(monY);
-			std::cout << monster->GetName() << " has revived at [" << monX << ", " << monY << "]!\n";
+			std::cout << name << " has revived at [" << monX << ", " << monY << "]!\n";
 		}
 		if (!isActive)
 		{
-			std::cout << monster->GetName() << " has died.\n";
+			std::cout << name << " has died.\n";
 		}
 
 		deathTime = (rand() / (RAND_MAX / maxTime)) + 1;
@@ -79,6 +78,6 @@ void MonsterController::checkAndSetTime()
 
 	else if (isActive)
 	{
-		std::cout << monster->GetName() << "'s current position is: [" << monster->GetPoint()->GetX() << ", " << monster->GetPoint()->GetY() << "].\n";
+		std::cout << name << "'s current position is: [" << monster->GetPoint()->GetX() << ", " << monster->GetPoint()->GetY() << "].\n";
 	}
 }
