@@ -1,19 +1,21 @@
 #pragma once
 #include "..\Engine\IGameObjectController.h"
-#include <cstdlib>
-
 class RandomController :
 	public IGameObjectController
 {
 public:
-	RandomController(GameObject* monster);
-	virtual void Move();
-
+	RandomController(float x, float y, GameObject* _monster, char* _name, bool active);
+	~RandomController();
+	void SetGameObject(GameObject* object) override;
+	void UpdateGameObject() override;
 private:
-	GameObject* monster;
-	bool isActive;
+	void checkAndSetTime();
 	unsigned int deathTime;
 	const unsigned int maxTime = 4;
-	void checkAndSetTime();
+	float maxX;
+	float maxY;
+	GameObject* monster;
+	char* name;
+	bool isActive;
 };
 

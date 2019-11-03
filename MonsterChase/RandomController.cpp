@@ -1,21 +1,24 @@
 #include "RandomController.h"
+#include <cstdlib>
+#include <iostream>
 
-RandomController::RandomController(GameObject* monster) :
-	monster(monster)
+RandomController::RandomController(float x, float y, GameObject* _monster, char* _name, bool active)
+	: maxX(x), maxY(y), monster(_monster), name(_name), isActive(active)
 {
 	deathTime = (rand() / (RAND_MAX / maxTime)) + 1;
-	unsigned int randomVal = (rand() / (RAND_MAX / 2));
-	if (randomVal == 0)
-	{
-		isActive = true;
-	}
-	else
-	{
-		isActive = false;
-	}
 }
 
-void RandomController::Move()
+RandomController::~RandomController()
+{
+	delete name;
+}
+
+void RandomController::SetGameObject(GameObject* object)
+{
+	monster = object;
+}
+
+void RandomController::UpdateGameObject()
 {
 	if (isActive)
 	{
@@ -51,7 +54,25 @@ void RandomController::checkAndSetTime()
 	if (deathTime == 0)
 	{
 		isActive = !isActive;
-	}
-	deathTime = (rand() / (RAND_MAX / maxTime)) + 1;
 
+		if (isActive)
+		{
+			float monX = rand() / (RAND_MAX / maxX * 2.0f) - maxX;
+			float monY = rand() / (RAND_MAX / maxY * 2.0f) - maxY;
+			monster->GetPoint()->SetX(monX);
+			monster->GetPoint()->SetY(monY);
+			std::cout << name << " has revived at [" << monX << ", " << monY << "]!\n";
+		}
+		if (!isActive)
+		{
+			std::cout << name << " has died.\n";
+		}
+
+		deathTime = (rand() / (RAND_MAX / maxTime)) + 1;
+	}
+
+	else if (isActive)
+	{
+		std::cout << name << "'s current position is: [" << monster->GetPoint()->GetX() << ", " << monster->GetPoint()->GetY() << "].\n";
+	}
 }
