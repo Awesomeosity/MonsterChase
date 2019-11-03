@@ -4,12 +4,15 @@ class PlayerController :
 	public IGameObjectController
 {
 public:
-	PlayerController(GameObject* thisPlayer, int sizeX, int sizeY);
-	virtual void Move(char direction);
+	PlayerController(GameObject* player, char* name, float _sizeX, float _sizeY);
+	void SetGameObject(GameObject* object) override;
+	void UpdateGameObject() override;
 private:
-	GameObject* player;
+	char getMovement();
 	void boundCheck();
-	int sizeX;
-	int sizeY;
+	GameObject* player;
+	char* name;
+	float maxX;
+	float maxY;
 };
 

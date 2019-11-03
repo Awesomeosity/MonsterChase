@@ -1,55 +1,108 @@
 #include "PlayerController.h"
+#include <iostream>
+#include <conio.h>
 
-PlayerController::PlayerController(GameObject* player, int sizeX, int sizeY)
-	: player(player), sizeX(sizeX), sizeY(sizeY)
+PlayerController::PlayerController(GameObject* _player, char* _name, float _sizeX, float _sizeY)
+	: player(_player), name(_name), maxX(_sizeX), maxY(_sizeY)
 {
 }
 
-void PlayerController::Move(char direction)
+void PlayerController::SetGameObject(GameObject* object)
 {
+	player = object;
+}
+
+void PlayerController::UpdateGameObject()
+{
+	char direction = getMovement();
+	float X = player->GetPoint()->GetX();
+	float Y = player->GetPoint()->GetY();
+
 	if (direction == 'W' || direction == 'w')
 	{
-		float Y = player->GetPoint()->GetY() + 1.0f;
-		player->GetPoint()->SetY(Y);
+		player->GetPoint()->SetY(++Y);
 	}
 	if (direction == 'A' || direction == 'a')
 	{
-		float X = player->GetPoint()->GetX() - 1.0f;
-		player->GetPoint()->SetX(X);
+		player->GetPoint()->SetX(--X);
 	}
 	if (direction == 'S' || direction == 's')
 	{
-		float Y = player->GetPoint()->GetY() - 1.0f;
-		player->GetPoint()->SetY(Y);
+		player->GetPoint()->SetY(--Y);
 	}
 	if (direction == 'D' || direction == 'd')
 	{
-		float X = player->GetPoint()->GetX() + 1.0f;
-		player->GetPoint()->SetX(X);
+		player->GetPoint()->SetX(++X);
 	}
 	boundCheck();
+
+}
+
+char PlayerController::getMovement()
+{
+	while (true)
+	{
+		std::cout << "Please enter the direction you want to move in. W, A, S, D, 'Q' to quit.\n";
+		char playerMove = (char)_getch();
+
+		if (std::cin.fail())
+		{
+			std::cin.clear();
+			std::cout << "Invalid input. Please try again.\n";
+		}
+		else
+		{
+			bool isValid = false;
+			switch (playerMove)
+			{
+			case 'W':
+			case 'w':
+			case 'A':
+			case 'a':
+			case 'S':
+			case 's':
+			case 'D':
+			case 'd':
+			case 'q':
+			case 'Q':
+				isValid = true;
+				break;
+			default:
+				break;
+			}
+
+			if (isValid)
+			{
+				return playerMove;
+			}
+			else
+			{
+				std::cout << "Invalid input. Please try again.\n";
+			}
+		}
+	}
+
 }
 
 void PlayerController::boundCheck()
 {
-	if (player->GetPoint()->GetX() > sizeX)
+	if (player->GetPoint()->GetX() > maxX)
 	{
-		player->GetPoint()->SetX(sizeX * -1);
+		player->GetPoint()->SetX(maxX * -1);
 	}
 
-	if (player->GetPoint()->GetX() < sizeX * -1)
+	if (player->GetPoint()->GetX() < maxX * -1)
 	{
-		player->GetPoint()->SetX(sizeX);
+		player->GetPoint()->SetX(maxX);
 	}
 
-	if (player->GetPoint()->GetY() > sizeY)
+	if (player->GetPoint()->GetY() > maxY)
 	{
-		player->GetPoint()->SetY(sizeY * -1);
+		player->GetPoint()->SetY(maxY * -1);
 	}
 
-	if (player->GetPoint()->GetY() < sizeY * -1)
+	if (player->GetPoint()->GetY() < maxY * -1)
 	{
-		player->GetPoint()->SetY(sizeY);
+		player->GetPoint()->SetY(maxY);
 	}
-
 }
