@@ -209,21 +209,39 @@ int main()
 {
 	Point2D* point = new Point2D();
 	point->Point2D_UnitTest();
-	static const int playX = 10;
-	static const int playY = 10;
+	float playX = 10.0f;
+	float playY = 10.0f;
 	unsigned int monsterCount = 0;
 	unsigned int* maxMonsters = &monsterCount;
 	std::cout << "Monster Mash by Kevin Le (u0916211)\n";
-	GameObject* monsters = MonsterCreateLoop(playX, playY, maxMonsters);
-	Player* player = CreatePlayer(playX, playY);
+	Point2D* zero = new Point2D(0, 0);
+	GameObject* playerObj = new GameObject(zero);
+	std::vector<IGameObjectController*>* controllers = new std::vector<IGameObjectController*>();
+	std::vector<MonsterController*>* monsters = new std::vector<MonsterController*>();
+	std::vector<RandomController*>* randoms = new std::vector<RandomController*>();
+
+	PlayerController* player = new PlayerController();
+	controllers->push_back(player);
+
+
+	GameObject* generated = MonsterCreateLoop(playX, playY, maxMonsters, playerObj, controllers, monsters, randoms);
+	CreatePlayer(playX, playY, player, playerObj);
 	
-	GameLoop(monsters, player, maxMonsters, playX, playY);
+	GameLoop(player, controllers, monsters, randoms);
 
 	std::cout << "Press any key to exit...\n";
 
-	
-	delete[] monsters;
-	delete player;
+	for (int i = 0; i < controllers->size(); i++)
+	{
+		delete (*controllers)[i];
+	}
+	delete controllers;
+	delete monsters;
+	delete randoms;
+	delete playerObj;
+	delete point;
+	delete zero;
+	delete[] generated;
 	_CrtDumpMemoryLeaks();
 
 #pragma warning (disable: 6031)
