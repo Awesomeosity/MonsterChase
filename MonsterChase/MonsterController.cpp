@@ -2,7 +2,6 @@
 #include <cstdlib>
 #include <iostream>
 
-
 MonsterController::MonsterController(bool active, float x, float y, GameObject* _monster, GameObject* _player, char* _name)
 	: isActive(active), maxX(x), maxY(y), monster(_monster), player(_player), name(_name)
 {
@@ -11,7 +10,17 @@ MonsterController::MonsterController(bool active, float x, float y, GameObject* 
 
 MonsterController::~MonsterController()
 {
-	delete name;
+	delete[] name;
+}
+
+void MonsterController::Setup(bool active, float x, float y, GameObject* _monster, GameObject* _player, char* _name)
+{
+	isActive = active;
+	maxX = x;
+	maxY = y;
+	monster = _monster;
+	player = _player;
+	name = _name;
 }
 
 void MonsterController::SetGameObject(GameObject* object)
@@ -30,8 +39,8 @@ void MonsterController::UpdateGameObject()
 	{
 		float x = monster->GetPoint()->GetX();
 		float y = monster->GetPoint()->GetY();
-		float diffX = player->GetPoint->GetX() - x;
-		float diffY = player->GetPoint->GetY() - y;
+		float diffX = player->GetPoint()->GetX() - x;
+		float diffY = player->GetPoint()->GetY() - y;
 
 		if (diffX > 0)
 		{
@@ -45,12 +54,26 @@ void MonsterController::UpdateGameObject()
 		{
 			monster->GetPoint()->SetY(++y);
 		}
-		else
+		else if(diffY < 0)
 		{
 			monster->GetPoint()->SetY(--y);
 		}
+		else
+		{
+
+		}
 	}
 	checkAndSetTime();
+}
+
+bool MonsterController::getActive() const
+{
+	return isActive;
+}
+
+Point2D* MonsterController::getPosition() const
+{
+	return monster->GetPoint();
 }
 
 void MonsterController::checkAndSetTime()
@@ -62,8 +85,8 @@ void MonsterController::checkAndSetTime()
 
 		if (isActive)
 		{
-			float monX = rand() / (RAND_MAX / maxX * 2.0f) - maxX;
-			float monY = rand() / (RAND_MAX / maxY * 2.0f) - maxY;
+			float monX = std::round(rand() / (RAND_MAX / maxX * 2) - maxX);
+			float monY = std::round(rand() / (RAND_MAX / maxY * 2) - maxY);
 			monster->GetPoint()->SetX(monX);
 			monster->GetPoint()->SetY(monY);
 			std::cout << name << " has revived at [" << monX << ", " << monY << "]!\n";
@@ -78,6 +101,7 @@ void MonsterController::checkAndSetTime()
 
 	else if (isActive)
 	{
+
 		std::cout << name << "'s current position is: [" << monster->GetPoint()->GetX() << ", " << monster->GetPoint()->GetY() << "].\n";
 	}
 }
