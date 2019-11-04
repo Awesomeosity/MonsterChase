@@ -7,6 +7,18 @@ PlayerController::PlayerController(GameObject* _player, char* _name, float _size
 {
 }
 
+PlayerController::~PlayerController()
+{
+	delete[] name;
+}
+
+void PlayerController::Setup(char* playerName, float playX, float playY)
+{
+	name = playerName;
+	maxX = playX;
+	maxY = playY;
+}
+
 void PlayerController::SetGameObject(GameObject* object)
 {
 	player = object;
@@ -14,10 +26,10 @@ void PlayerController::SetGameObject(GameObject* object)
 
 void PlayerController::UpdateGameObject()
 {
+	std::cout << name << "'s (Player) current position is: [" << player->GetPoint()->GetX() << ", " << player->GetPoint()->GetY() << "].\n";
 	char direction = getMovement();
 	float X = player->GetPoint()->GetX();
 	float Y = player->GetPoint()->GetY();
-
 	if (direction == 'W' || direction == 'w')
 	{
 		player->GetPoint()->SetY(++Y);
@@ -35,7 +47,11 @@ void PlayerController::UpdateGameObject()
 		player->GetPoint()->SetX(++X);
 	}
 	boundCheck();
+}
 
+Point2D* PlayerController::getPlayerPosition() const
+{
+	return player->GetPoint();
 }
 
 char PlayerController::getMovement()
