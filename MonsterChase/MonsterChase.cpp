@@ -11,7 +11,7 @@
 #include "../Engine/Engine.cpp"
 #include <vector>
 
-void GetMonsterCount(unsigned int* const maxMonsters)
+void inline GetMonsterCount(unsigned int* const maxMonsters)
 {
 	unsigned int monsterCount = 0;
 	while (true)
@@ -37,6 +37,9 @@ void GetMonsterCount(unsigned int* const maxMonsters)
 bool inline CheckPlayer(PlayerController* const player, std::vector<MonsterController*>* monsters, std::vector<RandomController*>* randoms)
 {
 	float playerX = player->getPlayerPosition()->GetX();
+	float playerY = player->getPlayerPosition()->GetY();
+
+	for (int i = 0; i < (*monsters).size(); i++)
 	{
 		if ((*monsters)[i]->getActive() && (*monsters)[i]->getPosition()->GetX() == playerX && (*monsters)[i]->getPosition()->GetY() == playerY)
 		{
@@ -50,11 +53,15 @@ bool inline CheckPlayer(PlayerController* const player, std::vector<MonsterContr
 			return false;
 		}
 	}
+
+	return true;
 }
 
 void inline GameLoop(PlayerController* const player, const std::vector<IGameObjectController*>* controllers, std::vector<MonsterController*>* monsters, std::vector<RandomController*>* randoms)
 {
 	float beforePosX, beforePosY, afterPosX, afterPosY;
+	bool isAlive = true;
+	while (isAlive)
 	{
 		beforePosX = player->getPlayerPosition()->GetX();
 		beforePosY = player->getPlayerPosition()->GetY();
@@ -65,6 +72,7 @@ void inline GameLoop(PlayerController* const player, const std::vector<IGameObje
 			{
 				afterPosX = player->getPlayerPosition()->GetX();
 				afterPosY = player->getPlayerPosition()->GetY();
+				if (beforePosX == afterPosX && beforePosY == afterPosY)
 				{
 					std::cout << "Quitting...\n";
 					isAlive = false;
@@ -82,74 +90,51 @@ void inline GameLoop(PlayerController* const player, const std::vector<IGameObje
 	}
 }
 
-void SpawnMonsters(Monster* const monsters, unsigned int* const maxMonsters, const float playX, const float playY)
+inline GameObject* MonsterCreateLoop(const float playX, const float playY, unsigned int* const maxMonsters, GameObject* player, std::vector<IGameObjectController*>* controllers, std::vector<MonsterController*>* monsters, std::vector<RandomController*>* randoms)
 {
-	for (unsigned int i = 0; i < *maxMonsters + 10; i++)
+	unsigned int i = 0;
+	bool isActive = false;
+	GetMonsterCount(maxMonsters);
+	std::cout << *maxMonsters << " is the initial amount of monsters.\n";
+	GameObject* monsterObjs = new GameObject[*maxMonsters + 10];
+	for (; i < *maxMonsters + 10; i++)
 	{
-		if (monsters[i].DecayTime() == 0)
+		float monX = std::round(rand() / (RAND_MAX / playX * 2) - playX);
+		float monY = std::round(rand() / (RAND_MAX / playY * 2) - playY);
+		char* name = new char[256]();
+
+		if (isActive)
 		{
-			monsters[i].setInit(!monsters[i].isInit());
-			if (monsters[i].isInit() == true)
-			{
-				float monX = rand() / (RAND_MAX / playX * 2.0f) - playX;
-				float monY = rand() / (RAND_MAX / playY * 2.0f) - playY;
-				monsters[i].GetPoint()->SetX(monX);
-				monsters[i].GetPoint()->SetY(monY);
-				char beginning[256] = "Monster #";
-				char buffer[256];
-				buffer[0] = '\0';
-				_itoa_s(i, buffer, 10);
-				strcat_s(beginning, buffer);
-				monsters[i].SetName(beginning);
-				monsters[i].SetTime();
-				std::cout << monsters[i].GetName() << " has spawned!\n";
-			}
-			if (monsters[i].isInit() == false)
-			{
-				std::cout << monsters[i].GetName() << " died!\n";
-				monsters[i].SetTime();
-			}
+			std::cout << "Please enter Monster #" << i - 9 << "'s name: ";
+			GetName(name);
+		}
+		if (!isActive)
+		{
+			char beginning[256] = "Monster #";
+			char buffer[256];
+			buffer[0] = '\0';
+			_itoa_s(i, buffer, 10);
+			strcat_s(beginning, buffer);
+			strcpy_s(name, 256, beginning);
+		}
+		if (rand() / (RAND_MAX / 2) == 0)
+		{
+			MonsterController* newController = new MonsterController(isActive, monX, monY, &(monsterObjs[i]), player, name);
+			controllers->push_back(newController);
+			monsters->push_back(newController);
+		}
+		else
+		{
+			RandomController* newController = new RandomController(isActive, monX, monY, &(monsterObjs[i]), name);
+			controllers->push_back(newController);
+			randoms->push_back(newController);
+		}
+
+		if (i == 9)
+		{
+			isActive = true;
 		}
 	}
-}
-
-bool CheckPlayer(Player* const player, Monster* const monsters, unsigned int* const maxMonsters)
-{
-	float playerX = player->GetPoint()->GetX();
-	float playerY = player->GetPoint()->GetY();
-
-	for (unsigned int i = 0; i < *maxMonsters + 10; i++)
-	{
-		if (monsters[i].isInit() && monsters[i].GetPoint()->GetX() == playerX && monsters[i].GetPoint()->GetY() == playerY)
-		{
-			return false;
-		}
-	}
-	return true;
-}
-
-void GameLoop(Monster* const monsters, Player* const player, unsigned int* const maxMonsters, const float playX, const float playY)
-{
-	while (true)
-	{
-		MonsterPrint(monsters, maxMonsters);
-		std::cout << player->GetName() << "'s (Player) current position is: [" << player->GetPoint()->GetX() << ", " << player->GetPoint()->GetY() << "].\n";
-		char movement = MoveLoop();
-		if (movement == 'q' || movement == 'Q')
-		{
-			std::cout << "Quitting game...\n";
-			break;
-		}
-		MoveMonsters(maxMonsters, monsters, player);
-		SpawnMonsters(monsters, maxMonsters, playX, playY);
-		player->MovePlayerMain(movement, player, playX, playY);
-		if (!CheckPlayer(player, monsters, maxMonsters))
-		{
-			std::cout << "You got hit and died...\n";
-			break;
-		}
-	}
-}
 
 	return monsterObjs;
 }
