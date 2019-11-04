@@ -60,48 +60,33 @@ void MoveMonsters(unsigned int* const maxMonsters, Monster* const monsters, Play
 	}
 }
 
-char MoveLoop()
+void inline GameLoop(PlayerController* const player, const std::vector<IGameObjectController*>* controllers, std::vector<MonsterController*>* monsters, std::vector<RandomController*>* randoms)
 {
-	while (true)
+	float beforePosX, beforePosY, afterPosX, afterPosY;
 	{
-		std::cout << "Please enter the direction you want to move in. W, A, S, D, 'Q' to quit.\n";
-		char playerMove = (char)_getch();
-
-		if (std::cin.fail())
+		beforePosX = player->getPlayerPosition()->GetX();
+		beforePosY = player->getPlayerPosition()->GetY();
+		for (int i = 0; i < controllers->size(); i++)
 		{
-			std::cin.clear();
-			std::cout << "Invalid input. Please try again.\n";
-		}
-		else
-		{
-			bool isValid = false;
-			switch (playerMove)
+			(*controllers)[i]->UpdateGameObject();
+			if (i == 0)
 			{
-			case 'W':
-			case 'w':
-			case 'A':
-			case 'a':
-			case 'S':
-			case 's':
-			case 'D':
-			case 'd':
-			case 'q':
-			case 'Q':
-				isValid = true;
-				break;
-			default:
-				break;
-			}
-
-			if (isValid)
-			{
-				return playerMove;
-			}
-			else
-			{
-				std::cout << "Invalid input. Please try again.\n";
+				afterPosX = player->getPlayerPosition()->GetX();
+				afterPosY = player->getPlayerPosition()->GetY();
+				{
+					std::cout << "Quitting...\n";
+					isAlive = false;
+					break;
+				} 
+				if (!CheckPlayer(player, monsters, randoms))
+				{
+					std::cout << "You got hit!\n";
+					isAlive = false;
+					break;
+				}
 			}
 		}
+
 	}
 }
 
@@ -174,24 +159,7 @@ void GameLoop(Monster* const monsters, Player* const player, unsigned int* const
 	}
 }
 
-MonsterController* MonsterCreateLoop(const int playX, const int playY, unsigned int* const maxMonsters)
-{
-	unsigned int i = 0;
-	GetMonsterCount(maxMonsters);
-	std::cout << *maxMonsters << " is the initial amount of monsters.\n";
-	GameObject* monsters = new GameObject[*maxMonsters + 10];
-	for (; i < *maxMonsters; i++)
-	{
-		float monX = rand() / (RAND_MAX / playX * 2.0f) - playX;
-		float monY = rand() / (RAND_MAX / playY * 2.0f) - playY;
-		std::cout << "Please enter Monster #" << i + 1 << "'s name: ";
-		char name[256];
-		GetName(name);
-		monsters[i].SetPoint(Point2D(monX, monY));
-		monsters[i].SetName(name);
-
-	}
-	return monsters;
+	return monsterObjs;
 }
 
 void inline CreatePlayer(const float playX, const float playY, PlayerController* player, GameObject* playerObj)
