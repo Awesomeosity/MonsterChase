@@ -9,6 +9,7 @@
 #include "../Engine/Point2D.h"
 #include "../Engine/GameObject.h"
 #include "../Engine/Engine.cpp"
+#include <vector>
 
 void GetMonsterCount(unsigned int* const maxMonsters)
 {
@@ -193,16 +194,13 @@ MonsterController* MonsterCreateLoop(const int playX, const int playY, unsigned 
 	return monsters;
 }
 
-Player* CreatePlayer(const int playX, const int playY)
+void inline CreatePlayer(const float playX, const float playY, PlayerController* player, GameObject* playerObj)
 {
-	float playerX = rand() / (RAND_MAX / playX * 2.0f) - playX;
-	float playerY = rand() / (RAND_MAX / playY * 2.0f) - playY;
-
 	std::cout << "Please enter your name: ";
-	char playerName[256];
+	char* playerName = new char[256]();
 	GetName(playerName);
-	Player* player = new Player(Point2D(playerX, playerY), playerName);
-	return player;
+	player->SetGameObject(playerObj);
+	player->Setup(playerName, playX, playY);
 }
 
 int main()
