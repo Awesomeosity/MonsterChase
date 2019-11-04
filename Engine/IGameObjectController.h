@@ -2,7 +2,8 @@
 #include "GameObject.h"
 class IGameObjectController
 {
-public: 
+public:
+	virtual ~IGameObjectController() {};
 	virtual void SetGameObject(GameObject* object) = 0;
 	virtual void UpdateGameObject() {};
 };
