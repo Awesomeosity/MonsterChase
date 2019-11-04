@@ -4,10 +4,12 @@ class RandomController :
 	public IGameObjectController
 {
 public:
-	RandomController(float x, float y, GameObject* _monster, char* _name, bool active);
+	RandomController(bool active, float x, float y, GameObject* _monster, char* _name);
 	~RandomController();
 	void SetGameObject(GameObject* object) override;
 	void UpdateGameObject() override;
+	bool getActive() const;
+	Point2D* getPosition() const;
 private:
 	void checkAndSetTime();
 	unsigned int deathTime;

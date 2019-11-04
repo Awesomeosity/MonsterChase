@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <iostream>
 
-RandomController::RandomController(float x, float y, GameObject* _monster, char* _name, bool active)
+RandomController::RandomController(bool active, float x, float y, GameObject* _monster, char* _name)
 	: maxX(x), maxY(y), monster(_monster), name(_name), isActive(active)
 {
 	deathTime = (rand() / (RAND_MAX / maxTime)) + 1;
@@ -10,7 +10,7 @@ RandomController::RandomController(float x, float y, GameObject* _monster, char*
 
 RandomController::~RandomController()
 {
-	delete name;
+	delete[] name;
 }
 
 void RandomController::SetGameObject(GameObject* object)
@@ -48,6 +48,17 @@ void RandomController::UpdateGameObject()
 	checkAndSetTime();
 }
 
+bool RandomController::getActive() const
+{
+	return isActive;
+}
+
+Point2D* RandomController::getPosition() const
+{
+	return monster->GetPoint();
+}
+
+
 void RandomController::checkAndSetTime()
 {
 	deathTime--;
@@ -57,8 +68,8 @@ void RandomController::checkAndSetTime()
 
 		if (isActive)
 		{
-			float monX = rand() / (RAND_MAX / maxX * 2.0f) - maxX;
-			float monY = rand() / (RAND_MAX / maxY * 2.0f) - maxY;
+			float monX = std::round(rand() / (RAND_MAX / maxX * 2) - maxX);
+			float monY = std::round(rand() / (RAND_MAX / maxY * 2) - maxY);
 			monster->GetPoint()->SetX(monX);
 			monster->GetPoint()->SetY(monY);
 			std::cout << name << " has revived at [" << monX << ", " << monY << "]!\n";
