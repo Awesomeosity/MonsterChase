@@ -34,28 +34,20 @@ void GetMonsterCount(unsigned int* const maxMonsters)
 	}
 }
 
-void MonsterPrint(MonsterController* const monsters, unsigned int* const maxMonsters)
+bool inline CheckPlayer(PlayerController* const player, std::vector<MonsterController*>* monsters, std::vector<RandomController*>* randoms)
 {
-	for (unsigned int i = 0; i < *maxMonsters + 10; i++)
+	float playerX = player->getPlayerPosition()->GetX();
 	{
-		if (monsters[i].isInit())
+		if ((*monsters)[i]->getActive() && (*monsters)[i]->getPosition()->GetX() == playerX && (*monsters)[i]->getPosition()->GetY() == playerY)
 		{
-			float monX = monsters[i].GetPoint()->GetX();
-			float monY = monsters[i].GetPoint()->GetY();
-			char* monName = monsters[i].GetName();
-			std::cout << monName << "'s current position is: [" << monX << ", " << monY << "].\n";
+			return false;
 		}
 	}
-
-}
-
-void MoveMonsters(unsigned int* const maxMonsters, Monster* const monsters, Player* const player)
-{
-	for (unsigned int i = 0; i < *maxMonsters + 10; i++)
+	for (int i = 0; i < (*randoms).size(); i++)
 	{
-		if (monsters[i].isInit())
+		if ((*randoms)[i]->getActive() && (*randoms)[i]->getPosition()->GetX() == playerX && (*randoms)[i]->getPosition()->GetY() == playerY)
 		{
-			monsters[i].MoveMonster(*(player->GetPoint()));
+			return false;
 		}
 	}
 }
