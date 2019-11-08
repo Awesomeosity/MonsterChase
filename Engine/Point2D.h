@@ -2,7 +2,7 @@
 class Point2D
 {
 public:
-	Point2D(float x = 0, float y = 0);
+	Point2D(const float x = 0, const float y = 0);
 	Point2D(const Point2D& point);
 	inline Point2D operator=(const Point2D& Point2D);
 	inline Point2D operator+=(const Point2D& Point2D);
