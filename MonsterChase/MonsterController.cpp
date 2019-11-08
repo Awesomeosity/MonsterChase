@@ -13,6 +13,28 @@ MonsterController::~MonsterController()
 	delete[] name;
 }
 
+MonsterController::MonsterController(const MonsterController& controller) :
+	deathTime(controller.deathTime), maxX(controller.maxX), maxY(controller.maxY),
+	monster(controller.monster), player(controller.player), name(_strdup(controller.name)),
+	isActive(controller.isActive)
+{
+}
+
+MonsterController& MonsterController::operator=(const MonsterController& other)
+{
+	if (this != &other)
+	{
+		deathTime = other.deathTime;
+		maxX = other.maxX;
+		maxY = other.maxY;
+		monster = other.monster;
+		player = other.player;
+		name = _strdup(other.name);
+		isActive = other.isActive;
+	}
+	return *this;
+}
+
 void MonsterController::Setup(bool active, float x, float y, GameObject* _monster, GameObject* _player, char* _name)
 {
 	isActive = active;

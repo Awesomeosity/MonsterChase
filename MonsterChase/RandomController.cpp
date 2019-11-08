@@ -13,6 +13,26 @@ RandomController::~RandomController()
 	delete[] name;
 }
 
+RandomController::RandomController(const RandomController& controller):
+	deathTime(controller.deathTime), maxX(controller.maxX), maxY(controller.maxY),
+	monster(controller.monster), name(_strdup(controller.name)), isActive(controller.isActive)
+{
+}
+
+RandomController& RandomController::operator=(const RandomController& other)
+{
+	if (this != &other)
+	{
+		deathTime = other.deathTime;
+		maxX = other.maxX;
+		maxY = other.maxY;
+		monster = other.monster;
+		name = _strdup(other.name);
+		isActive = other.isActive;
+	}
+	return *this;
+}
+
 void RandomController::SetGameObject(GameObject* object)
 {
 	monster = object;

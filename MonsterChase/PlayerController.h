@@ -6,6 +6,8 @@ class PlayerController :
 public:
 	PlayerController(GameObject* player = nullptr, char* name = nullptr, float _sizeX = 0, float _sizeY = 0);
 	~PlayerController();
+	PlayerController(const PlayerController& controller);
+	PlayerController& operator=(const PlayerController& other);
 	void Setup(char* playerName, float playX, float playY);
 	void SetGameObject(GameObject* object) override;
 	void UpdateGameObject() override;

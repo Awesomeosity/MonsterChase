@@ -6,6 +6,8 @@ class RandomController :
 public:
 	RandomController(bool active, float x, float y, GameObject* _monster, char* _name);
 	~RandomController();
+	RandomController(const RandomController& controller);
+	RandomController& operator=(const RandomController& other);
 	void SetGameObject(GameObject* object) override;
 	void UpdateGameObject() override;
 	bool getActive() const;

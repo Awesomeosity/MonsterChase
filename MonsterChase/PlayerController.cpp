@@ -12,6 +12,24 @@ PlayerController::~PlayerController()
 	delete[] name;
 }
 
+PlayerController::PlayerController(const PlayerController& controller) :
+	player(controller.player), name(_strdup(controller.name)), maxX(controller.maxX), maxY(controller.maxY)
+{
+
+}
+
+PlayerController& PlayerController::operator=(const PlayerController& other)
+{
+	if (this != &other)
+	{
+		player = other.player;
+		name = _strdup(other.name);
+		maxX = other.maxX;
+		maxY = other.maxY;
+	}
+	return *this;
+}
+
 void PlayerController::Setup(char* playerName, float playX, float playY)
 {
 	name = playerName;
