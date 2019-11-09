@@ -301,35 +301,45 @@ void* operator new(const size_t size, void* const ptr, HeapManager* const heap)
 }
 
 
-		SYSTEM_INFO SysInfo;
-		GetSystemInfo(&SysInfo);
-		// round our size to a multiple of memory page size
-		assert(SysInfo.dwPageSize > 0);
-		size_t sizeHeapInPageMultiples = SysInfo.dwPageSize * ((sizeHeap + SysInfo.dwPageSize) / SysInfo.dwPageSize);
-		void* pHeapMemory = VirtualAlloc(NULL, sizeHeapInPageMultiples, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
-		assert(pHeapMemory);
-
-		// Create a heap manager for my test heap.
-		thisHeap = CreateHeapManager(pHeapMemory, sizeHeap);
-		assert(thisHeap);
-
-		if (thisHeap == nullptr)
-		{
-			std::cerr << "Bad Pointer Generated (1)";
-		}
-	}
-
-	return alloc(thisHeap, size);
-}
-
-void operator delete(void* i_ptr)
-{
-
-}
-
 int main()
 {
 	HeapManager_UnitTest();
+
+	using namespace HeapManagerProxy;
+	const size_t 		sizeHeap = 1024 * 1024;
+	const unsigned int 	numDescriptors = 2048;
+
+	// Get SYSTEM_INFO, which includes the memory page size
+	SYSTEM_INFO SysInfo;
+	GetSystemInfo(&SysInfo);
+	// round our size to a multiple of memory page size
+	assert(SysInfo.dwPageSize > 0);
+	size_t sizeHeapInPageMultiples = SysInfo.dwPageSize * ((sizeHeap + SysInfo.dwPageSize) / SysInfo.dwPageSize);
+	void* pHeapMemory = VirtualAlloc(NULL, sizeHeapInPageMultiples, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
+	assert(pHeapMemory);
+
+	HeapManager* pHeapManager = CreateHeapManager(pHeapMemory, sizeHeap);
+	assert(pHeapManager);
+
+	if (pHeapManager == nullptr)
+	{
+		std::cerr << "Bad Pointer Generated (1)";
+	}
+
+	int* tryInt = new(pHeapManager) int;
+	*tryInt = 1;
+
+	int* multiInt = new(pHeapManager) int[10];
+	multiInt[0] = 0;
+
+	int* placeInt = new(reinterpret_cast<void*>(tryInt), pHeapManager) int(10);
+	*placeInt = 10;
+
+	if (pHeapMemory)
+	{
+		VirtualFree(pHeapMemory, 0, MEM_RELEASE);
+	}
+
 
 	_CrtDumpMemoryLeaks();
 
