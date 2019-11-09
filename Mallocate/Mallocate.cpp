@@ -256,8 +256,20 @@ bool HeapManager_UnitTest()
 	return true;
 }
 
-void* operator new(size_t size)
+void* operator new(const size_t size, HeapManager* const heap)
 {
+	assert(heap != nullptr);
+	assert(size > 0);
+	std::cout << "Calling new new(size, heap).\n";
+	return HeapManagerProxy::alloc(heap, size);
+}
+
+void operator delete(void* const i_ptr, HeapManager* const heap)
+{
+	assert(heap != nullptr);
+	assert(i_ptr != nullptr);
+	HeapManagerProxy::free(heap, i_ptr);
+}
 	using namespace HeapManagerProxy;
 
 	static HeapManager* thisHeap = nullptr;
