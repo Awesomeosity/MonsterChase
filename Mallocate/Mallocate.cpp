@@ -260,6 +260,7 @@ bool HeapManager_UnitTest()
 int main()
 {
 	HeapManager_UnitTest();
+	_CrtDumpMemoryLeaks();
 
 #pragma warning (disable: 6031)
 	printf("Test is done. Press any key to exit...\n");

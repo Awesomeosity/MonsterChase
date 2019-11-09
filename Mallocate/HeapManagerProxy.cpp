@@ -236,7 +236,7 @@ void HeapManagerProxy::Collect(HeapManager* const i_pManager)
 
 void HeapManagerProxy::CollectHelper(HeapManager* const i_pManager)
 {
-	if (i_pManager == nullptr)
+	if (i_pManager == nullptr || i_pManager->isAllocated == true)
 	{
 		return;
 	}
