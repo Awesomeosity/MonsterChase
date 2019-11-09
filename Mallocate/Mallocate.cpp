@@ -270,12 +270,25 @@ void operator delete(void* const i_ptr, HeapManager* const heap)
 	assert(i_ptr != nullptr);
 	HeapManagerProxy::free(heap, i_ptr);
 }
-	using namespace HeapManagerProxy;
 
-	static HeapManager* thisHeap = nullptr;
-	const size_t 		sizeHeap = 1024 * 1024;
+void* operator new[](const size_t size, HeapManager* const heap)
+{
+	assert(heap != nullptr);
+	assert(size > 0);
+	std::cout << "Calling new new[](size, heap).\n";
+	void* newArr = HeapManagerProxy::alloc(heap, size + sizeof(size_t));
+	newArr = reinterpret_cast<void*>(reinterpret_cast<char*>(newArr) + sizeof(size_t));
+	return newArr;
+}
 
-	if (thisHeap == nullptr)
+void operator delete[](void* const i_ptr, HeapManager* const heap)
+{
+	assert(heap != nullptr);
+	assert(i_ptr != nullptr);
+
+	void* deletePoint = reinterpret_cast<void*>(reinterpret_cast<char*>(i_ptr) - sizeof(size_t));
+	HeapManagerProxy::free(heap, deletePoint);
+}
 	{
 		SYSTEM_INFO SysInfo;
 		GetSystemInfo(&SysInfo);
