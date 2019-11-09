@@ -256,10 +256,45 @@ bool HeapManager_UnitTest()
 	return true;
 }
 
+void* operator new(size_t size)
+{
+	using namespace HeapManagerProxy;
+
+	static HeapManager* thisHeap = nullptr;
+	const size_t 		sizeHeap = 1024 * 1024;
+
+	if (thisHeap == nullptr)
+	{
+		SYSTEM_INFO SysInfo;
+		GetSystemInfo(&SysInfo);
+		// round our size to a multiple of memory page size
+		assert(SysInfo.dwPageSize > 0);
+		size_t sizeHeapInPageMultiples = SysInfo.dwPageSize * ((sizeHeap + SysInfo.dwPageSize) / SysInfo.dwPageSize);
+		void* pHeapMemory = VirtualAlloc(NULL, sizeHeapInPageMultiples, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
+		assert(pHeapMemory);
+
+		// Create a heap manager for my test heap.
+		thisHeap = CreateHeapManager(pHeapMemory, sizeHeap);
+		assert(thisHeap);
+
+		if (thisHeap == nullptr)
+		{
+			std::cerr << "Bad Pointer Generated (1)";
+		}
+	}
+
+	return alloc(thisHeap, size);
+}
+
+void operator delete(void* i_ptr)
+{
+
+}
 
 int main()
 {
 	HeapManager_UnitTest();
+
 	_CrtDumpMemoryLeaks();
 
 #pragma warning (disable: 6031)
