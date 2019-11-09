@@ -300,6 +300,14 @@ void* operator new(const size_t size, void* const ptr, HeapManager* const heap)
 	return ptr;
 }
 
+void* operator new(const size_t size, HeapManager* const heap, unsigned int alignment)
+{
+	assert(alignment % 2 == 0);
+	assert(heap != nullptr);
+	std::cout << "Calling new new(size, heap, alignment).\n";
+	return HeapManagerProxy::alloc(heap, size, alignment);
+}
+
 
 int main()
 {
@@ -334,6 +342,9 @@ int main()
 
 	int* placeInt = new(reinterpret_cast<void*>(tryInt), pHeapManager) int(10);
 	*placeInt = 10;
+
+	int* doInt = new(pHeapManager, 4) int;
+	*doInt = 5;
 
 	if (pHeapMemory)
 	{
