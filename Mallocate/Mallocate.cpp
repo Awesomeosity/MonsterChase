@@ -289,7 +289,18 @@ void operator delete[](void* const i_ptr, HeapManager* const heap)
 	void* deletePoint = reinterpret_cast<void*>(reinterpret_cast<char*>(i_ptr) - sizeof(size_t));
 	HeapManagerProxy::free(heap, deletePoint);
 }
-	{
+
+void* operator new(const size_t size, void* const ptr, HeapManager* const heap)
+{
+	assert(heap != nullptr);
+	assert(size > 0);
+	assert(HeapManagerProxy::IsAllocated(heap, ptr));
+	std::cout << "Calling new placement new(size, heap).\n";
+
+	return ptr;
+}
+
+
 		SYSTEM_INFO SysInfo;
 		GetSystemInfo(&SysInfo);
 		// round our size to a multiple of memory page size
