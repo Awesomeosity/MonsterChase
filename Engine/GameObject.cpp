@@ -14,6 +14,12 @@ GameObject::GameObject(GameObject& gameObject) : _point(*(gameObject.GetPoint())
 {
 }
 
+GameObject::GameObject(GameObject&& gameObject) noexcept
+	: _point()
+{
+	_point = gameObject._point;
+}
+
 GameObject& GameObject::operator=(GameObject& gameObject)
 {
 	if (this == &gameObject)
@@ -23,6 +29,17 @@ GameObject& GameObject::operator=(GameObject& gameObject)
 
 	_point = *(gameObject.GetPoint());
 
+	return *this;
+}
+
+GameObject& GameObject::operator=(GameObject&& gameObject) noexcept
+{
+	if (this == &gameObject)
+	{
+		return *this;
+	}
+
+	_point = *(gameObject.GetPoint());
 	return *this;
 }
 
