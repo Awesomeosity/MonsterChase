@@ -20,6 +20,28 @@ MonsterController::MonsterController(const MonsterController& controller) :
 {
 }
 
+MonsterController::MonsterController(MonsterController&& controller) noexcept
+	: deathTime(0), maxX(0), maxY(0),
+	monster(nullptr), player(nullptr), name(nullptr),
+	isActive(false)
+{
+	deathTime = controller.deathTime;
+	maxX = controller.maxX;
+	maxY = controller.maxY;
+	monster = controller.monster;
+	player = controller.player;
+	name = controller.name;
+	isActive = controller.isActive;
+
+	controller.deathTime = 0;
+	controller.maxX = 0;
+	controller.maxY = 0;
+	controller.monster = nullptr;
+	controller.player = nullptr;
+	controller.name = nullptr;
+	controller.isActive = false;
+}
+
 MonsterController& MonsterController::operator=(const MonsterController& other)
 {
 	if (this != &other)
@@ -32,6 +54,26 @@ MonsterController& MonsterController::operator=(const MonsterController& other)
 		name = _strdup(other.name);
 		isActive = other.isActive;
 	}
+	return *this;
+}
+
+MonsterController& MonsterController::operator=(MonsterController&& other) noexcept
+{
+	if (this != &other)
+	{
+		delete monster;
+		delete player;
+		delete name;
+
+		deathTime = other.deathTime;
+		maxX = other.maxX;
+		maxY = other.maxY;
+		monster = other.monster;
+		player = other.player;
+		name = other.name;
+		isActive = other.isActive;
+	}
+
 	return *this;
 }
 
