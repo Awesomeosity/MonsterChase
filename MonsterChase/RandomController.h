@@ -7,7 +7,9 @@ public:
 	RandomController(bool active, float x, float y, GameObject* _monster, char* _name);
 	~RandomController();
 	RandomController(const RandomController& controller);
+	RandomController(RandomController&& controller) noexcept;
 	RandomController& operator=(const RandomController& other);
+	RandomController& operator=(RandomController&& other) noexcept;
 	void SetGameObject(GameObject* object) override;
 	void UpdateGameObject() override;
 	bool getActive() const;

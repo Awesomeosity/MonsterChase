@@ -19,6 +19,18 @@ RandomController::RandomController(const RandomController& controller):
 {
 }
 
+RandomController::RandomController(RandomController&& controller) noexcept
+	: deathTime(0), maxX(0), maxY(0),
+	monster(nullptr), name(nullptr), isActive(false)
+{
+	deathTime = controller.deathTime;
+	maxX = controller.maxX;
+	maxY = controller.maxY;
+	monster = controller.monster;
+	name = controller.name;
+	isActive = controller.isActive;
+}
+
 RandomController& RandomController::operator=(const RandomController& other)
 {
 	if (this != &other)
@@ -28,6 +40,23 @@ RandomController& RandomController::operator=(const RandomController& other)
 		maxY = other.maxY;
 		monster = other.monster;
 		name = _strdup(other.name);
+		isActive = other.isActive;
+	}
+	return *this;
+}
+
+RandomController& RandomController::operator=(RandomController&& other) noexcept
+{
+	if (this != &other)
+	{
+		delete monster;
+		delete name;
+
+		deathTime = other.deathTime;
+		maxX = other.maxX;
+		maxY = other.maxY;
+		monster = other.monster;
+		name = other.name;
 		isActive = other.isActive;
 	}
 	return *this;
