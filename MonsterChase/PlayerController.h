@@ -7,7 +7,9 @@ public:
 	PlayerController(GameObject* player = nullptr, char* name = nullptr, float _sizeX = 0, float _sizeY = 0);
 	~PlayerController();
 	PlayerController(const PlayerController& controller);
+	PlayerController(PlayerController&& controller) noexcept;
 	PlayerController& operator=(const PlayerController& other);
+	PlayerController& operator=(PlayerController&& other) noexcept;
 	void Setup(char* playerName, float playX, float playY);
 	void SetGameObject(GameObject* object) override;
 	void UpdateGameObject() override;

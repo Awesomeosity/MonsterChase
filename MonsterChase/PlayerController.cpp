@@ -18,6 +18,21 @@ PlayerController::PlayerController(const PlayerController& controller) :
 
 }
 
+PlayerController::PlayerController(PlayerController&& controller) noexcept
+	: player(nullptr), name(nullptr), maxX(0), maxY(0)
+{
+	player = controller.player;
+	name = controller.name;
+	maxX = controller.maxX;
+	maxY = controller.maxY;
+
+	controller.player = nullptr;
+	controller.name = nullptr;
+	controller.maxX = 0;
+	controller.maxY = 0;
+
+}
+
 PlayerController& PlayerController::operator=(const PlayerController& other)
 {
 	if (this != &other)
@@ -27,6 +42,27 @@ PlayerController& PlayerController::operator=(const PlayerController& other)
 		maxX = other.maxX;
 		maxY = other.maxY;
 	}
+	return *this;
+}
+
+PlayerController& PlayerController::operator=(PlayerController&& other) noexcept
+{
+	if (this != &other)
+	{
+		delete player;
+		delete name;
+		
+		player = other.player;
+		name = other.name;
+		maxX = other.maxX;
+		maxY = other.maxY;
+
+		other.player = nullptr;
+		other.name = nullptr;
+		other.maxX = 0;
+		other.maxY = 0;
+	}
+
 	return *this;
 }
 
