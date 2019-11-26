@@ -64,20 +64,42 @@ LinkedNode* queryLoop()
 	return startNode;
 }
 
-
-char* MakeSentence(LinkedNode* startNode)
+char** convertInput(LinkedNode* links)
 {
-#if defined(_DEBUG)
-	_ASSERTE(_CrtIsValidPointer(startNode, sizeof(LinkedNode), true));
-#endif // _DEBUG
-
-	LinkedNode* currNode = startNode;
-	LinkedNode* secondPassNode = startNode;
-	int totalSize = 0;
-	//Per Word
-	while (currNode != NULL)
+	LinkedNode* currRef = links;
+	LinkedNode* initialRef = currRef;
+	size_t count = 0;
+	while (currRef != nullptr)
 	{
-		char* currStr = currNode->string;
+		count++;
+		currRef = currRef->nextNode;
+	}
+
+	if (count == 0)
+	{
+		return {NULL};
+	}
+
+	char** sentence = (char**)malloc(sizeof(char*) * (count + 1));
+
+	for (int i = 0; i < count; i++)
+	{
+		sentence[i] = initialRef->string;
+		initialRef = initialRef->nextNode;
+	}
+
+	sentence[count] = NULL;
+	return sentence;
+}
+
+char* MakeSentence(char** strings)
+{
+	int totalSize = 0;
+	int i = 0;
+	//Per Word
+	while (strings[i] != NULL)
+	{
+		const char* currStr = strings[i];
 		int j = 0;
 		//Per Char
 		while (currStr[j] != '\0')
@@ -85,21 +107,17 @@ char* MakeSentence(LinkedNode* startNode)
 			totalSize++;
 			j++;
 		}
-		currNode = currNode->nextNode;
 		totalSize++;
-	}
-	if (startNode == nullptr)
-	{
-		totalSize++;
+		i++;
 	}
 	totalSize++;
-
-	char* sentence = (char *)malloc(sizeof(char) * totalSize);
+	char* sentence = (char*)malloc(sizeof(char) * totalSize);
 	int iter = 0;
-	while (secondPassNode != NULL)
+	int ii = 0;
+	while (strings[ii] != NULL)
 	{
 		int j = 0;
-		char* currStr = secondPassNode->string;
+		const char* currStr = strings[ii];
 		while (currStr[j] != '\0')
 		{
 			sentence[iter] = currStr[j];
@@ -107,15 +125,18 @@ char* MakeSentence(LinkedNode* startNode)
 			j++;
 		}
 
-		if (secondPassNode->nextNode != nullptr)
+		if (ii + 1 != i)
 		{
 			sentence[iter] = ' ';
-			iter++;
 		}
-		secondPassNode = secondPassNode->nextNode;
+		else
+		{
+			sentence[iter] = '.';
+			sentence[iter + 1] = '\0';
+		}
+		iter++;
+		ii++;
 	}
-	sentence[iter] = '.';
-	sentence[iter + 1] = '\0';
 	return sentence;
 }
 
@@ -148,8 +169,8 @@ int main(int i_argc, char** i_argl)
 	*/
 
 	LinkedNode* startNode = queryLoop();
-
-	char* pSentence = MakeSentence(startNode);
+	char** converted = convertInput(startNode);
+	char* pSentence = MakeSentence(converted);
 
 	printf("The Sentence is: %s", pSentence);
 
@@ -157,6 +178,7 @@ int main(int i_argc, char** i_argl)
 
 	chainFree(startNode);
 	free(startNode);
+	free(converted);
 
 #if defined(_DEBUG)
 	_CrtDumpMemoryLeaks();
