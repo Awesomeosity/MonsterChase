@@ -223,6 +223,7 @@ int main()
 	
 	delete[] monsters;
 	delete player;
+	delete point;
 	_CrtDumpMemoryLeaks();
 
 #pragma warning (disable: 6031)
