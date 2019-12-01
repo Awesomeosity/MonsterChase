@@ -3,6 +3,7 @@
 
 #include <Windows.h>
 #include "HeapManagerProxy.h"
+#include "BitArray.h"
 #include <assert.h>
 #include <conio.h>
 #include <iostream>
@@ -308,6 +309,19 @@ void* operator new(const size_t size, HeapManager* const heap, unsigned int alig
 	return HeapManagerProxy::alloc(heap, size, alignment);
 }
 
+void BitArrayTest(HeapManager* heapManager)
+{
+	BitArray* bitArr = BitArray::Create(16 * 20, heapManager);
+	assert(!bitArr->AreAllSet());
+	assert(bitArr->AreAllClear());
+	bitArr->SetAll();
+	assert(!bitArr->AreAllClear());
+	assert(bitArr->AreAllSet());
+	bitArr->ClearAll();
+	assert(!bitArr->AreAllSet());
+	assert(bitArr->AreAllClear());
+}
+
 
 int main()
 {
@@ -334,6 +348,8 @@ int main()
 		std::cerr << "Bad Pointer Generated (1)";
 	}
 
+	BitArrayTest(pHeapManager);
+
 	int* tryInt = new(pHeapManager) int;
 	*tryInt = 1;
 
@@ -353,6 +369,8 @@ int main()
 
 
 	_CrtDumpMemoryLeaks();
+
+
 
 #pragma warning (disable: 6031)
 	printf("Test is done. Press any key to exit...\n");
