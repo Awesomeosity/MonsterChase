@@ -12,8 +12,28 @@ public:
 	bool AreAllClear() const;
 	bool AreAllSet() const;
 
-	inline bool IsBitClear(size_t i_bitNum) const;
-	inline bool IsBitSet(size_t i_bitNum) const;
+	inline bool IsBitClear(size_t i_bitNum) const
+	{
+		//divide by number of bits
+		size_t i = i_bitNum / 8;
+		//get the offset by getting the remainder
+		size_t offset = i_bitNum % 8;
+
+		unsigned char targChar = bits[i];
+		return (targChar & (1 << (offset))) == 0;
+	};
+
+	inline bool IsBitSet(size_t i_bitNum) const
+	{
+		//divide by number of bits
+		size_t i = i_bitNum / 8;
+
+		//get the offset by getting the remainder
+		size_t offset = i_bitNum % 8;
+
+		unsigned char targChar = bits[i];
+		return (targChar & (1 << (offset))) != 0;
+	};
 
 	void SetBit(size_t i_bitNum);
 	void ClearBit(size_t i_bitNum);

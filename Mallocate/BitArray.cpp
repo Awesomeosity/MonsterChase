@@ -137,29 +137,6 @@ bool BitArray::AreAllSet() const
 	return true;
 }
 
-inline bool BitArray::IsBitClear(size_t i_bitNum) const
-{
-	//divide by number of bits
-	size_t i = i_bitNum / 8;
-	//get the offset by getting the remainder
-	size_t offset = i_bitNum % 8;
-
-	unsigned char targChar = bits[i];
-	return (targChar & (1 << (offset - 1))) == 0;
-}
-
-inline bool BitArray::IsBitSet(size_t i_bitNum) const
-{
-	assert(i_bitNum < count);
-	//divide by number of bits
-	size_t i = i_bitNum / 8;
-
-	//get the offset by getting the remainder
-	size_t offset = i_bitNum % 8;
-
-	unsigned char targChar = bits[i];
-	return (targChar & (1 << (offset - 1))) != 0;
-}
 
 void BitArray::SetBit(size_t i_bitNum)
 {
