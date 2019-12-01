@@ -311,15 +311,15 @@ void* operator new(const size_t size, HeapManager* const heap, unsigned int alig
 
 void BitArrayTest(HeapManager* heapManager)
 {
-	BitArray* bitArr = BitArray::Create(16 * 20, heapManager);
-	assert(!bitArr->AreAllSet());
-	assert(bitArr->AreAllClear());
-	bitArr->SetAll();
-	assert(!bitArr->AreAllClear());
-	assert(bitArr->AreAllSet());
-	bitArr->ClearAll();
-	assert(!bitArr->AreAllSet());
-	assert(bitArr->AreAllClear());
+	BitArray bitArr = *(BitArray::Create(16 * 20, heapManager));
+	assert(!bitArr.AreAllSet());
+	assert(bitArr.AreAllClear());
+
+	bitArr.SetAll();
+	assert(!bitArr.AreAllClear());
+	assert(bitArr.AreAllSet());
+
+	bitArr.ClearAll();
 }
 
 
