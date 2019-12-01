@@ -23,9 +23,6 @@ public:
 
 	bool operator[](size_t i_index) const;
 private:
-	//Prevent users from copying this, that would be bad --
-	BitArray(const BitArray& arr);
-	BitArray& operator=(const BitArray& arr) {};
 	//Pointer to the bitarray proper
 	unsigned char* bits;
 	//The amount of blocks this particular BitArray has access to.

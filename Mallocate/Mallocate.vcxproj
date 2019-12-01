@@ -155,10 +155,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BitArray.cpp" />
+    <ClCompile Include="FixedSizeAllocator.cpp" />
     <ClCompile Include="HeapManagerProxy.cpp" />
     <ClCompile Include="Mallocate.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BitArray.h" />
+    <ClInclude Include="FixedSizeAllocator.h" />
     <ClInclude Include="HeapManagerProxy.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

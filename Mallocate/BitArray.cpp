@@ -57,8 +57,8 @@ bool BitArray::AreAllClear() const
 {
 #if _WIN32
 	unsigned long* currPoint = reinterpret_cast<unsigned long*>(bits);
-	int reducedCount = count / 4;
-	for (int i = 0; i < reducedCount; i++)
+	size_t reducedCount = count / 4;
+	for (size_t i = 0; i < reducedCount; i++)
 	{
 		unsigned char isNonZero;
 		unsigned long index;
@@ -97,14 +97,14 @@ bool BitArray::AreAllSet() const
 {
 #if _WIN32
 	unsigned long* currPoint = reinterpret_cast<unsigned long*>(bits);
-	int reducedCount = count / 4;
-	for (int i = 0; i < reducedCount; i++)
+	size_t reducedCount = count / 4;
+	for (size_t i = 0; i < reducedCount; i++)
 	{
 		unsigned char isNonZero;
 		unsigned long index;
 
 		unsigned long mask = ~(*currPoint);
-		isNonZero = _BitScanForward(&index, *currPoint);
+		isNonZero = _BitScanForward(&index, mask);
 
 		if (isNonZero)
 		{
@@ -186,10 +186,10 @@ bool BitArray::GetFirstClearBit(size_t& o_bitNumber) const
 {
 #if _WIN32
 	unsigned long* currPoint = reinterpret_cast<unsigned long*>(bits);
-	unsigned int reducedCount = count / 4;
+	size_t reducedCount = count / 4;
 	size_t result = 0;
 
-	for (unsigned int i = 0; i < reducedCount; i++)
+	for (size_t i = 0; i < reducedCount; i++)
 	{
 		unsigned char isNonZero;
 		unsigned long index;
@@ -237,10 +237,10 @@ bool BitArray::GetFirstSetBit(size_t& o_bitNumber) const
 {
 #if _WIN32
 	unsigned long* currPoint = reinterpret_cast<unsigned long*>(bits);
-	unsigned int reducedCount = count / 4;
+	size_t reducedCount = count / 4;
 	size_t result = 0;
 
-	for (unsigned int i = 0; i < reducedCount; i++)
+	for (size_t i = 0; i < reducedCount; i++)
 	{
 		unsigned char isNonZero;
 		unsigned long index;
