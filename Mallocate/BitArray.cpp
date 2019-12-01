@@ -146,7 +146,7 @@ void BitArray::SetBit(size_t i_bitNum)
 	size_t offset = i_bitNum % 8;
 
 	//To set a bit, we need to OR it with a mask containing a 1 in the offset position.
-	bits[i] = bits[i] | (1 << (offset - 1));
+	bits[i] = bits[i] | (1 << (offset));
 }
 
 void BitArray::ClearBit(size_t i_bitNum)
@@ -157,7 +157,7 @@ void BitArray::ClearBit(size_t i_bitNum)
 	size_t offset = i_bitNum % 8;
 
 	//To unset a bit, we need to XOR the result with a similar mask.
-	bits[i] = bits[i] ^ (1 << (offset - 1));
+	bits[i] = bits[i] ^ (1 << (offset));
 }
 
 bool BitArray::GetFirstClearBit(size_t& o_bitNumber) const
@@ -268,5 +268,5 @@ bool BitArray::operator[](size_t i_index) const
 	//get the offset by getting the remainder
 	size_t offset = i_index % 8;
 
-	return bits[i] & (1 << (offset - 1));
+	return bits[i] & (1 << (offset));
 }
