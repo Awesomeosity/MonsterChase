@@ -342,6 +342,23 @@ void BitArrayTest(HeapManager* heapManager)
 	assert(count == 0);
 
 	assert(!bitArr[0]);
+
+	bitArr.SetBit(65);
+	assert(!bitArr.IsBitClear(65));
+	assert(bitArr.IsBitSet(65));
+	assert(bitArr.GetFirstSetBit(count));
+	assert(count == 65);
+	assert(bitArr.GetFirstClearBit(count));
+	assert(count == 0);
+
+	bitArr.ClearBit(65);
+	assert(bitArr.IsBitClear(65));
+	assert(!bitArr.IsBitSet(65));
+	assert(bitArr.GetFirstClearBit(count));
+	assert(count == 0);
+
+	assert(!bitArr[65]);
+
 }
 
 
