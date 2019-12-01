@@ -15,7 +15,7 @@ BitArray* BitArray::Create(size_t i_blockSize, HeapManager* i_pHeap, bool i_star
 
 	//Clear/Set array depending on the passed i_startClear
 	unsigned char* currPoint = bitArray->bits;
-	for (int i = 0; i < bitArray->count; i++)
+	for (unsigned int i = 0; i < bitArray->count; i++)
 	{
 		memset(currPoint, i_startClear ? 0 : 1, byteSize);
 		currPoint++;
@@ -35,7 +35,7 @@ void BitArray::ClearAll()
 {
 	const unsigned int byteSize = 1;
 	unsigned char* currPoint = bits;
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 	{
 		memset(currPoint, 0, byteSize);
 		currPoint++;
@@ -46,7 +46,7 @@ void BitArray::SetAll()
 {
 	const unsigned int byteSize = 1;
 	unsigned char* currPoint = bits;
-	for (int i = 0; i < count; i++)
+	for (unsigned int i = 0; i < count; i++)
 	{
 		//65535 is the max value of 8 bits
 		memset(currPoint, 65535, byteSize);
