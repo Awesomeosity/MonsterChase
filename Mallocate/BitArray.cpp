@@ -48,7 +48,8 @@ void BitArray::SetAll()
 	unsigned char* currPoint = bits;
 	for (int i = 0; i < count; i++)
 	{
-		memset(currPoint, 1, byteSize);
+		//65535 is the max value of 8 bits
+		memset(currPoint, 65535, byteSize);
 		currPoint++;
 	}
 }
@@ -122,7 +123,7 @@ bool BitArray::AreAllSet() const
 		unsigned __int64 index;
 
 		unsigned __int64 mask = ~(*currPoint);
-		isNonZero = _BitScanForward64(&index, *currPoint);
+		isNonZero = _BitScanForward64(&index, mask);
 
 		if (isNonZero)
 		{
