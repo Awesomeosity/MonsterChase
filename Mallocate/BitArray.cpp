@@ -56,7 +56,25 @@ void BitArray::SetAll()
 
 bool BitArray::AreAllClear() const
 {
-#if _WIN32
+#if _WIN64
+	unsigned __int64* currPoint = reinterpret_cast<unsigned __int64*>(bits);
+	size_t reducedCount = count / 8;
+	for (int i = 0; i < reducedCount; i++)
+	{
+		unsigned char isNonZero;
+		unsigned long index;
+
+		isNonZero = _BitScanForward64(&index, *currPoint);
+
+		if (isNonZero)
+		{
+			return false;
+		}
+
+		currPoint++;
+	}
+
+#else
 	unsigned long* currPoint = reinterpret_cast<unsigned long*>(bits);
 	size_t reducedCount = count / 4;
 	for (size_t i = 0; i < reducedCount; i++)
@@ -73,15 +91,22 @@ bool BitArray::AreAllClear() const
 
 		currPoint++;
 	}
-#else
+#endif
+	return true;
+}
+
+bool BitArray::AreAllSet() const
+{
+#if _WIN64
 	unsigned __int64* currPoint = reinterpret_cast<unsigned __int64*>(bits);
-	int reducedCount = count / 8;
+	size_t reducedCount = count / 8;
 	for (int i = 0; i < reducedCount; i++)
 	{
 		unsigned char isNonZero;
-		unsigned __int64 index;
+		unsigned long index;
 
-		isNonZero = _BitScanForward64(&index, *currPoint);
+		unsigned __int64 mask = ~(*currPoint);
+		isNonZero = _BitScanForward64(&index, mask);
 
 		if (isNonZero)
 		{
@@ -90,13 +115,7 @@ bool BitArray::AreAllClear() const
 
 		currPoint++;
 	}
-#endif
-	return true;
-}
-
-bool BitArray::AreAllSet() const
-{
-#if _WIN32
+#else
 	unsigned long* currPoint = reinterpret_cast<unsigned long*>(bits);
 	size_t reducedCount = count / 4;
 	for (size_t i = 0; i < reducedCount; i++)
@@ -106,24 +125,6 @@ bool BitArray::AreAllSet() const
 
 		unsigned long mask = ~(*currPoint);
 		isNonZero = _BitScanForward(&index, mask);
-
-		if (isNonZero)
-		{
-			return false;
-		}
-
-		currPoint++;
-	}
-#else
-	unsigned __int64* currPoint = reinterpret_cast<unsigned __int64*>(bits);
-	int reducedCount = count / 8;
-	for (int i = 0; i < reducedCount; i++)
-	{
-		unsigned char isNonZero;
-		unsigned __int64 index;
-
-		unsigned __int64 mask = ~(*currPoint);
-		isNonZero = _BitScanForward64(&index, mask);
 
 		if (isNonZero)
 		{
@@ -162,7 +163,30 @@ void BitArray::ClearBit(size_t i_bitNum)
 
 bool BitArray::GetFirstClearBit(size_t& o_bitNumber) const
 {
-#if _WIN32
+#if _WIN64
+	unsigned __int64* currPoint = reinterpret_cast<unsigned __int64*>(bits);
+	size_t reducedCount = count / 8;
+	size_t result = 0;
+
+	for (int i = 0; i < reducedCount; i++)
+	{
+		unsigned char isNonZero;
+		unsigned long index;
+
+		unsigned __int64 mask = ~(*currPoint);
+		isNonZero = _BitScanForward64(&index, mask);
+
+		if (isNonZero)
+		{
+			o_bitNumber = result + index;
+			return true;
+		}
+
+		result += 64;
+		currPoint++;
+	}
+#else
+
 	unsigned long* currPoint = reinterpret_cast<unsigned long*>(bits);
 	size_t reducedCount = count / 4;
 	size_t result = 0;
@@ -184,18 +208,24 @@ bool BitArray::GetFirstClearBit(size_t& o_bitNumber) const
 		result += 32;
 		currPoint++;
 	}
-#else
+#endif
+	return false;
+
+}
+
+bool BitArray::GetFirstSetBit(size_t& o_bitNumber) const
+{
+#if _WIN64
 	unsigned __int64* currPoint = reinterpret_cast<unsigned __int64*>(bits);
-	int reducedCount = count / 8;
+	size_t reducedCount = count / 8;
 	size_t result = 0;
 
 	for (int i = 0; i < reducedCount; i++)
 	{
 		unsigned char isNonZero;
-		unsigned __int64 index;
+		unsigned long index;
 
-		unsigned long mask = ~(*currPoint);
-		isNonZero = _BitScanForward(&index, mask);
+		isNonZero = _BitScanForward64(&index, *currPoint);
 
 		if (isNonZero)
 		{
@@ -206,14 +236,8 @@ bool BitArray::GetFirstClearBit(size_t& o_bitNumber) const
 		result += 64;
 		currPoint++;
 	}
-#endif
-	return false;
 
-}
-
-bool BitArray::GetFirstSetBit(size_t& o_bitNumber) const
-{
-#if _WIN32
+#else
 	unsigned long* currPoint = reinterpret_cast<unsigned long*>(bits);
 	size_t reducedCount = count / 4;
 	size_t result = 0;
@@ -232,27 +256,6 @@ bool BitArray::GetFirstSetBit(size_t& o_bitNumber) const
 		}
 
 		result += 32;
-		currPoint++;
-	}
-#else
-	unsigned __int64* currPoint = reinterpret_cast<unsigned __int64*>(bits);
-	int reducedCount = count / 8;
-	size_t result = 0;
-
-	for (int i = 0; i < reducedCount; i++)
-	{
-		unsigned char isNonZero;
-		unsigned __int64 index;
-
-		isNonZero = _BitScanForward64(&index, *currPoint);
-
-		if (isNonZero)
-		{
-			o_bitNumber = result + index;
-			return true;
-		}
-
-		result += 64;
 		currPoint++;
 	}
 #endif
