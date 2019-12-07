@@ -14,7 +14,6 @@ namespace HeapManagerProxy
 	bool			free(HeapManager* const i_pManager, void* const i_ptr);
 
 	void			Collect(HeapManager* const i_pManager);
-	void			CollectHelper(HeapManager* const i_pManager);
 
 	bool			Contains(const HeapManager* const i_pManager, void* const i_ptr);
 	bool			IsAllocated(const HeapManager* const i_pManager, void* const i_ptr);
