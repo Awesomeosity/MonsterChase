@@ -158,12 +158,14 @@
     <ClCompile Include="BitArray.cpp" />
     <ClCompile Include="FixedSizeAllocator.cpp" />
     <ClCompile Include="HeapManagerProxy.cpp" />
+    <ClCompile Include="HeapManager.cpp" />
     <ClCompile Include="Mallocate.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitArray.h" />
     <ClInclude Include="FixedSizeAllocator.h" />
     <ClInclude Include="HeapManagerProxy.h" />
+    <ClInclude Include="HeapManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

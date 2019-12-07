@@ -406,7 +406,6 @@ int main()
 		VirtualFree(pHeapMemory, 0, MEM_RELEASE);
 	}
 
-
 	_CrtDumpMemoryLeaks();
 
 
