@@ -3,15 +3,15 @@
 #include <cstring>
 #include <intrin.h>
 #include <cassert>
-BitArray* BitArray::Create(size_t i_blockSize, HeapManager* i_pHeap, bool i_startClear)
+BitArray* BitArray::Create(size_t i_blockCount, HeapManager* i_pHeap, bool i_startClear)
 {
 	//Provides clarity instead of magic numbers
 	//unsigned char across x64/x86 processors should always be 1 byte in size
 	const unsigned int byteSize = 1;
 
-	BitArray* bitArray = reinterpret_cast<BitArray*>(HeapManagerProxy::alloc(i_pHeap, i_blockSize + sizeof(BitArray)));
+	BitArray* bitArray = reinterpret_cast<BitArray*>(HeapManagerProxy::alloc(i_pHeap, i_blockCount + sizeof(BitArray)));
 	bitArray->bits = reinterpret_cast<unsigned char*>(bitArray + 1);
-	bitArray->count = i_blockSize;
+	bitArray->count = i_blockCount;
 
 	//Clear/Set array depending on the passed i_startClear
 	unsigned char* currPoint = bitArray->bits;
@@ -61,16 +61,10 @@ bool BitArray::AreAllClear() const
 	size_t reducedCount = count / 8;
 	for (int i = 0; i < reducedCount; i++)
 	{
-		unsigned char isNonZero;
-		unsigned long index;
-
-		isNonZero = _BitScanForward64(&index, *currPoint);
-
-		if (isNonZero)
+		if (*currPoint != 0x0000000000000000)
 		{
 			return false;
 		}
-
 		currPoint++;
 	}
 
@@ -79,16 +73,10 @@ bool BitArray::AreAllClear() const
 	size_t reducedCount = count / 4;
 	for (size_t i = 0; i < reducedCount; i++)
 	{
-		unsigned char isNonZero;
-		unsigned long index;
-
-		isNonZero = _BitScanForward(&index, *currPoint);
-
-		if (isNonZero)
+		if (*currPoint != 0x00000000)
 		{
 			return false;
 		}
-
 		currPoint++;
 	}
 #endif
@@ -102,17 +90,10 @@ bool BitArray::AreAllSet() const
 	size_t reducedCount = count / 8;
 	for (int i = 0; i < reducedCount; i++)
 	{
-		unsigned char isNonZero;
-		unsigned long index;
-
-		unsigned __int64 mask = ~(*currPoint);
-		isNonZero = _BitScanForward64(&index, mask);
-
-		if (isNonZero)
+		if (*currPoint != 0xFFFFFFFFFFFFFFFF)
 		{
 			return false;
 		}
-
 		currPoint++;
 	}
 #else
@@ -120,17 +101,10 @@ bool BitArray::AreAllSet() const
 	size_t reducedCount = count / 4;
 	for (size_t i = 0; i < reducedCount; i++)
 	{
-		unsigned char isNonZero;
-		unsigned long index;
-
-		unsigned long mask = ~(*currPoint);
-		isNonZero = _BitScanForward(&index, mask);
-
-		if (isNonZero)
+		if (*currPoint != 0xFFFFFFFF)
 		{
 			return false;
 		}
-
 		currPoint++;
 	}
 #endif

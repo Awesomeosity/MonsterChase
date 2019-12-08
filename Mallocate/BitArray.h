@@ -3,7 +3,7 @@ class HeapManager;
 class BitArray
 {
 public:
-	static BitArray* Create(size_t i_blockSize, HeapManager* i_pHeap, bool i_startClear = true);
+	static BitArray* Create(size_t i_blockCount, HeapManager* i_pHeap, bool i_startClear = true);
 	~BitArray();
 	
 	void ClearAll();
