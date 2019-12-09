@@ -1,7 +1,6 @@
 #include "FixedSizeAllocator.h"
 #include "HeapManagerProxy.h"
 #include "BitArray.h"
-#include <cstring>
 #include <cassert>
 FixedSizeAllocator* FixedSizeAllocator::Create(size_t i_blockSize, size_t i_blockCount, HeapManager* i_pHeap)
 {
@@ -35,7 +34,7 @@ FixedSizeAllocator::~FixedSizeAllocator()
 	
 }
 
-void* FixedSizeAllocator::alloc(size_t i_size)
+void* FixedSizeAllocator::alloc()
 {
 	size_t bitNumber = 0;
 	if (!bitArray->GetFirstClearBit(bitNumber))

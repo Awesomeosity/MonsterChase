@@ -6,7 +6,7 @@ class FixedSizeAllocator
 public:
 	static FixedSizeAllocator* Create(size_t i_blockSize, size_t i_blockCount, HeapManager* i_pHeap);
 	~FixedSizeAllocator();
-	void* alloc(size_t i_size);
+	void* alloc();
 	void free(void* const i_ptr);
 	size_t getBlockSize();
 private:
