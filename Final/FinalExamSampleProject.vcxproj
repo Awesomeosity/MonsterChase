@@ -89,7 +89,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\Users\Kevin Le\Source\Repos\EAE6100\Mallocate\Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -104,7 +104,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\Users\Kevin Le\Source\Repos\EAE6100\Mallocate\Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -121,7 +121,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\Users\Kevin Le\Source\Repos\EAE6100\Mallocate\Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -140,7 +140,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\Users\Kevin Le\Source\Repos\EAE6100\Mallocate\Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -151,17 +151,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Mallocate\BitArray.cpp" />
+    <ClCompile Include="..\Mallocate\FixedSizeAllocator.cpp" />
+    <ClCompile Include="..\Mallocate\HeapManager.cpp" />
+    <ClCompile Include="..\Mallocate\HeapManagerProxy.cpp" />
     <ClCompile Include="Allocators.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MemorySystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Mallocate\BitArray.h" />
+    <ClInclude Include="..\Mallocate\FixedSizeAllocator-inl.h" />
+    <ClInclude Include="..\Mallocate\FixedSizeAllocator.h" />
+    <ClInclude Include="..\Mallocate\HeapManager.h" />
+    <ClInclude Include="..\Mallocate\HeapManagerProxy.h" />
     <ClInclude Include="MemorySystem.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Mallocate\Mallocate.vcxproj">
-      <Project>{4ce5b6ab-9996-45ab-9028-5958741faf3d}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
