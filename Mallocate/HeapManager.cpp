@@ -63,7 +63,7 @@ void* HeapManager::alloc(HeapManager* const i_pManager, const size_t i_size, con
 	size_t targSize = i_size + (i_alignment - i_size % i_alignment) % i_alignment;
 
 	char* up = reinterpret_cast<char*>(currBlock + 1);
-	up += (i_alignment - (uintptr_t)up % i_alignment) % i_alignment;
+	up += (i_alignment - reinterpret_cast<uintptr_t>(up) % i_alignment) % i_alignment;
 	currBlock->userPointer = reinterpret_cast<void*>(up);
 
 	//If allocating this block wouldn't leave enough size for another HeapManager, allocate the whole block.
