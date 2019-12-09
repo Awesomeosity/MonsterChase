@@ -358,7 +358,6 @@ void BitArrayTest(HeapManager* heapManager)
 	assert(count == 0);
 
 	assert(!bitArr[65]);
-
 }
 
 

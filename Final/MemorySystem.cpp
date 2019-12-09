@@ -1,7 +1,11 @@
 #include "MemorySystem.h"
+#include "../Mallocate/HeapManagerProxy.h"
+#include "../Mallocate/FixedSizeAllocator.h"
 bool InitializeMemorySystem(void * i_pHeapMemory, size_t i_sizeHeapMemory, unsigned int i_OptionalNumDescriptors)
 {
 	// create your HeapManager and FixedSizeAllocators
+	HeapManager* currHeap = HeapManagerProxy::CreateHeapManager(i_pHeapMemory, i_sizeHeapMemory);
+
 	return true;
 }
 

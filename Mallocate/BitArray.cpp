@@ -24,7 +24,7 @@ BitArray* BitArray::Create(size_t i_blockCount, HeapManager* i_pHeap, bool i_sta
 	return bitArray;
 }
 
-//Note: Need to free manually from FSA due to this free's implementation requiring a starting HeapManager*
+//Note: Need to free manually from HeapManager due to this free's implementation requiring a starting HeapManager*
 BitArray::~BitArray()
 {
 	bits = nullptr;
