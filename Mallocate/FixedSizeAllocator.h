@@ -10,7 +10,11 @@ public:
 	void free(void* const i_ptr);
 	size_t getBlockSize();
 private:
+	inline void memsetPattern(const size_t i_blockSize, const void* i_pointer, const int i_pattern);
 	size_t blockSize;
+	void* userBlock;
 	BitArray* bitArray;
+	const int guardBandSize = 4;
 };
 
+#include "FixedSizeAllocator-inl.h"
