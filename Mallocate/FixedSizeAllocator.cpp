@@ -49,28 +49,35 @@ void* FixedSizeAllocator::alloc()
 	return reinterpret_cast<void*>(resultPointer);
 }
 
-void FixedSizeAllocator::free(void* const i_ptr)
+bool FixedSizeAllocator::free(void* const i_ptr)
 {
 	static const int fillValue = 0xDD;
 	char* passedPointer = reinterpret_cast<char*>(i_ptr);
+
+	//Check if the pointer is within our memory
 	ptrdiff_t result = passedPointer - reinterpret_cast<char*>(userBlock);
 	if (result < 0)
 	{
-		return;
+		return false;
 	}
 
+	//Check to make sure it points to the start of a block
 	size_t totalBlockSize = blockSize + guardBandSize;
 	if (result % totalBlockSize != 0)
 	{
-		return;
+		return false;
 	}
 
+	//Finally, check the bitarray, to make sure that it's an allocated block
 	size_t bitRef = result / totalBlockSize;
 	if (bitArray->IsBitSet(bitRef))
 	{
 		bitArray->ClearBit(bitRef);
 		memsetPattern(blockSize, i_ptr, fillValue);
+		return true;
 	}
+
+	return false;
 }
 
 size_t FixedSizeAllocator::getBlockSize()
