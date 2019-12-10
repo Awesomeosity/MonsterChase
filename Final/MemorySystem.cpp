@@ -1,6 +1,9 @@
 #include "MemorySystem.h"
 #include "../Mallocate/HeapManagerProxy.h"
 #include "../Mallocate/FixedSizeAllocator.h"
+
+HeapManager* heap;
+std::vector<FixedSizeAllocator*> allFSAs;
 bool InitializeMemorySystem(void * i_pHeapMemory, size_t i_sizeHeapMemory, unsigned int i_OptionalNumDescriptors)
 {
 	// create your HeapManager and FixedSizeAllocators
@@ -21,6 +24,7 @@ void Collect()
 
 void DestroyMemorySystem()
 {
+	
 	// Destroy your HeapManager and FixedSizeAllocators
 }
 

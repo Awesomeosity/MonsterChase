@@ -12,5 +12,3 @@ void Collect();
 // DestroyMemorySystem - destroy your memory systems
 void DestroyMemorySystem();
 
-HeapManager* heap;
-std::vector<FixedSizeAllocator*> allFSAs;
