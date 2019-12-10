@@ -12,9 +12,9 @@ public:
 private:
 	inline void memsetPattern(const size_t i_blockSize, const void* i_pointer, const int i_pattern);
 	size_t blockSize;
+	size_t blockCount;
 	void* userBlock;
 	BitArray* bitArray;
-	const int guardBandSize = 4;
 };
 
 #include "FixedSizeAllocator-inl.h"

@@ -13,8 +13,9 @@ FixedSizeAllocator* FixedSizeAllocator::Create(size_t i_blockSize, size_t i_bloc
 	size_t totalAllocSize = sizeof(FixedSizeAllocator) + (i_blockSize + guardBandSize) * i_blockCount;
 	FixedSizeAllocator* newAlloc = reinterpret_cast<FixedSizeAllocator*>(HeapManagerProxy::alloc(i_pHeap, totalAllocSize));
 	newAlloc->blockSize = i_blockSize;
-	newAlloc->bitArray = BitArray::Create(i_blockCount, i_pHeap);
+	newAlloc->blockCount = i_blockCount;
 	newAlloc->userBlock = reinterpret_cast<void*>(newAlloc + 1);
+	newAlloc->bitArray = BitArray::Create(i_blockCount, i_pHeap);
 
 	//Set up user blocks with fill values and guardbands
 	char* currPointer = reinterpret_cast<char*>(newAlloc->userBlock);
