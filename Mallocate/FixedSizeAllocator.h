@@ -4,14 +4,14 @@ class HeapManager;
 class FixedSizeAllocator
 {
 public:
-	static FixedSizeAllocator* Create(size_t i_blockSize, size_t i_blockCount, HeapManager* i_pHeap);
+	static FixedSizeAllocator* Create(const size_t i_blockSize, const size_t i_blockCount, HeapManager* consti_pHeap);
 	~FixedSizeAllocator();
 	FixedSizeAllocator(const FixedSizeAllocator& i_other) = delete;
 	FixedSizeAllocator& operator=(const FixedSizeAllocator& i_other) = delete;
 
 	void* alloc();
 	bool free(void* const i_ptr);
-	size_t getBlockSize();
+	size_t getBlockSize() const;
 private:
 	inline void memsetPattern(const size_t i_blockSize, const void* i_pointer, const int i_pattern);
 	size_t blockSize;

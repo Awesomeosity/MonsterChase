@@ -3,7 +3,7 @@
 #include "BitArray.h"
 #include <cassert>
 #include <stdio.h>
-FixedSizeAllocator* FixedSizeAllocator::Create(size_t i_blockSize, size_t i_blockCount, HeapManager* i_pHeap)
+FixedSizeAllocator* FixedSizeAllocator::Create(const size_t i_blockSize, const size_t i_blockCount, HeapManager* const i_pHeap)
 {
 	assert(i_blockSize % 2 == 0);
 	size_t guardBandSize = 4;
@@ -93,7 +93,7 @@ bool FixedSizeAllocator::free(void* const i_ptr)
 	return false;
 }
 
-size_t FixedSizeAllocator::getBlockSize()
+size_t FixedSizeAllocator::getBlockSize() const
 {
 	return blockSize;
 }
