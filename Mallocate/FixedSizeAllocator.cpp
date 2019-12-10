@@ -2,7 +2,7 @@
 #include "HeapManagerProxy.h"
 #include "BitArray.h"
 #include <cassert>
-#include <iostream>
+#include <stdio.h>
 FixedSizeAllocator* FixedSizeAllocator::Create(size_t i_blockSize, size_t i_blockCount, HeapManager* i_pHeap)
 {
 	assert(i_blockSize % 2 == 0);
@@ -38,10 +38,11 @@ FixedSizeAllocator::~FixedSizeAllocator()
 	{
 		if ((*bitArray)[i])
 		{
-			std::cout << "Allocation at " << i << "\n";
+			printf("Spare Allocation at block %zu\n", i);
 		}
 	}
 #endif
+
 	delete bitArray;
 }
 
