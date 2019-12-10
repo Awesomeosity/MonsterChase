@@ -311,53 +311,53 @@ void* operator new(const size_t size, HeapManager* const heap, unsigned int alig
 
 void BitArrayTest(HeapManager* heapManager)
 {
-	BitArray bitArr = *(BitArray::Create(16 * 20, heapManager));
-	assert(!bitArr.AreAllSet());
-	assert(bitArr.AreAllClear());
+	BitArray* bitArr = BitArray::Create(16 * 20, heapManager);
+	assert(!bitArr->AreAllSet());
+	assert(bitArr->AreAllClear());
 
-	bitArr.SetAll();
-	assert(!bitArr.AreAllClear());
-	assert(bitArr.AreAllSet());
+	bitArr->SetAll();
+	assert(!bitArr->AreAllClear());
+	assert(bitArr->AreAllSet());
 
-	bitArr.ClearAll();
-	assert(!bitArr.AreAllSet());
-	assert(bitArr.AreAllClear());
-	assert(bitArr.IsBitClear(0));
-	assert(!bitArr.IsBitSet(0));
+	bitArr->ClearAll();
+	assert(!bitArr->AreAllSet());
+	assert(bitArr->AreAllClear());
+	assert(bitArr->IsBitClear(0));
+	assert(!bitArr->IsBitSet(0));
 
 	size_t count;
 
-	bitArr.SetBit(0);
-	assert(!bitArr.IsBitClear(0));
-	assert(bitArr.IsBitSet(0));
-	assert(bitArr.GetFirstSetBit(count));
+	bitArr->SetBit(0);
+	assert(!bitArr->IsBitClear(0));
+	assert(bitArr->IsBitSet(0));
+	assert(bitArr->GetFirstSetBit(count));
 	assert(count == 0);
-	assert(bitArr.GetFirstClearBit(count));
+	assert(bitArr->GetFirstClearBit(count));
 	assert(count == 1);
 
-	bitArr.ClearBit(0);
-	assert(bitArr.IsBitClear(0));
-	assert(!bitArr.IsBitSet(0));
-	assert(bitArr.GetFirstClearBit(count));
+	bitArr->ClearBit(0);
+	assert(bitArr->IsBitClear(0));
+	assert(!bitArr->IsBitSet(0));
+	assert(bitArr->GetFirstClearBit(count));
 	assert(count == 0);
 
-	assert(!bitArr[0]);
+	assert(!(*bitArr)[0]);
 
-	bitArr.SetBit(65);
-	assert(!bitArr.IsBitClear(65));
-	assert(bitArr.IsBitSet(65));
-	assert(bitArr.GetFirstSetBit(count));
+	bitArr->SetBit(65);
+	assert(!bitArr->IsBitClear(65));
+	assert(bitArr->IsBitSet(65));
+	assert(bitArr->GetFirstSetBit(count));
 	assert(count == 65);
-	assert(bitArr.GetFirstClearBit(count));
+	assert(bitArr->GetFirstClearBit(count));
 	assert(count == 0);
 
-	bitArr.ClearBit(65);
-	assert(bitArr.IsBitClear(65));
-	assert(!bitArr.IsBitSet(65));
-	assert(bitArr.GetFirstClearBit(count));
+	bitArr->ClearBit(65);
+	assert(bitArr->IsBitClear(65));
+	assert(!bitArr->IsBitSet(65));
+	assert(bitArr->GetFirstClearBit(count));
 	assert(count == 0);
 
-	assert(!bitArr[65]);
+	assert(!(*bitArr)[65]);
 }
 
 
