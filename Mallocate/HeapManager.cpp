@@ -40,6 +40,12 @@ HeapManager::~HeapManager()
 	return;
 }
 
+void* HeapManager::alloc(HeapManager* const i_pManager, const size_t i_size)
+{
+	const size_t alignment = 4;
+	return alloc(i_pManager, i_size, alignment);
+}
+
 void* HeapManager::alloc(HeapManager* const i_pManager, const size_t i_size, const unsigned int i_alignment)
 {
 	if (i_pManager == nullptr)
