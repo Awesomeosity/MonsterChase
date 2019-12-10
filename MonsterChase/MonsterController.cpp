@@ -8,8 +8,8 @@ MonsterController::MonsterController()
 	deathTime = 0;
 }
 
-MonsterController::MonsterController(bool active, float x, float y, GameObject* _monster, GameObject* _player, char* _name)
-	: maxX(x), maxY(y), monster(_monster), player(_player), name(_name), isActive(active)
+MonsterController::MonsterController(bool i_active, float i_x, float i_y, GameObject* i_monster, GameObject* i_player, char* i_name)
+	: maxX(i_x), maxY(i_y), monster(i_monster), player(i_player), name(i_name), isActive(i_active)
 {
 	deathTime = (rand() / (RAND_MAX / maxTime)) + 1;
 }
@@ -19,88 +19,88 @@ MonsterController::~MonsterController()
 	delete[] name;
 }
 
-MonsterController::MonsterController(const MonsterController& controller) :
-	deathTime(controller.deathTime), maxX(controller.maxX), maxY(controller.maxY),
-	monster(controller.monster), player(controller.player), name(_strdup(controller.name)),
-	isActive(controller.isActive)
+MonsterController::MonsterController(const MonsterController& i_controller) :
+	deathTime(i_controller.deathTime), maxX(i_controller.maxX), maxY(i_controller.maxY),
+	monster(i_controller.monster), player(i_controller.player), name(_strdup(i_controller.name)),
+	isActive(i_controller.isActive)
 {
 }
 
-MonsterController::MonsterController(MonsterController&& controller) noexcept
+MonsterController::MonsterController(MonsterController&& i_controller) noexcept
 	: deathTime(0), maxX(0), maxY(0),
 	monster(nullptr), player(nullptr), name(nullptr),
 	isActive(false)
 {
-	deathTime = controller.deathTime;
-	maxX = controller.maxX;
-	maxY = controller.maxY;
-	monster = controller.monster;
-	player = controller.player;
-	name = controller.name;
-	isActive = controller.isActive;
+	deathTime = i_controller.deathTime;
+	maxX = i_controller.maxX;
+	maxY = i_controller.maxY;
+	monster = i_controller.monster;
+	player = i_controller.player;
+	name = i_controller.name;
+	isActive = i_controller.isActive;
 
-	controller.deathTime = 0;
-	controller.maxX = 0;
-	controller.maxY = 0;
-	controller.monster = nullptr;
-	controller.player = nullptr;
-	controller.name = nullptr;
-	controller.isActive = false;
+	i_controller.deathTime = 0;
+	i_controller.maxX = 0;
+	i_controller.maxY = 0;
+	i_controller.monster = nullptr;
+	i_controller.player = nullptr;
+	i_controller.name = nullptr;
+	i_controller.isActive = false;
 }
 
-MonsterController& MonsterController::operator=(const MonsterController& other)
+MonsterController& MonsterController::operator=(const MonsterController& i_other)
 {
-	if (this != &other)
+	if (this != &i_other)
 	{
-		deathTime = other.deathTime;
-		maxX = other.maxX;
-		maxY = other.maxY;
-		monster = other.monster;
-		player = other.player;
-		name = _strdup(other.name);
-		isActive = other.isActive;
+		deathTime = i_other.deathTime;
+		maxX = i_other.maxX;
+		maxY = i_other.maxY;
+		monster = i_other.monster;
+		player = i_other.player;
+		name = _strdup(i_other.name);
+		isActive = i_other.isActive;
 	}
 	return *this;
 }
 
-MonsterController& MonsterController::operator=(MonsterController&& other) noexcept
+MonsterController& MonsterController::operator=(MonsterController&& i_other) noexcept
 {
-	if (this != &other)
+	if (this != &i_other)
 	{
 		delete monster;
 		delete player;
 		delete name;
 
-		deathTime = other.deathTime;
-		maxX = other.maxX;
-		maxY = other.maxY;
-		monster = other.monster;
-		player = other.player;
-		name = other.name;
-		isActive = other.isActive;
+		deathTime = i_other.deathTime;
+		maxX = i_other.maxX;
+		maxY = i_other.maxY;
+		monster = i_other.monster;
+		player = i_other.player;
+		name = i_other.name;
+		isActive = i_other.isActive;
 	}
 
 	return *this;
 }
 
-void MonsterController::Setup(bool active, float x, float y, GameObject* _monster, GameObject* _player, char* _name)
+void MonsterController::Setup(const bool i_active, const float i_x, const float i_y, GameObject* const i_monster, GameObject* const i_player, char* const i_name)
 {
-	isActive = active;
-	maxX = x;
-	maxY = y;
-	monster = _monster;
-	player = _player;
-	name = _name;
+	isActive = i_active;
+	maxX = i_x;
+	maxY = i_y;
+	monster = i_monster;
+	player = i_player;
+	name = i_name;
 }
 
-void MonsterController::SetGameObject(GameObject* object)
+void MonsterController::SetGameObject(GameObject* const i_object)
 {
-	monster = object;
+	monster = i_object;
 }
 
-void MonsterController::GetFocus(GameObject* object)
+void MonsterController::GetFocus(GameObject* const i_object)
 {
-	player = object;
+	player = i_object;
 }
 
 void MonsterController::UpdateGameObject()

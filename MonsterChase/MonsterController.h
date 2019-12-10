@@ -5,15 +5,15 @@ class MonsterController :
 {
 public:
 	MonsterController();
-	MonsterController(bool active, float x, float y, GameObject* monster, GameObject* player, char* _name);
+	MonsterController(bool i_active, float i_x, float i_y, GameObject* i_monster, GameObject* i_player, char* i_name);
 	~MonsterController();
-	MonsterController(const MonsterController& controller);
-	MonsterController(MonsterController&& controller) noexcept;
-	MonsterController& operator=(const MonsterController& other);
-	MonsterController& operator=(MonsterController&& other) noexcept;
-	void Setup(bool active, float x, float y, GameObject* monster, GameObject* player, char* name);
-	void SetGameObject(GameObject* object) override;
-	void GetFocus(GameObject* object);
+	MonsterController(const MonsterController& i_controller);
+	MonsterController(MonsterController&& i_controller) noexcept;
+	MonsterController& operator=(const MonsterController& i_other);
+	MonsterController& operator=(MonsterController&& i_other) noexcept;
+	void Setup(const bool i_active, const float i_x, const float i_y, GameObject* const i_monster, GameObject* const i_player, char* const i_name);
+	void SetGameObject(GameObject* const i_object) override;
+	void GetFocus(GameObject* const i_object);
 	void UpdateGameObject() override;
 	bool getActive() const;
 	Point2D* getPosition() const;
