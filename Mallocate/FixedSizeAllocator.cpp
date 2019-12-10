@@ -1,6 +1,6 @@
+#include "BitArray.h"
 #include "FixedSizeAllocator.h"
 #include "HeapManagerProxy.h"
-#include "BitArray.h"
 #include <cassert>
 #include <stdio.h>
 FixedSizeAllocator* FixedSizeAllocator::Create(const size_t i_blockSize, const size_t i_blockCount, HeapManager* const i_pHeap)

@@ -1,8 +1,8 @@
+#include "MemorySystem.h"
+
 #include <inttypes.h>
 #include <malloc.h>
-
 #include <stdio.h>
-#include "MemorySystem.h"
 
 extern HeapManager* heap;
 extern FixedSizeAllocator* allFSAs[3];

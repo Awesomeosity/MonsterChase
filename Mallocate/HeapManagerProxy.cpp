@@ -1,5 +1,5 @@
-#include "HeapManagerProxy.h"
 #include "HeapManager.h"
+#include "HeapManagerProxy.h"
 #include <iostream>
 
 HeapManager* HeapManagerProxy::CreateHeapManager(void* const i_pMemory, const size_t i_sizeMemory)

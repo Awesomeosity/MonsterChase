@@ -1,14 +1,14 @@
 // Mallocate.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include <Windows.h>
-#include "HeapManagerProxy.h"
 #include "BitArray.h"
+#include "HeapManagerProxy.h"
+#include <algorithm>
 #include <assert.h>
 #include <conio.h>
 #include <iostream>
 #include <vector>
-#include <algorithm>
+#include <Windows.h>
 
 #define SUPPORTS_ALIGNMENT
 #define SUPPORTS_SHOWFREEBLOCKS

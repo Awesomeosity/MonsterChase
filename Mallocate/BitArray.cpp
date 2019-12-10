@@ -1,8 +1,8 @@
 #include "BitArray.h"
 #include "HeapManagerProxy.h"
 #include <cstring>
-#include <intrin.h>
 #include <cassert>
+#include <intrin.h>
 BitArray* BitArray::Create(const size_t i_blockCount, HeapManager* const i_pHeap, const bool i_startClear)
 {
 	//Provides clarity instead of magic numbers
