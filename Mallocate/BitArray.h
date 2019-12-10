@@ -3,7 +3,7 @@ class HeapManager;
 class BitArray
 {
 public:
-	static BitArray* Create(size_t i_blockCount, HeapManager* i_pHeap, bool i_startClear = true);
+	static BitArray* Create(const size_t i_blockCount, HeapManager* const i_pHeap, const bool i_startClear = true);
 	~BitArray();
 	//As-is, each BitArray is unique to its holding Fixed Size Allocator. Assigning to them is dangerous.
 	BitArray (const BitArray& i_other) = delete;
@@ -15,7 +15,7 @@ public:
 	bool AreAllClear() const;
 	bool AreAllSet() const;
 
-	inline bool IsBitClear(size_t i_bitNum) const
+	inline bool IsBitClear(const size_t i_bitNum) const
 	{
 		if (i_bitNum > count)
 		{
@@ -31,7 +31,7 @@ public:
 		return (targChar & (1 << (offset))) == 0;
 	};
 
-	inline bool IsBitSet(size_t i_bitNum) const
+	inline bool IsBitSet(const size_t i_bitNum) const
 	{
 		if (i_bitNum > count)
 		{
@@ -48,13 +48,13 @@ public:
 		return (targChar & (1 << (offset))) != 0;
 	};
 
-	void SetBit(size_t i_bitNum);
-	void ClearBit(size_t i_bitNum);
+	void SetBit(const size_t i_bitNum);
+	void ClearBit(const size_t i_bitNum);
 
 	bool GetFirstClearBit(size_t& o_bitNumber) const;
 	bool GetFirstSetBit(size_t& o_bitNumber) const;
 
-	bool operator[](size_t i_index) const;
+	bool operator[](const size_t i_index) const;
 private:
 	//Pointer to the bitarray proper
 	unsigned char* bits;

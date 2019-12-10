@@ -3,7 +3,7 @@
 #include <cstring>
 #include <intrin.h>
 #include <cassert>
-BitArray* BitArray::Create(size_t i_blockCount, HeapManager* i_pHeap, bool i_startClear)
+BitArray* BitArray::Create(const size_t i_blockCount, HeapManager* const i_pHeap, const bool i_startClear)
 {
 	//Provides clarity instead of magic numbers
 	//unsigned char across x64/x86 processors should always be 1 byte in size
@@ -113,7 +113,7 @@ bool BitArray::AreAllSet() const
 }
 
 
-void BitArray::SetBit(size_t i_bitNum)
+void BitArray::SetBit(const size_t i_bitNum)
 {
 	if (i_bitNum > count)
 	{
@@ -129,7 +129,7 @@ void BitArray::SetBit(size_t i_bitNum)
 	bits[i] = bits[i] | (1 << (offset));
 }
 
-void BitArray::ClearBit(size_t i_bitNum)
+void BitArray::ClearBit(const size_t i_bitNum)
 {
 	if (i_bitNum > count)
 	{
@@ -246,7 +246,7 @@ bool BitArray::GetFirstSetBit(size_t& o_bitNumber) const
 	return false;
 }
 
-bool BitArray::operator[](size_t i_index) const
+bool BitArray::operator[](const size_t i_index) const
 {
 	assert(i_index < count);
 	//divide by number of bits
