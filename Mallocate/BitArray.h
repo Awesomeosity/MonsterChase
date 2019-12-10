@@ -14,6 +14,11 @@ public:
 
 	inline bool IsBitClear(size_t i_bitNum) const
 	{
+		if (i_bitNum > count)
+		{
+			return false;
+		}
+
 		//divide by number of bits
 		size_t i = i_bitNum / 8;
 		//get the offset by getting the remainder
@@ -25,6 +30,11 @@ public:
 
 	inline bool IsBitSet(size_t i_bitNum) const
 	{
+		if (i_bitNum > count)
+		{
+			return false;
+		}
+
 		//divide by number of bits
 		size_t i = i_bitNum / 8;
 

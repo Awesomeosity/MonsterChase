@@ -115,6 +115,11 @@ bool BitArray::AreAllSet() const
 
 void BitArray::SetBit(size_t i_bitNum)
 {
+	if (i_bitNum > count)
+	{
+		return;
+	}
+
 	//divide by number of bits
 	size_t i = i_bitNum / 8;
 	//get the offset by getting the remainder
@@ -126,6 +131,11 @@ void BitArray::SetBit(size_t i_bitNum)
 
 void BitArray::ClearBit(size_t i_bitNum)
 {
+	if (i_bitNum > count)
+	{
+		return;
+	}
+
 	//divide by number of bits
 	size_t i = i_bitNum / 8;
 	//get the offset by getting the remainder
