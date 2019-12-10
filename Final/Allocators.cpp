@@ -30,10 +30,13 @@ void* __cdecl malloc(size_t i_size)
 		retPoint = targFSA->alloc();
 	}
 
+	if (retPoint == nullptr)
+	{
+		retPoint = HeapManagerProxy::alloc(heap, i_size);
+	}
 
-	// replace with calls to your HeapManager or FixedSizeAllocators
 	printf("malloc %zu\n", i_size);
-	return _aligned_malloc(i_size, 4);
+	return retPoint;
 }
 
 void __cdecl free(void* i_ptr)
