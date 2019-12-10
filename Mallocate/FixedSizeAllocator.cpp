@@ -34,7 +34,13 @@ FixedSizeAllocator* FixedSizeAllocator::Create(size_t i_blockSize, size_t i_bloc
 FixedSizeAllocator::~FixedSizeAllocator()
 {
 #ifdef _DEBUG
-	std::cout << (*bitArray)[0];
+	for (size_t i = 0; i < blockCount; i++)
+	{
+		if ((*bitArray)[i])
+		{
+			std::cout << "Allocation at " << i << "\n";
+		}
+	}
 #endif
 	delete bitArray;
 }
