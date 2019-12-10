@@ -5,14 +5,14 @@ class PlayerController :
 {
 public:
 	PlayerController();
-	PlayerController(GameObject* player, char* name, float _sizeX, float _sizeY);
+	PlayerController(GameObject* i_player, char* i_name, float i_sizeX, float i_sizeY);
 	~PlayerController();
-	PlayerController(const PlayerController& controller);
-	PlayerController(PlayerController&& controller) noexcept;
-	PlayerController& operator=(const PlayerController& other);
-	PlayerController& operator=(PlayerController&& other) noexcept;
-	void Setup(char* playerName, float playX, float playY);
-	void SetGameObject(GameObject* object) override;
+	PlayerController(const PlayerController& i_controller);
+	PlayerController(PlayerController&& i_controller) noexcept;
+	PlayerController& operator=(const PlayerController& i_other);
+	PlayerController& operator=(PlayerController&& i_other) noexcept;
+	void Setup(char* const i_playerName, const float i_playX, const float i_playY);
+	void SetGameObject(GameObject* const i_object) override;
 	void UpdateGameObject() override;
 	Point2D* getPlayerPosition() const;
 private:

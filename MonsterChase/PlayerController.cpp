@@ -6,8 +6,8 @@ PlayerController::PlayerController()
 {
 }
 
-PlayerController::PlayerController(GameObject* _player, char* _name, float _sizeX, float _sizeY)
-	: player(_player), name(_name), maxX(_sizeX), maxY(_sizeY)
+PlayerController::PlayerController(GameObject* i_player, char* i_name, float i_sizeX, float i_sizeY)
+	: player(i_player), name(i_name), maxX(i_sizeX), maxY(i_sizeY)
 {
 }
 
@@ -16,70 +16,70 @@ PlayerController::~PlayerController()
 	delete[] name;
 }
 
-PlayerController::PlayerController(const PlayerController& controller) :
-	player(controller.player), name(_strdup(controller.name)), maxX(controller.maxX), maxY(controller.maxY)
+PlayerController::PlayerController(const PlayerController& i_controller) :
+	player(i_controller.player), name(_strdup(i_controller.name)), maxX(i_controller.maxX), maxY(i_controller.maxY)
 {
 
 }
 
-PlayerController::PlayerController(PlayerController&& controller) noexcept
+PlayerController::PlayerController(PlayerController&& i_controller) noexcept
 	: player(nullptr), name(nullptr), maxX(0), maxY(0)
 {
-	player = controller.player;
-	name = controller.name;
-	maxX = controller.maxX;
-	maxY = controller.maxY;
+	player = i_controller.player;
+	name = i_controller.name;
+	maxX = i_controller.maxX;
+	maxY = i_controller.maxY;
 
-	controller.player = nullptr;
-	controller.name = nullptr;
-	controller.maxX = 0;
-	controller.maxY = 0;
+	i_controller.player = nullptr;
+	i_controller.name = nullptr;
+	i_controller.maxX = 0;
+	i_controller.maxY = 0;
 
 }
 
-PlayerController& PlayerController::operator=(const PlayerController& other)
+PlayerController& PlayerController::operator=(const PlayerController& i_other)
 {
-	if (this != &other)
+	if (this != &i_other)
 	{
-		player = other.player;
-		name = _strdup(other.name);
-		maxX = other.maxX;
-		maxY = other.maxY;
+		player = i_other.player;
+		name = _strdup(i_other.name);
+		maxX = i_other.maxX;
+		maxY = i_other.maxY;
 	}
 	return *this;
 }
 
-PlayerController& PlayerController::operator=(PlayerController&& other) noexcept
+PlayerController& PlayerController::operator=(PlayerController&& i_other) noexcept
 {
-	if (this != &other)
+	if (this != &i_other)
 	{
 		delete player;
 		delete name;
 		
-		player = other.player;
-		name = other.name;
-		maxX = other.maxX;
-		maxY = other.maxY;
+		player = i_other.player;
+		name = i_other.name;
+		maxX = i_other.maxX;
+		maxY = i_other.maxY;
 
-		other.player = nullptr;
-		other.name = nullptr;
-		other.maxX = 0;
-		other.maxY = 0;
+		i_other.player = nullptr;
+		i_other.name = nullptr;
+		i_other.maxX = 0;
+		i_other.maxY = 0;
 	}
 
 	return *this;
 }
 
-void PlayerController::Setup(char* playerName, float playX, float playY)
+void PlayerController::Setup(char* const i_playerName, const float i_playX, const float i_playY)
 {
-	name = playerName;
-	maxX = playX;
-	maxY = playY;
+	name = i_playerName;
+	maxX = i_playX;
+	maxY = i_playY;
 }
 
-void PlayerController::SetGameObject(GameObject* object)
+void PlayerController::SetGameObject(GameObject* const i_object)
 {
-	player = object;
+	player = i_object;
 }
 
 void PlayerController::UpdateGameObject()
