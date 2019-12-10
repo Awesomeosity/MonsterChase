@@ -38,6 +38,7 @@ FixedSizeAllocator::~FixedSizeAllocator()
 void* FixedSizeAllocator::alloc()
 {
 	size_t bitNumber = 0;
+	size_t guardBandSize = 4;
 	if (!bitArray->GetFirstClearBit(bitNumber))
 	{
 		return nullptr;
@@ -51,12 +52,13 @@ void* FixedSizeAllocator::alloc()
 
 bool FixedSizeAllocator::free(void* const i_ptr)
 {
+	size_t guardBandSize = 4;
 	static const int fillValue = 0xDD;
 	char* passedPointer = reinterpret_cast<char*>(i_ptr);
 
 	//Check if the pointer is within our memory
 	ptrdiff_t result = passedPointer - reinterpret_cast<char*>(userBlock);
-	if (result < 0)
+	if (result < 0 || result > static_cast<int>((blockSize + guardBandSize) * blockCount))
 	{
 		return false;
 	}
