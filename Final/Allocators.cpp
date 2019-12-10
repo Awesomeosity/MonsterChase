@@ -64,9 +64,20 @@ void __cdecl free(void* i_ptr)
 
 void* operator new(size_t i_size)
 {
-	// replace with calls to your HeapManager or FixedSizeAllocators
+	void* retPoint = nullptr;
+
+	FixedSizeAllocator* targFSA = getFSA(i_size);
+	if (targFSA)
+	{
+		retPoint = targFSA->alloc();
+	}
+
+	if (retPoint == nullptr)
+	{
+		retPoint = HeapManagerProxy::alloc(heap, i_size);
+	}
 	printf("new %zu\n", i_size);
-	return _aligned_malloc(i_size, 4);
+	return retPoint;
 }
 
 void operator delete(void* i_ptr)
