@@ -5,13 +5,13 @@ class RandomController :
 {
 public:
 	RandomController();
-	RandomController(bool active, float x, float y, GameObject* _monster, char* _name);
+	RandomController(bool i_active, float i_x, float i_y, GameObject* i_monster, char* i_name);
 	~RandomController();
-	RandomController(const RandomController& controller);
-	RandomController(RandomController&& controller) noexcept;
-	RandomController& operator=(const RandomController& other);
-	RandomController& operator=(RandomController&& other) noexcept;
-	void SetGameObject(GameObject* object) override;
+	RandomController(const RandomController& i_controller);
+	RandomController(RandomController&& i_controller) noexcept;
+	RandomController& operator=(const RandomController& i_other);
+	RandomController& operator=(RandomController&& i_other) noexcept;
+	void SetGameObject(GameObject* const i_object) override;
 	void UpdateGameObject() override;
 	bool getActive() const;
 	Point2D* getPosition() const;

@@ -6,8 +6,8 @@ RandomController::RandomController()
 {
 }
 
-RandomController::RandomController(bool active, float x, float y, GameObject* _monster, char* _name)
-	: maxX(x), maxY(y), monster(_monster), name(_name), isActive(active)
+RandomController::RandomController(bool i_active, float i_x, float i_y, GameObject* i_monster, char* i_name)
+	: maxX(i_x), maxY(i_y), monster(i_monster), name(i_name), isActive(i_active)
 {
 	deathTime = (rand() / (RAND_MAX / maxTime)) + 1;
 }
@@ -17,58 +17,58 @@ RandomController::~RandomController()
 	delete[] name;
 }
 
-RandomController::RandomController(const RandomController& controller):
-	deathTime(controller.deathTime), maxX(controller.maxX), maxY(controller.maxY),
-	monster(controller.monster), name(_strdup(controller.name)), isActive(controller.isActive)
+RandomController::RandomController(const RandomController& i_controller):
+	deathTime(i_controller.deathTime), maxX(i_controller.maxX), maxY(i_controller.maxY),
+	monster(i_controller.monster), name(_strdup(i_controller.name)), isActive(i_controller.isActive)
 {
 }
 
-RandomController::RandomController(RandomController&& controller) noexcept
+RandomController::RandomController(RandomController&& i_controller) noexcept
 	: deathTime(0), maxX(0), maxY(0),
 	monster(nullptr), name(nullptr), isActive(false)
 {
-	deathTime = controller.deathTime;
-	maxX = controller.maxX;
-	maxY = controller.maxY;
-	monster = controller.monster;
-	name = controller.name;
-	isActive = controller.isActive;
+	deathTime = i_controller.deathTime;
+	maxX = i_controller.maxX;
+	maxY = i_controller.maxY;
+	monster = i_controller.monster;
+	name = i_controller.name;
+	isActive = i_controller.isActive;
 }
 
-RandomController& RandomController::operator=(const RandomController& other)
+RandomController& RandomController::operator=(const RandomController& i_other)
 {
-	if (this != &other)
+	if (this != &i_other)
 	{
-		deathTime = other.deathTime;
-		maxX = other.maxX;
-		maxY = other.maxY;
-		monster = other.monster;
-		name = _strdup(other.name);
-		isActive = other.isActive;
+		deathTime = i_other.deathTime;
+		maxX = i_other.maxX;
+		maxY = i_other.maxY;
+		monster = i_other.monster;
+		name = _strdup(i_other.name);
+		isActive = i_other.isActive;
 	}
 	return *this;
 }
 
-RandomController& RandomController::operator=(RandomController&& other) noexcept
+RandomController& RandomController::operator=(RandomController&& i_other) noexcept
 {
-	if (this != &other)
+	if (this != &i_other)
 	{
 		delete monster;
 		delete name;
 
-		deathTime = other.deathTime;
-		maxX = other.maxX;
-		maxY = other.maxY;
-		monster = other.monster;
-		name = other.name;
-		isActive = other.isActive;
+		deathTime = i_other.deathTime;
+		maxX = i_other.maxX;
+		maxY = i_other.maxY;
+		monster = i_other.monster;
+		name = i_other.name;
+		isActive = i_other.isActive;
 	}
 	return *this;
 }
 
-void RandomController::SetGameObject(GameObject* object)
+void RandomController::SetGameObject(GameObject* const i_object)
 {
-	monster = object;
+	monster = i_object;
 }
 
 void RandomController::UpdateGameObject()
