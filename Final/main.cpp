@@ -13,19 +13,19 @@
 #endif // _DEBUG
 
 bool MemorySystem_UnitTest();
-int main(int i_arg, char **)
+int main()
 {
 	const size_t 		sizeHeap = 1024 * 1024;
 
 	// you may not need this if you don't use a descriptor pool
-	const unsigned int 	numDescriptors = 2048;
+	//const unsigned int 	numDescriptors = 2048;
 
 	// Allocate memory for my test heap.
 	void * pHeapMemory = HeapAlloc(GetProcessHeap(), 0, sizeHeap);
 	assert(pHeapMemory);
 
 	// Create your HeapManager and FixedSizeAllocators.
-	InitializeMemorySystem(pHeapMemory, sizeHeap, numDescriptors);
+	InitializeMemorySystem(pHeapMemory, sizeHeap);
 
 	bool success = MemorySystem_UnitTest();
 	assert(success);
