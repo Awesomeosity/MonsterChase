@@ -4,7 +4,8 @@ class MonsterController :
 	public IGameObjectController
 {
 public:
-	MonsterController(bool active = false, float x = 0, float y = 0, GameObject* monster = nullptr, GameObject* player = nullptr, char* _name = nullptr);
+	MonsterController();
+	MonsterController(bool active, float x, float y, GameObject* monster, GameObject* player, char* _name);
 	~MonsterController();
 	MonsterController(const MonsterController& controller);
 	MonsterController(MonsterController&& controller) noexcept;

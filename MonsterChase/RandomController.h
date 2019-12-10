@@ -4,6 +4,7 @@ class RandomController :
 	public IGameObjectController
 {
 public:
+	RandomController();
 	RandomController(bool active, float x, float y, GameObject* _monster, char* _name);
 	~RandomController();
 	RandomController(const RandomController& controller);

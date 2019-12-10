@@ -2,8 +2,14 @@
 #include <cstdlib>
 #include <iostream>
 
+MonsterController::MonsterController()
+	: maxX(0), maxY(0), monster(nullptr), player(nullptr), name(nullptr), isActive(false)
+{
+	deathTime = 0;
+}
+
 MonsterController::MonsterController(bool active, float x, float y, GameObject* _monster, GameObject* _player, char* _name)
-	: isActive(active), maxX(x), maxY(y), monster(_monster), player(_player), name(_name)
+	: maxX(x), maxY(y), monster(_monster), player(_player), name(_name), isActive(active)
 {
 	deathTime = (rand() / (RAND_MAX / maxTime)) + 1;
 }

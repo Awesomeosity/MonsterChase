@@ -1,6 +1,10 @@
 #include "RandomController.h"
 #include <cstdlib>
 #include <iostream>
+RandomController::RandomController()
+	: deathTime(0), maxX(0), maxY(0), monster(nullptr), name(nullptr), isActive(false)
+{
+}
 
 RandomController::RandomController(bool active, float x, float y, GameObject* _monster, char* _name)
 	: maxX(x), maxY(y), monster(_monster), name(_name), isActive(active)

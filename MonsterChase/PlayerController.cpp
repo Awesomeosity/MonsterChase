@@ -1,6 +1,10 @@
 #include "PlayerController.h"
 #include <iostream>
 #include <conio.h>
+PlayerController::PlayerController()
+	: player(nullptr), name(nullptr), maxX(0), maxY(0)
+{
+}
 
 PlayerController::PlayerController(GameObject* _player, char* _name, float _sizeX, float _sizeY)
 	: player(_player), name(_name), maxX(_sizeX), maxY(_sizeY)

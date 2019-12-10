@@ -4,7 +4,8 @@ class PlayerController :
 	public IGameObjectController
 {
 public:
-	PlayerController(GameObject* player = nullptr, char* name = nullptr, float _sizeX = 0, float _sizeY = 0);
+	PlayerController();
+	PlayerController(GameObject* player, char* name, float _sizeX, float _sizeY);
 	~PlayerController();
 	PlayerController(const PlayerController& controller);
 	PlayerController(PlayerController&& controller) noexcept;
