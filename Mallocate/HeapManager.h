@@ -4,6 +4,9 @@ class HeapManager
 public:
 	static HeapManager* Create(void* const i_pMemory, const size_t i_sizeMemory);
 	~HeapManager();
+	HeapManager(const HeapManager& i_other) = delete;
+	HeapManager& operator=(const HeapManager& i_other) = delete;
+
 	void* alloc(HeapManager* const i_pManager, const size_t i_size);
 	void* alloc(HeapManager* const i_pManager, const size_t i_size, const unsigned int i_alignment);
 

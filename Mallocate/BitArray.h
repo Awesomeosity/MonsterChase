@@ -5,7 +5,10 @@ class BitArray
 public:
 	static BitArray* Create(size_t i_blockCount, HeapManager* i_pHeap, bool i_startClear = true);
 	~BitArray();
-	
+	//As-is, each BitArray is unique to its holding Fixed Size Allocator. Assigning to them is dangerous.
+	BitArray (const BitArray& i_other) = delete;
+	BitArray& operator=(const BitArray& i_other) = delete;
+
 	void ClearAll();
 	void SetAll();
 

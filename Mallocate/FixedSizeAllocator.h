@@ -6,6 +6,9 @@ class FixedSizeAllocator
 public:
 	static FixedSizeAllocator* Create(size_t i_blockSize, size_t i_blockCount, HeapManager* i_pHeap);
 	~FixedSizeAllocator();
+	FixedSizeAllocator(const FixedSizeAllocator& i_other) = delete;
+	FixedSizeAllocator& operator=(const FixedSizeAllocator& i_other) = delete;
+
 	void* alloc();
 	bool free(void* const i_ptr);
 	size_t getBlockSize();
