@@ -1,6 +1,6 @@
 #pragma once
-#include "BitArray.h"
-#include "HeapManagerProxy.h"
+class BitArray;
+class HeapManager;
 class FixedSizeAllocator
 {
 public:
