@@ -21,13 +21,13 @@ HeapManager* HeapManager::Create(void* const i_pMemory, const size_t i_sizeMemor
 	char* guardPoint = reinterpret_cast<char*>(currMem + 1);
 	guardPoint += initMem;
 	int* gp = reinterpret_cast<int*>(guardPoint);
-	*gp = 4261281277;
+	*gp = 0xFDFDFDFD;
 
 	int* filler = reinterpret_cast<int*>(currMem + 1);
 	//Filling internals
 	while (initMem > 4)
 	{
-		*filler = 3722304989;
+		*filler = 0xDDDDDDDD;
 		filler++;
 		initMem -= sizeof(int);
 	}
@@ -84,7 +84,7 @@ void* HeapManager::alloc(HeapManager* const i_pManager, const size_t i_size, con
 		//Need to perform pointer arithmetic to get to where the new Manager will be setup.
 		char* gp = reinterpret_cast<char*>(currBlock + 1) + targSize;
 		int* guardPointer = reinterpret_cast<int*>(gp);
-		*guardPointer = 4261281277; //Should convert into 0xFDFDFDFD?
+		*guardPointer = 0xFDFDFDFD;
 
 		HeapManager* newManager = reinterpret_cast<HeapManager*>(guardPointer + 1);
 		newManager->prevBlock = currBlock;
@@ -103,7 +103,7 @@ void* HeapManager::alloc(HeapManager* const i_pManager, const size_t i_size, con
 	int* fillPointer = reinterpret_cast<int*>(currBlock + 1);
 	while (targSize > 0)
 	{
-		*fillPointer = 3452816845;
+		*fillPointer = 0xCDCDCDCD;
 		fillPointer++;
 		targSize -= sizeof(int);
 	}
@@ -136,7 +136,7 @@ bool HeapManager::free(HeapManager* const i_pManager, void* const i_ptr)
 		size_t totalSize = currManager->sizeOf;
 		while (totalSize > 0)
 		{
-			*fp = 3722304989;
+			*fp = 0xDDDDDDDD;
 			totalSize -= sizeof(int);
 		}
 
