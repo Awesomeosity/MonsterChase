@@ -2,7 +2,8 @@
 class Point2D
 {
 public:
-	Point2D(const float x = 0, const float y = 0);
+	Point2D();
+	Point2D(const float x, const float y);
 	Point2D(const Point2D& point);
 	Point2D(Point2D&& point) noexcept;
 	Point2D& operator=(Point2D&& point) noexcept;
