@@ -123,7 +123,22 @@ void* operator new[](size_t i_size)
 
 void operator delete [](void* i_ptr)
 {
-	// replace with calls to your HeapManager or FixedSizeAllocators
 	printf("delete [] 0x%" PRIXPTR "\n", reinterpret_cast<uintptr_t>(i_ptr));
-	return _aligned_free(i_ptr);
+	if (i_ptr == nullptr)
+	{
+		return;
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		if (allFSAs[i]->free(i_ptr))
+		{
+			return;
+		}
+	}
+
+	if (HeapManagerProxy::free(heap, i_ptr))
+	{
+		return;
+	}
 }
