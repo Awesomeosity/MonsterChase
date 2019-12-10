@@ -1,43 +1,43 @@
 #pragma once
-inline Point2D Point2D::operator=(const Point2D& point)
+inline Point2D Point2D::operator=(const Point2D& i_point)
 {
-	if (*this == point)
+	if (*this == i_point)
 	{
 		return *this;
 	}
 
-	_X = point._X;
-	_Y = point._Y;
+	_X = i_point._X;
+	_Y = i_point._Y;
 	return *this;
 }
 
-inline Point2D Point2D::operator+=(const Point2D& Point2D)
+inline Point2D Point2D::operator+=(const Point2D& i_Point2D)
 {
-	_X += Point2D._X;
-	_Y += Point2D._Y;
+	_X += i_Point2D._X;
+	_Y += i_Point2D._Y;
 	return *this;
 }
 
-inline Point2D Point2D::operator-=(const Point2D& Point2D)
+inline Point2D Point2D::operator-=(const Point2D& i_Point2D)
 {
-	_X -= Point2D._X;
-	_Y -= Point2D._Y;
+	_X -= i_Point2D._X;
+	_Y -= i_Point2D._Y;
 	return *this;
 }
 
-inline Point2D Point2D::operator*=(const float scalar)
+inline Point2D Point2D::operator*=(const float i_scalar)
 {
-	_X *= scalar;
-	_Y *= scalar;
+	_X *= i_scalar;
+	_Y *= i_scalar;
 	return *this;
 }
 
-inline Point2D Point2D::operator/=(const float scalar)
+inline Point2D Point2D::operator/=(const float i_scalar)
 {
-	if (scalar != 0)
+	if (i_scalar != 0)
 	{
-		_X /= scalar;
-		_Y /= scalar;
+		_X /= i_scalar;
+		_Y /= i_scalar;
 	}
 	else
 	{
@@ -57,31 +57,31 @@ inline float Point2D::GetY() const
 	return _Y;
 }
 
-inline Point2D operator+(const Point2D& p1, const Point2D& p2)
+inline Point2D operator+(const Point2D& i_p1, const Point2D& i_p2)
 {
-	return Point2D(p1.GetX() + p2.GetX(), p1.GetY() + p2.GetY());
+	return Point2D(i_p1.GetX() + i_p2.GetX(), i_p1.GetY() + i_p2.GetY());
 }
 
-inline Point2D operator-(const Point2D& point)
+inline Point2D operator-(const Point2D& i_point)
 {
-	return Point2D(-1 * point.GetX(), -1 * point.GetY());
+	return Point2D(-1 * i_point.GetX(), -1 * i_point.GetY());
 }
 
-inline Point2D operator-(const Point2D& p1, const Point2D& p2)
+inline Point2D operator-(const Point2D& i_p1, const Point2D& i_p2)
 {
-	return Point2D(p1.GetX() - p2.GetX(), p1.GetY() - p2.GetY());
+	return Point2D(i_p1.GetX() - i_p2.GetX(), i_p1.GetY() - i_p2.GetY());
 }
 
-inline Point2D operator*(const Point2D& p1, const float scalar)
+inline Point2D operator*(const Point2D& i_p1, const float i_scalar)
 {
-	return Point2D(p1.GetX() * scalar, p1.GetY() * scalar);
+	return Point2D(i_p1.GetX() * i_scalar, i_p1.GetY() * i_scalar);
 }
 
-inline Point2D operator/(const Point2D& p1, const float scalar)
+inline Point2D operator/(const Point2D& i_p1, const float i_scalar)
 {
-	if (scalar != 0.0f)
+	if (i_scalar != 0.0f)
 	{
-		return Point2D(p1.GetX() / scalar, p1.GetY() / scalar);
+		return Point2D(i_p1.GetX() / i_scalar, i_p1.GetY() / i_scalar);
 	}
 	else
 	{
@@ -89,13 +89,13 @@ inline Point2D operator/(const Point2D& p1, const float scalar)
 	}
 }
 
-inline bool operator==(const Point2D& p1, const Point2D& p2)
+inline bool operator==(const Point2D& i_p1, const Point2D& i_p2)
 {
-	return (p1.GetX() == p2.GetX() && p1.GetY() == p2.GetY());
+	return (i_p1.GetX() == i_p2.GetX() && i_p1.GetY() == i_p2.GetY());
 }
 
-inline bool operator!=(const Point2D& p1, const Point2D& p2)
+inline bool operator!=(const Point2D& i_p1, const Point2D& i_p2)
 {
-	return !(p1.GetX() == p2.GetX() && p1.GetY() == p2.GetY());
+	return !(i_p1.GetX() == i_p2.GetX() && i_p1.GetY() == i_p2.GetY());
 }
 

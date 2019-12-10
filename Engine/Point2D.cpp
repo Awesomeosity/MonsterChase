@@ -7,48 +7,48 @@ Point2D::Point2D()
 {
 }
 
-Point2D::Point2D(const float x, const float y)
-	: _X(x), _Y(y)
+Point2D::Point2D(const float i_x, const float i_y)
+	: _X(i_x), _Y(i_y)
 {
 }
 
-Point2D::Point2D(const Point2D& point)
-	: _X(point._X), _Y(point._Y)
+Point2D::Point2D(const Point2D& i_point)
+	: _X(i_point._X), _Y(i_point._Y)
 {
 }
 
-Point2D::Point2D(Point2D&& point) noexcept
+Point2D::Point2D(Point2D&& i_point) noexcept
 	: _X(0), _Y(0)
 {
-	_X = point._X;
-	_Y = point._Y;
+	_X = i_point._X;
+	_Y = i_point._Y;
 
-	point._X = 0;
-	point._Y = 0;
+	i_point._X = 0;
+	i_point._Y = 0;
 }
 
-Point2D& Point2D::operator=(Point2D&& point) noexcept
+Point2D& Point2D::operator=(Point2D&& i_point) noexcept
 {
-	if (this != &point)
+	if (this != &i_point)
 	{
-		_X = point._X;
-		_Y = point._Y;
+		_X = i_point._X;
+		_Y = i_point._Y;
 
-		point._X = 0;
-		point._Y = 0;
+		i_point._X = 0;
+		i_point._Y = 0;
 	}
 
 	return *this;
 }
 
-void Point2D::SetX(const float x)
+void Point2D::SetX(const float i_x)
 {
-	_X = x;
+	_X = i_x;
 }
 
-void Point2D::SetY(const float y)
+void Point2D::SetY(const float i_y)
 {
-	_Y = y;
+	_Y = i_y;
 }
 
 void Point2D::Point2D_UnitTest()
