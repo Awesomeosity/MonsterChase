@@ -5,11 +5,11 @@
 #include "MemorySystem.h"
 
 extern HeapManager* heap;
-extern std::vector<FixedSizeAllocator*> allFSAs;
+extern FixedSizeAllocator* allFSAs[3];
 
 FixedSizeAllocator* getFSA(size_t size)
 {
-	for (int i = 0; i < allFSAs.size(); i++)
+	for (int i = 0; i < 3; i++)
 	{
 		if (size < allFSAs[i]->getBlockSize())
 		{
