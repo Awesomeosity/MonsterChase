@@ -20,6 +20,7 @@ FixedSizeAllocator* getFSA(size_t size)
 	return nullptr;
 }
 
+#pragma warning(disable: 4565)
 void* __cdecl malloc(size_t i_size)
 {
 	void* retPoint = nullptr;
