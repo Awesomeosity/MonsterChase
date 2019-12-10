@@ -25,10 +25,9 @@ void Collect()
 
 void DestroyMemorySystem()
 {
-	delete allFSAs[2];
-	delete allFSAs[1];
 	delete allFSAs[0];
-	HeapManagerProxy::Destroy();
+	delete allFSAs[1];
+	delete allFSAs[2];
 	// Destroy your HeapManager and FixedSizeAllocators
 }
 
