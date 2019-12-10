@@ -4,7 +4,7 @@ class GameObject
 {
 public:
 	GameObject();
-	GameObject(Point2D* point);
+	GameObject(Point2D& point);
 	GameObject(GameObject& gameObject);
 	GameObject(GameObject&& gameObject) noexcept;
 	GameObject& operator=(GameObject& gameObject);

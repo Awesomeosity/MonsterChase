@@ -6,7 +6,7 @@ GameObject::GameObject() : _point()
 {
 }
 
-GameObject::GameObject(Point2D* point) : _point(*point)
+GameObject::GameObject(Point2D& point) : _point(point)
 {
 }
 

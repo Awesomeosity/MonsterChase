@@ -158,7 +158,7 @@ int main()
 	unsigned int* maxMonsters = &monsterCount;
 	std::cout << "Monster Mash by Kevin Le (u0916211)\n";
 	Point2D* zero = new Point2D(0, 0);
-	GameObject* playerObj = new GameObject(zero);
+	GameObject* playerObj = new GameObject(*zero);
 	std::vector<IGameObjectController*>* controllers = new std::vector<IGameObjectController*>();
 	std::vector<MonsterController*>* monsters = new std::vector<MonsterController*>();
 	std::vector<RandomController*>* randoms = new std::vector<RandomController*>();
