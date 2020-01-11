@@ -13,30 +13,33 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Controllers">
+      <UniqueIdentifier>{8c86467a-3579-473e-9429-fd19be4e7a40}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MonsterChase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerController.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Controllers\MonsterController.cpp">
+      <Filter>Controllers</Filter>
     </ClCompile>
-    <ClCompile Include="MonsterController.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Controllers\PlayerController.cpp">
+      <Filter>Controllers</Filter>
     </ClCompile>
-    <ClCompile Include="RandomController.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Controllers\RandomController.cpp">
+      <Filter>Controllers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PlayerController.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Controllers\MonsterController.h">
+      <Filter>Controllers</Filter>
     </ClInclude>
-    <ClInclude Include="MonsterController.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Controllers\PlayerController.h">
+      <Filter>Controllers</Filter>
     </ClInclude>
-    <ClInclude Include="RandomController.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Controllers\RandomController.h">
+      <Filter>Controllers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

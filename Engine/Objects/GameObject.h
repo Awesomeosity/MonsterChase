@@ -1,5 +1,5 @@
 #pragma once
-#include "Point2D.h"
+#include "../Types/Point2D.h"
 class GameObject
 {
 public:

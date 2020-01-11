@@ -1,5 +1,5 @@
 #pragma once
-#include "../Engine/IGameObjectController.h"
+#include "../../Engine/Objects/IGameObjectController.h"
 class RandomController :
 	public IGameObjectController
 {

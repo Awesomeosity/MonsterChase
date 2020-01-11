@@ -2,12 +2,12 @@
 //
 
 #include <iostream>
-#include "MonsterController.h"
-#include "PlayerController.h"
-#include "RandomController.h"
+#include "Controllers/MonsterController.h"
+#include "Controllers/PlayerController.h"
+#include "Controllers/RandomController.h"
 #include "conio.h"
-#include "../Engine/Point2D.h"
-#include "../Engine/GameObject.h"
+#include "../Engine/Types/Point2D.h"
+#include "../Engine/Objects/GameObject.h"
 #include "../Engine/Engine.cpp"
 #include <vector>
 

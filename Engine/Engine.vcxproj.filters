@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Memory">
+      <UniqueIdentifier>{47779f36-f031-474c-807a-05e18b371139}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{f68d22c5-08c3-4ac7-9aa8-6043ba2618dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Containers">
+      <UniqueIdentifier>{bdbb1d80-a0a5-4608-bc0d-eff3a3557e0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Types">
+      <UniqueIdentifier>{dab71c20-a5b3-4859-9431-779fe91b3ec5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -21,17 +33,32 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Point2D.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Memory\HeapManagerProxy.h">
+      <Filter>Memory</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Memory\HeapManager.h">
+      <Filter>Memory</Filter>
     </ClInclude>
-    <ClInclude Include="Point2D-inl.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Memory\FixedSizeAllocator-inl.h">
+      <Filter>Memory</Filter>
     </ClInclude>
-    <ClInclude Include="IGameObjectController.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Memory\FixedSizeAllocator.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\GameObject.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\IGameObjectController.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Containers\BitArray.h">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Point2D.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Point2D-inl.h">
+      <Filter>Types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -41,11 +68,23 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Point2D.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Memory\FixedSizeAllocator.cpp">
+      <Filter>Memory</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Memory\HeapManager.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\HeapManagerProxy.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\GameObject.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Containers\BitArray.cpp">
+      <Filter>Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Types\Point2D.cpp">
+      <Filter>Types</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

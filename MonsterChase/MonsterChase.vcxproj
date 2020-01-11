@@ -155,15 +155,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Controllers\MonsterController.cpp" />
+    <ClCompile Include="Controllers\PlayerController.cpp" />
+    <ClCompile Include="Controllers\RandomController.cpp" />
     <ClCompile Include="MonsterChase.cpp" />
-    <ClCompile Include="MonsterController.cpp" />
-    <ClCompile Include="PlayerController.cpp" />
-    <ClCompile Include="RandomController.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MonsterController.h" />
-    <ClInclude Include="PlayerController.h" />
-    <ClInclude Include="RandomController.h" />
+    <ClInclude Include="Controllers\MonsterController.h" />
+    <ClInclude Include="Controllers\PlayerController.h" />
+    <ClInclude Include="Controllers\RandomController.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
