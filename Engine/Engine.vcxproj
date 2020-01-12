@@ -157,6 +157,8 @@
   <ItemGroup>
     <ClInclude Include="Containers\BitArray.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="GLib\BasicTypes.h" />
+    <ClInclude Include="GLib\GLib.h" />
     <ClInclude Include="Memory\FixedSizeAllocator-inl.h" />
     <ClInclude Include="Memory\FixedSizeAllocator.h" />
     <ClInclude Include="Memory\HeapManager.h" />

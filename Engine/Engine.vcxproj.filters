@@ -60,6 +60,12 @@
     <ClInclude Include="Types\Point2D-inl.h">
       <Filter>Types</Filter>
     </ClInclude>
+    <ClInclude Include="GLib\BasicTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLib\GLib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">

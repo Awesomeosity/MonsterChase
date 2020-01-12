@@ -2,17 +2,27 @@
 //
 
 #include <iostream>
+#include <assert.h>
 #include "Controllers/MonsterController.h"
 #include "Controllers/PlayerController.h"
 #include "Controllers/RandomController.h"
 #include "conio.h"
-#include "../Engine/Types/Point2D.h"
-#include "../Engine/Objects/GameObject.h"
+#include <stdint.h>
+#include <Windows.h>
+
 #include "../Engine/Engine.cpp"
+#include "../Engine/GLib/BasicTypes.h"
+#include "../Engine/GLib/GLib.h"
+#include "../Engine/Objects/GameObject.h"
+#include "../Engine/Types/Point2D.h"
 #include <vector>
 
 void inline GetMonsterCount(unsigned int* const maxMonsters)
 {
+	//TEMP: Fixed Monster Count because no input lol
+	*maxMonsters = 1;
+	
+	/*
 	unsigned int monsterCount = 0;
 	while (true)
 	{
@@ -32,6 +42,7 @@ void inline GetMonsterCount(unsigned int* const maxMonsters)
 			break;
 		}
 	}
+	*/
 }
 
 bool inline CheckPlayer(PlayerController* const player, std::vector<MonsterController*>* monsters, std::vector<RandomController*>* randoms)
@@ -39,14 +50,14 @@ bool inline CheckPlayer(PlayerController* const player, std::vector<MonsterContr
 	float playerX = player->getPlayerPosition()->GetX();
 	float playerY = player->getPlayerPosition()->GetY();
 
-	for (int i = 0; i < (*monsters).size(); i++)
+	for (size_t i = 0; i < (*monsters).size(); i++)
 	{
 		if ((*monsters)[i]->getActive() && (*monsters)[i]->getPosition()->GetX() == playerX && (*monsters)[i]->getPosition()->GetY() == playerY)
 		{
 			return false;
 		}
 	}
-	for (int i = 0; i < (*randoms).size(); i++)
+	for (size_t i = 0; i < (*randoms).size(); i++)
 	{
 		if ((*randoms)[i]->getActive() && (*randoms)[i]->getPosition()->GetX() == playerX && (*randoms)[i]->getPosition()->GetY() == playerY)
 		{
@@ -65,7 +76,7 @@ void inline GameLoop(PlayerController* const player, const std::vector<IGameObje
 	{
 		beforePosX = player->getPlayerPosition()->GetX();
 		beforePosY = player->getPlayerPosition()->GetY();
-		for (int i = 0; i < controllers->size(); i++)
+		for (size_t i = 0; i < controllers->size(); i++)
 		{
 			(*controllers)[i]->UpdateGameObject();
 			if (i == 0)
@@ -95,7 +106,7 @@ inline GameObject* MonsterCreateLoop(const float playX, const float playY, unsig
 	unsigned int i = 0;
 	bool isActive = false;
 	GetMonsterCount(maxMonsters);
-	std::cout << *maxMonsters << " is the initial amount of monsters.\n";
+	//std::cout << *maxMonsters << " is the initial amount of monsters.\n";
 	GameObject* monsterObjs = new GameObject[*maxMonsters + 10];
 	for (; i < *maxMonsters + 10; i++)
 	{
@@ -105,10 +116,11 @@ inline GameObject* MonsterCreateLoop(const float playX, const float playY, unsig
 
 		if (isActive)
 		{
-			std::cout << "Please enter Monster #" << i - 9 << "'s name: ";
-			GetName(name);
+			//TEMP: Change this back when we get inputs
+			//std::cout << "Please enter Monster #" << i - 9 << "'s name: ";
+			//GetName(name);
 		}
-		if (!isActive)
+		else
 		{
 			char beginning[256] = "Monster #";
 			char buffer[256];
@@ -117,8 +129,11 @@ inline GameObject* MonsterCreateLoop(const float playX, const float playY, unsig
 			strcat_s(beginning, buffer);
 			strcpy_s(name, 256, beginning);
 		}
+
 		if (rand() / (RAND_MAX / 2) == 0)
 		{
+			//TEMP: Change this back when we get inputs
+			strcpy_s(name, 256, "bruh");
 			MonsterController* newController = new MonsterController(isActive, monX, monY, &(monsterObjs[i]), player, name);
 			controllers->push_back(newController);
 			monsters->push_back(newController);
@@ -139,24 +154,164 @@ inline GameObject* MonsterCreateLoop(const float playX, const float playY, unsig
 	return monsterObjs;
 }
 
+void* LoadFile(const char* i_pFilename, size_t& o_sizeFile)
+{
+	assert(i_pFilename != NULL);
+
+	FILE* pFile = NULL;
+
+	errno_t fopenError = fopen_s(&pFile, i_pFilename, "rb");
+	if (fopenError != 0)
+		return NULL;
+
+	assert(pFile != NULL);
+
+	int FileIOError = fseek(pFile, 0, SEEK_END);
+	assert(FileIOError == 0);
+
+	long FileSize = ftell(pFile);
+	assert(FileSize >= 0);
+
+	FileIOError = fseek(pFile, 0, SEEK_SET);
+	assert(FileIOError == 0);
+
+	uint8_t* pBuffer = new uint8_t[FileSize];
+	assert(pBuffer);
+
+	size_t FileRead = fread(pBuffer, 1, FileSize, pFile);
+	assert(FileRead == FileSize);
+
+	fclose(pFile);
+
+	o_sizeFile = FileSize;
+
+	return pBuffer;
+}
+
+GLib::Sprites::Sprite* CreateSprite(const char* i_pFilename)
+{
+	assert(i_pFilename);
+
+	size_t sizeTextureFile = 0;
+
+	// Load the source file (texture data)
+	void* pTextureFile = LoadFile(i_pFilename, sizeTextureFile);
+
+	// Ask GLib to create a texture out of the data (assuming it was loaded successfully)
+	GLib::Texture* pTexture = pTextureFile ? GLib::CreateTexture(pTextureFile, sizeTextureFile) : nullptr;
+
+	// exit if something didn't work
+	// probably need some debug logging in here!!!!
+	if (pTextureFile)
+		delete[] pTextureFile;
+
+	if (pTexture == nullptr)
+		return NULL;
+
+	unsigned int width = 0;
+	unsigned int height = 0;
+	unsigned int depth = 0;
+
+	// Get the dimensions of the texture. We'll use this to determine how big it is on screen
+	bool result = GLib::GetDimensions(pTexture, width, height, depth);
+	assert(result == true);
+	assert((width > 0) && (height > 0));
+
+	// Define the sprite edges
+	GLib::Sprites::SpriteEdges	Edges = { -float(width / 2.0f), float(height), float(width / 2.0f), 0.0f };
+	GLib::Sprites::SpriteUVs	UVs = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 0.0f, 1.0f }, { 1.0f, 1.0f } };
+	GLib::RGBA							Color = { 255, 255, 255, 255 };
+
+	// Create the sprite
+	GLib::Sprites::Sprite* pSprite = GLib::Sprites::CreateSprite(Edges, 0.1f, Color, UVs);
+	if (pSprite == nullptr)
+	{
+		GLib::Release(pTexture);
+		return nullptr;
+	}
+
+	// Bind the texture to sprite
+	GLib::Sprites::SetTexture(*pSprite, *pTexture);
+
+	return pSprite;
+}
+
 void inline CreatePlayer(const float playX, const float playY, PlayerController* player, GameObject* playerObj)
 {
-	std::cout << "Please enter your name: ";
+	//TEMP: Change this back when we get inputs
 	char* playerName = new char[256]();
-	GetName(playerName);
+	strcpy_s(playerName, 256, "bruh");
+	//GetName(playerName);
 	player->SetGameObject(playerObj);
 	player->Setup(playerName, playX, playY);
 }
 
+int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_lpCmdLine, int i_nCmdShow)
+{
+	//_CrtSetBreakAlloc();
+	unsigned short ID = 65535;
+	float playX = 10.0f;
+	float playY = 10.0f;
+
+	// IMPORTANT: first we need to initialize GLib
+	bool bSuccess = GLib::Initialize(i_hInstance, i_nCmdShow, "Monster Mash", ID, static_cast<unsigned int>(playX) * 50, static_cast<unsigned int>(playY) * 50);
+	unsigned int monsterCount = 0;
+	unsigned int* maxMonsters = &monsterCount;
+	Point2D* zero = new Point2D(0, 0);
+	GameObject* playerObj = new GameObject(*zero);
+	std::vector<IGameObjectController*>* controllers = new std::vector<IGameObjectController*>();
+	std::vector<MonsterController*>* monsters = new std::vector<MonsterController*>();
+	std::vector<RandomController*>* randoms = new std::vector<RandomController*>();
+
+	PlayerController* player = new PlayerController();
+	controllers->push_back(player);
+
+
+	GameObject* generated = MonsterCreateLoop(playX, playY, maxMonsters, playerObj, controllers, monsters, randoms);
+	CreatePlayer(playX, playY, player, playerObj);
+
+	if (bSuccess)
+	{
+		bool bQuit = false;
+		do
+		{
+			GLib::Service(bQuit);
+			if (!bQuit)
+			{
+
+				GLib::BeginRendering();
+				GLib::Sprites::BeginRendering();
+
+				GLib::Sprites::EndRendering();
+				GLib::EndRendering();
+			}
+
+		} while (bQuit == false);
+
+		// IMPORTANT:  Tell GLib to shutdown, releasing resources.
+		GLib::Shutdown();
+	}
+
+	for (size_t i = 0; i < controllers->size(); i++)
+	{
+		delete (*controllers)[i];
+	}
+	delete controllers;
+	delete monsters;
+	delete randoms;
+	delete playerObj;
+	delete zero;
+	delete[] generated;
+	_CrtDumpMemoryLeaks();
+
+}
+
 int main()
 {
-	Point2D* point = new Point2D();
-	point->Point2D_UnitTest();
 	float playX = 10.0f;
 	float playY = 10.0f;
 	unsigned int monsterCount = 0;
 	unsigned int* maxMonsters = &monsterCount;
-	std::cout << "Monster Mash by Kevin Le (u0916211)\n";
 	Point2D* zero = new Point2D(0, 0);
 	GameObject* playerObj = new GameObject(*zero);
 	std::vector<IGameObjectController*>* controllers = new std::vector<IGameObjectController*>();
@@ -172,9 +327,7 @@ int main()
 	
 	GameLoop(player, controllers, monsters, randoms);
 
-	std::cout << "Press any key to exit...\n";
-
-	for (int i = 0; i < controllers->size(); i++)
+	for (size_t i = 0; i < controllers->size(); i++)
 	{
 		delete (*controllers)[i];
 	}
@@ -182,7 +335,6 @@ int main()
 	delete monsters;
 	delete randoms;
 	delete playerObj;
-	delete point;
 	delete zero;
 	delete[] generated;
 	_CrtDumpMemoryLeaks();
