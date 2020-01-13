@@ -20,7 +20,7 @@
 void inline GetMonsterCount(unsigned int* const maxMonsters)
 {
 	//TEMP: Fixed Monster Count because no input lol
-	*maxMonsters = 1;
+	*maxMonsters = 5;
 	
 	/*
 	unsigned int monsterCount = 0;
@@ -286,7 +286,6 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 	{
 		GLib::SetKeyStateChangeCallback(TestKeyCallback);
 
-		//TODO: Generate multiple sprites?
 		GLib::Sprites::Sprite* pGoodGuy = CreateSprite("data\\GoodGuy.dds");
 		GLib::Sprites::Sprite* pBadGuy = CreateSprite("data\\BadGuy.dds");
 
