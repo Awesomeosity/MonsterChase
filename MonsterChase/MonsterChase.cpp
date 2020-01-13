@@ -85,13 +85,13 @@ void inline GameLoop(PlayerController* const player, const std::vector<IGameObje
 				afterPosY = player->getPlayerPosition()->GetY();
 				if (beforePosX == afterPosX && beforePosY == afterPosY)
 				{
-					std::cout << "Quitting...\n";
+					//std::cout << "Quitting...\n";
 					isAlive = false;
 					break;
 				} 
 				if (!CheckPlayer(player, monsters, randoms))
 				{
-					std::cout << "You got hit!\n";
+					//std::cout << "You got hit!\n";
 					isAlive = false;
 					break;
 				}
@@ -110,8 +110,6 @@ inline GameObject* MonsterCreateLoop(const float playX, const float playY, unsig
 	GameObject* monsterObjs = new GameObject[*maxMonsters + 10];
 	for (; i < *maxMonsters + 10; i++)
 	{
-		float monX = std::round(rand() / (RAND_MAX / playX * 2) - playX);
-		float monY = std::round(rand() / (RAND_MAX / playY * 2) - playY);
 		char* name = new char[256]();
 
 		if (isActive)
@@ -134,13 +132,14 @@ inline GameObject* MonsterCreateLoop(const float playX, const float playY, unsig
 		{
 			//TEMP: Change this back when we get inputs
 			strcpy_s(name, 256, "bruh");
-			MonsterController* newController = new MonsterController(isActive, monX, monY, &(monsterObjs[i]), player, name);
+			MonsterController* newController = new MonsterController(isActive, playX, playY, &(monsterObjs[i]), player, name);
+			
 			controllers->push_back(newController);
 			monsters->push_back(newController);
 		}
 		else
 		{
-			RandomController* newController = new RandomController(isActive, monX, monY, &(monsterObjs[i]), name);
+			RandomController* newController = new RandomController(isActive, playX, playY, &(monsterObjs[i]), name);
 			controllers->push_back(newController);
 			randoms->push_back(newController);
 		}
@@ -246,6 +245,18 @@ void inline CreatePlayer(const float playX, const float playY, PlayerController*
 	player->Setup(playerName, playX, playY);
 }
 
+void TestKeyCallback(unsigned int i_VKeyID, bool bWentDown)
+{
+#ifdef _DEBUG
+	const size_t	lenBuffer = 65;
+	char			Buffer[lenBuffer];
+
+	sprintf_s(Buffer, lenBuffer, "VKey 0x%04x went %s\n", i_VKeyID, bWentDown ? "down" : "up");
+	OutputDebugStringA(Buffer);
+#endif // __DEBUG
+}
+
+
 int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_lpCmdLine, int i_nCmdShow)
 {
 	//_CrtSetBreakAlloc();
@@ -254,7 +265,8 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 	float playY = 10.0f;
 
 	// IMPORTANT: first we need to initialize GLib
-	bool bSuccess = GLib::Initialize(i_hInstance, i_nCmdShow, "Monster Mash", ID, static_cast<unsigned int>(playX) * 50, static_cast<unsigned int>(playY) * 50);
+	bool bSuccess = GLib::Initialize(i_hInstance, i_nCmdShow, "Monster Mash", ID, static_cast<unsigned int>(playX) * 50 * 2, static_cast<unsigned int>(playY) * 50 * 2);
+	
 	unsigned int monsterCount = 0;
 	unsigned int* maxMonsters = &monsterCount;
 	Point2D* zero = new Point2D(0, 0);
@@ -272,16 +284,43 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 
 	if (bSuccess)
 	{
+		GLib::SetKeyStateChangeCallback(TestKeyCallback);
+
+		GLib::Sprites::Sprite* pGoodGuy = CreateSprite("data\\GoodGuy.dds");
+		GLib::Sprites::Sprite* pBadGuy = CreateSprite("data\\BadGuy.dds");
+
+		//float beforePosX, beforePosY, afterPosX, afterPosY;
 		bool bQuit = false;
+
 		do
 		{
+			
 			GLib::Service(bQuit);
 			if (!bQuit)
 			{
 
 				GLib::BeginRendering();
 				GLib::Sprites::BeginRendering();
+				if (pGoodGuy)
+				{
+					float playerSpritePos_X = player->getPlayerPosition()->GetX() * 50;
+					float playerSpritePos_Y = player->getPlayerPosition()->GetY() * 50;
 
+					static GLib::Point2D	Offset = { playerSpritePos_X, playerSpritePos_Y };
+
+					GLib::Sprites::RenderSprite(*pGoodGuy, Offset, 0);
+				}
+
+				if (pBadGuy)
+				{
+					float monsterSpritePos_X = (*monsters)[0]->getPosition()->GetX() * 50;
+					float monsterSpritePos_Y = (*monsters)[0]->getPosition()->GetY() * 50;
+
+					static GLib::Point2D	Offset = { monsterSpritePos_X, monsterSpritePos_Y };
+
+					GLib::Sprites::RenderSprite(*pBadGuy, Offset, 0);
+
+				}
 				GLib::Sprites::EndRendering();
 				GLib::EndRendering();
 			}
