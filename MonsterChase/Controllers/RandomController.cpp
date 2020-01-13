@@ -10,6 +10,12 @@ RandomController::RandomController(bool i_active, float i_x, float i_y, GameObje
 	: maxX(i_x), maxY(i_y), monster(i_monster), name(i_name), isActive(i_active)
 {
 	deathTime = (rand() / (RAND_MAX / maxTime)) + 1;
+
+	float monX = std::round(rand() / (RAND_MAX / maxX * 2) - maxX);
+	float monY = std::round(rand() / (RAND_MAX / maxY * 2) - maxY);
+	monster->GetPoint()->SetX(monX);
+	monster->GetPoint()->SetY(monY);
+
 }
 
 RandomController::~RandomController()
