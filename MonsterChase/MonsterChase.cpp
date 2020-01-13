@@ -286,6 +286,7 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 	{
 		GLib::SetKeyStateChangeCallback(TestKeyCallback);
 
+		//TODO: Generate multiple sprites?
 		GLib::Sprites::Sprite* pGoodGuy = CreateSprite("data\\GoodGuy.dds");
 		GLib::Sprites::Sprite* pBadGuy = CreateSprite("data\\BadGuy.dds");
 
@@ -313,13 +314,32 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 
 				if (pBadGuy)
 				{
-					float monsterSpritePos_X = (*monsters)[0]->getPosition()->GetX() * 50;
-					float monsterSpritePos_Y = (*monsters)[0]->getPosition()->GetY() * 50;
+					for (size_t i = 0; i < (*monsters).size(); i++)
+					{
+						if ((*monsters)[i]->getActive())
+						{
+							float monsterSpritePos_X = (*monsters)[i]->getPosition()->GetX() * 50;
+							float monsterSpritePos_Y = (*monsters)[i]->getPosition()->GetY() * 50;
 
-					static GLib::Point2D	Offset = { monsterSpritePos_X, monsterSpritePos_Y };
+							static GLib::Point2D	Offset = { monsterSpritePos_X, monsterSpritePos_Y };
 
-					GLib::Sprites::RenderSprite(*pBadGuy, Offset, 0);
+							GLib::Sprites::RenderSprite(*pBadGuy, Offset, 0);
 
+						}
+					}
+					for (size_t i = 0; i < (*randoms).size(); i++)
+					{
+						if ((*randoms)[i]->getActive())
+						{
+							float monsterSpritePos_X = (*randoms)[i]->getPosition()->GetX() * 50;
+							float monsterSpritePos_Y = (*randoms)[i]->getPosition()->GetY() * 50;
+
+							static GLib::Point2D	Offset = { monsterSpritePos_X, monsterSpritePos_Y };
+
+							GLib::Sprites::RenderSprite(*pBadGuy, Offset, 0);
+
+						}
+					}
 				}
 				GLib::Sprites::EndRendering();
 				GLib::EndRendering();
