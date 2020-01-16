@@ -257,6 +257,7 @@ void TestKeyCallback(unsigned int i_VKeyID, bool bWentDown)
 }
 
 
+
 int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_lpCmdLine, int i_nCmdShow)
 {
 	//_CrtSetBreakAlloc();
@@ -298,7 +299,6 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 			GLib::Service(bQuit);
 			if (!bQuit)
 			{
-
 				GLib::BeginRendering();
 				GLib::Sprites::BeginRendering();
 				if (pGoodGuy)

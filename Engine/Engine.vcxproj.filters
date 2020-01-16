@@ -25,6 +25,12 @@
     <Filter Include="Types">
       <UniqueIdentifier>{dab71c20-a5b3-4859-9431-779fe91b3ec5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Timing">
+      <UniqueIdentifier>{e6042e9a-83ae-4072-8fb8-c7ff13ca8dbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{08e9d619-9901-443b-ac9c-86f3f1e2fde2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -66,6 +72,9 @@
     <ClInclude Include="GLib\GLib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Timing.h">
+      <Filter>Timing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -91,6 +100,9 @@
     </ClCompile>
     <ClCompile Include="Types\Point2D.cpp">
       <Filter>Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Timing.cpp">
+      <Filter>Timing</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
