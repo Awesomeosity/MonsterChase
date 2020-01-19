@@ -72,7 +72,7 @@
     <ClInclude Include="GLib\GLib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Timing.h">
+    <ClInclude Include="Timing\Timing.h">
       <Filter>Timing</Filter>
     </ClInclude>
   </ItemGroup>
@@ -101,7 +101,7 @@
     <ClCompile Include="Types\Point2D.cpp">
       <Filter>Types</Filter>
     </ClCompile>
-    <ClCompile Include="Timing.cpp">
+    <ClCompile Include="Timing\Timing.cpp">
       <Filter>Timing</Filter>
     </ClCompile>
   </ItemGroup>

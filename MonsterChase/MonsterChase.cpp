@@ -11,6 +11,7 @@
 #include <Windows.h>
 
 #include "../Engine/Engine.cpp"
+#include "../Engine/Timing/Timing.h"
 #include "../Engine/GLib/BasicTypes.h"
 #include "../Engine/GLib/GLib.h"
 #include "../Engine/Objects/GameObject.h"
@@ -290,12 +291,14 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 		GLib::Sprites::Sprite* pGoodGuy = CreateSprite("data\\GoodGuy.dds");
 		GLib::Sprites::Sprite* pBadGuy = CreateSprite("data\\BadGuy.dds");
 
+		Timing::startTime();
+
 		//float beforePosX, beforePosY, afterPosX, afterPosY;
 		bool bQuit = false;
 
 		do
 		{
-			
+			float dt = Timing::deltaTime();
 			GLib::Service(bQuit);
 			if (!bQuit)
 			{
