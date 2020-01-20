@@ -8,16 +8,17 @@ void Timing::startTime()
 	return;
 }
 
-float Timing::deltaTime()
+//Returns diff in milliseconds
+long Timing::deltaTime()
 {
 	LARGE_INTEGER currentTick, diffTick;
 	QueryPerformanceCounter(&currentTick);
 
-	diffTick.QuadPart = lastTick.QuadPart - currentTick.QuadPart;
-	diffTick.QuadPart *= 1000000000;
+	diffTick.QuadPart = currentTick.QuadPart - lastTick.QuadPart;
+	diffTick.QuadPart *= 1000000;
 	diffTick.QuadPart /= frequency.QuadPart;
 
 	lastTick = currentTick;
 
-	return diffTick.QuadPart;
+	return (long)diffTick.QuadPart / 1000;
 }

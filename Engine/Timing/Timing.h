@@ -5,7 +5,7 @@ class Timing
 {
 public:
 	static void startTime();
-	static float deltaTime();
+	static long deltaTime();
 private:
 	Timing();
 	static LARGE_INTEGER frequency;

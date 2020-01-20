@@ -79,6 +79,8 @@ void RandomController::SetGameObject(GameObject* const i_object)
 
 void RandomController::UpdateGameObject()
 {
+	//TEMP: Disabled for Assignment 2.02
+	/*
 	if (isActive)
 	{
 		float x = monster->GetPoint()->GetX();
@@ -105,6 +107,7 @@ void RandomController::UpdateGameObject()
 		}
 	}
 	checkAndSetTime();
+	*/
 }
 
 bool RandomController::getActive() const

@@ -110,6 +110,8 @@ void MonsterController::GetFocus(GameObject* const i_object)
 
 void MonsterController::UpdateGameObject()
 {
+	//TEMP: Disabled for Assignment 2.02
+	/*
 	if (isActive)
 	{
 		float x = monster->GetPoint()->GetX();
@@ -139,6 +141,7 @@ void MonsterController::UpdateGameObject()
 		}
 	}
 	checkAndSetTime();
+	*/
 }
 
 bool MonsterController::getActive() const

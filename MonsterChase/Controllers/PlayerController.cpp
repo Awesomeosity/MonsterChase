@@ -84,6 +84,8 @@ void PlayerController::SetGameObject(GameObject* const i_object)
 
 void PlayerController::UpdateGameObject()
 {
+	//TEMP: Disabled for assignment 2.02
+	/*
 	std::cout << name << "'s (Player) current position is: [" << player->GetPoint()->GetX() << ", " << player->GetPoint()->GetY() << "].\n";
 	char direction = getMovement();
 	float X = player->GetPoint()->GetX();
@@ -105,6 +107,7 @@ void PlayerController::UpdateGameObject()
 		player->GetPoint()->SetX(++X);
 	}
 	boundCheck();
+	*/
 }
 
 Point2D* PlayerController::getPlayerPosition() const
