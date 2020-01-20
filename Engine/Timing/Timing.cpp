@@ -1,5 +1,7 @@
 #include "Timing.h"
 #include <windows.h>
+static LARGE_INTEGER frequency;
+static LARGE_INTEGER lastTick;
 
 void Timing::startTime()
 {

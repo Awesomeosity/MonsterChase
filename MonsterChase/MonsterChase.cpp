@@ -298,7 +298,7 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 
 		do
 		{
-			float dt = Timing::deltaTime();
+			long dt = Timing::deltaTime();
 			GLib::Service(bQuit);
 			if (!bQuit)
 			{

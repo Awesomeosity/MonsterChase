@@ -8,7 +8,5 @@ public:
 	static long deltaTime();
 private:
 	Timing();
-	static LARGE_INTEGER frequency;
-	static LARGE_INTEGER lastTick;
 };
 
