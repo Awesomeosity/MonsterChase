@@ -15,8 +15,12 @@
 #include "../Engine/GLib/BasicTypes.h"
 #include "../Engine/GLib/GLib.h"
 #include "../Engine/Objects/GameObject.h"
+#include "../Engine/Physics/PhysicsData.h"
+#include "../Engine/Physics/Physics.h"
 #include "../Engine/Types/Point2D.h"
 #include <vector>
+
+unsigned int currKey = 0;
 
 void inline GetMonsterCount(unsigned int* const maxMonsters)
 {
@@ -254,6 +258,16 @@ void TestKeyCallback(unsigned int i_VKeyID, bool bWentDown)
 
 	sprintf_s(Buffer, lenBuffer, "VKey 0x%04x went %s\n", i_VKeyID, bWentDown ? "down" : "up");
 	OutputDebugStringA(Buffer);
+
+	if (bWentDown)
+	{
+		//TODO: Implement multiple key detection
+		currKey = i_VKeyID;
+	}
+	else
+	{
+		currKey = 0;
+	}
 #endif // __DEBUG
 }
 
@@ -280,6 +294,8 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 	PlayerController* player = new PlayerController();
 	controllers->push_back(player);
 
+	PhysicsData* playerPhysics = new PhysicsData(playerObj, 1, 0);
+
 
 	GameObject* generated = MonsterCreateLoop(playX, playY, maxMonsters, playerObj, controllers, monsters, randoms);
 	CreatePlayer(playX, playY, player, playerObj);
@@ -299,17 +315,50 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 		do
 		{
 			long dt = Timing::deltaTime();
+			float dt_ms = (float)dt / 1000.0f;
 			GLib::Service(bQuit);
+			
 			if (!bQuit)
 			{
+				Point2D force;
+				switch (currKey)
+				{
+				//W
+				case 87:
+					force = Point2D(0, 1);
+					break;
+				//S
+				case 83:
+					force = Point2D(0, -1);
+					break;
+				//A
+				case 65:
+					force = Point2D(-1, 0);
+					break;
+				//D
+				case 68:
+					force = Point2D(1, 0);
+					break;
+				case 81:
+					break;
+				//No key being held down.
+				case 0:
+				default:
+					force = Point2D(0, 0);
+					break;
+				}
+				Physics::calcNewPos(dt_ms, playerPhysics, force);
+
 				GLib::BeginRendering();
 				GLib::Sprites::BeginRendering();
 				if (pGoodGuy)
 				{
-					float playerSpritePos_X = player->getPlayerPosition()->GetX() * 50;
-					float playerSpritePos_Y = player->getPlayerPosition()->GetY() * 50;
+					float p_x = player->getPlayerPosition()->GetX();
+					float p_y = player->getPlayerPosition()->GetY();
+					float playerSpritePos_X = p_x * 50;
+					float playerSpritePos_Y = p_y * 50;
 
-					static GLib::Point2D	Offset = { playerSpritePos_X, playerSpritePos_Y };
+					GLib::Point2D	Offset = { playerSpritePos_X, playerSpritePos_Y };
 
 					GLib::Sprites::RenderSprite(*pGoodGuy, Offset, 0);
 				}
