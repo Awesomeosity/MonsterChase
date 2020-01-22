@@ -156,6 +156,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Containers\BitArray.h" />
+    <ClInclude Include="Physics\FloatCalcs.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GLib\BasicTypes.h" />
     <ClInclude Include="GLib\GLib.h" />
@@ -175,6 +176,7 @@
   <ItemGroup>
     <ClCompile Include="Containers\BitArray.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="Physics\FloatCalcs.cpp" />
     <ClCompile Include="Memory\FixedSizeAllocator.cpp" />
     <ClCompile Include="Memory\HeapManager.cpp" />
     <ClCompile Include="Memory\HeapManagerProxy.cpp" />
