@@ -17,6 +17,7 @@
 #include "../Engine/Objects/GameObject.h"
 #include "../Engine/Physics/PhysicsData.h"
 #include "../Engine/Physics/Physics.h"
+#include "../Engine/Physics/FloatCalcs.h"
 #include "../Engine/Types/Point2D.h"
 #include <vector>
 
@@ -276,6 +277,8 @@ void TestKeyCallback(unsigned int i_VKeyID, bool bWentDown)
 int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_lpCmdLine, int i_nCmdShow)
 {
 	//_CrtSetBreakAlloc();
+	//TEMP: Floating Point Unit Test
+	FloatCalcs::floatingUnitTest();
 	unsigned short ID = 65535;
 	float playX = 10.0f;
 	float playY = 10.0f;

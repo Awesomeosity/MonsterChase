@@ -28,3 +28,17 @@ bool FloatCalcs::relativeEquality(const float left, const float right, const flo
 
 	return false;
 }
+
+void FloatCalcs::floatingUnitTest()
+{
+	assert(isZero(0.0f));
+	assert(!isZero(0.01f));
+	assert(!isZero(0.00000001f));
+
+	assert(!isNaN(0.0f));
+	assert(!isNaN(-0.0f));
+
+	assert(relativeEquality(0.1f, 0.1f));
+	assert(!relativeEquality(0.01f, 0.011f));
+	assert(!relativeEquality(1.1f, 1.11f));
+}
