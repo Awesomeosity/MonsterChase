@@ -156,6 +156,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Containers\BitArray.h" />
+    <ClInclude Include="Physics\FloatCalcs-inl.h" />
     <ClInclude Include="Physics\FloatCalcs.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GLib\BasicTypes.h" />

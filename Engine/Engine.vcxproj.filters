@@ -84,6 +84,9 @@
     <ClInclude Include="Physics\FloatCalcs.h">
       <Filter>Physics</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\FloatCalcs-inl.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">

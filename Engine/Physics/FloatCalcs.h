@@ -2,12 +2,12 @@
 class FloatCalcs
 {
 public:
-	static bool relativeEquality(float left, float right);
-	static bool relativeEquality(float left, float right, float maxDiff);
-	static inline bool isZero(float val);
-	static inline bool isNaN(float val);
+	static bool relativeEquality(const float left, const float right);
+	static bool relativeEquality(const float left, const float right, const float maxDiff);
+	static inline bool isZero(const float val);
+	static inline bool isNaN(const float val);
 private:
 	FloatCalcs();
 };
 
-#include "FloatCalcs-inl.h";
+#include "FloatCalcs-inl.h"
