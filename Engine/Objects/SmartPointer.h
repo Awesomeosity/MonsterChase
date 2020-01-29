@@ -1,4 +1,6 @@
 #pragma once
+#include <assert.h>
+
 struct ptrCount
 {
 	int smartCount{ 1 };
@@ -16,7 +18,7 @@ public:
 
 	T& operator*();
 	T* operator->();
-
+	operator bool();
 private:
 	void decrement();
 	T* objPtr;
@@ -33,12 +35,9 @@ SmartPointer<T>::SmartPointer(T* ptr)
 template<class T>
 SmartPointer<T>::SmartPointer(const SmartPointer& ptr)
 {
-	if (ptr == this)
-	{
-		return;
-	}
+	assert(ptr != nullptr);
 
-	if (ptr == nullptr)
+	if (ptr == this)
 	{
 		return;
 	}
@@ -51,13 +50,9 @@ SmartPointer<T>::SmartPointer(const SmartPointer& ptr)
 template<class T>
 inline SmartPointer<T>& SmartPointer<T>::operator=(const SmartPointer& ptr)
 {
-	// TODO: insert return statement here
-	if (ptr == this)
-	{
-		return this;
-	}
+	assert(ptr != nullptr);
 
-	if (ptr == nullptr)
+	if (ptr == this)
 	{
 		return this;
 	}
@@ -96,6 +91,12 @@ inline T* SmartPointer<T>::operator->()
 	}
 
 	return *objPtr;
+}
+
+template<class T>
+inline SmartPointer<T>::operator bool()
+{
+	return (objPtr == nullptr);
 }
 
 template<class T>
