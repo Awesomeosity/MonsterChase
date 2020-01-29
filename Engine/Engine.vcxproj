@@ -170,11 +170,11 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Physics\PhysicsData.h" />
     <ClInclude Include="Physics\Physics.h" />
-    <ClInclude Include="SmartPointer.h" />
+    <ClInclude Include="Objects\SmartPointer.h" />
     <ClInclude Include="Timing\Timing.h" />
     <ClInclude Include="Types\Point2D-inl.h" />
     <ClInclude Include="Types\Point2D.h" />
-    <ClInclude Include="WeakPointer.h" />
+    <ClInclude Include="Objects\WeakPointer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Containers\BitArray.cpp" />
@@ -192,10 +192,10 @@
     </ClCompile>
     <ClCompile Include="Physics\PhysicsData.cpp" />
     <ClCompile Include="Physics\Physics.cpp" />
-    <ClCompile Include="SmartPointer.cpp" />
+    <ClCompile Include="Objects\SmartPointer.cpp" />
     <ClCompile Include="Timing\Timing.cpp" />
     <ClCompile Include="Types\Point2D.cpp" />
-    <ClCompile Include="WeakPointer.cpp" />
+    <ClCompile Include="Objects\WeakPointer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

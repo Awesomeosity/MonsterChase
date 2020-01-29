@@ -80,12 +80,21 @@ inline SmartPointer<T>::~SmartPointer()
 template<class T>
 inline T& SmartPointer<T>::operator*()
 {
+	if (objPtr == nullptr)
+	{
+		return nullptr;
+	}
 	return &objPtr;
 }
 
 template<class T>
 inline T* SmartPointer<T>::operator->()
 {
+	if (objPtr == nullptr)
+	{
+		return nullptr;
+	}
+
 	return *objPtr;
 }
 
