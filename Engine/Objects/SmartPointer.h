@@ -96,7 +96,7 @@ inline T* SmartPointer<T>::operator->()
 template<class T>
 inline SmartPointer<T>::operator bool()
 {
-	return (objPtr == nullptr);
+	return (objPtr != nullptr);
 }
 
 template<class T>

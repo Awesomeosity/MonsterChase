@@ -11,6 +11,8 @@ public:
 	WeakPointer& operator=(const WeakPointer& ptr);
 	~WeakPointer();
 
+	operator bool();
+
 
 private:
 	WeakPointer();
@@ -69,6 +71,12 @@ template<class T>
 inline WeakPointer<T>::~WeakPointer()
 {
 	decrement();
+}
+
+template<class T>
+inline WeakPointer<T>::operator bool()
+{
+	return (objPtr != nullptr);
 }
 
 template<class T>
