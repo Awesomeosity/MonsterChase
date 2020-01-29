@@ -87,6 +87,12 @@
     <ClInclude Include="Physics\FloatCalcs-inl.h">
       <Filter>Physics</Filter>
     </ClInclude>
+    <ClInclude Include="SmartPointer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WeakPointer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -124,6 +130,12 @@
     </ClCompile>
     <ClCompile Include="Physics\FloatCalcs.cpp">
       <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="SmartPointer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WeakPointer.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
