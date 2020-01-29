@@ -54,12 +54,12 @@ inline SmartPointer<T>& SmartPointer<T>::operator=(const SmartPointer& ptr)
 	// TODO: insert return statement here
 	if (ptr == this)
 	{
-		return;
+		return this;
 	}
 
 	if (ptr == nullptr)
 	{
-		return;
+		return this;
 	}
 
 	objPtr = ptr.objPtr;
@@ -67,4 +67,33 @@ inline SmartPointer<T>& SmartPointer<T>::operator=(const SmartPointer& ptr)
 
 	ptr.objPtr = nullptr;
 	ptr.countCache = nullptr;
+
+	return this;
+}
+
+template<class T>
+inline SmartPointer<T>::~SmartPointer()
+{
+	decrement();
+}
+
+template<class T>
+inline T& SmartPointer<T>::operator*()
+{
+	return &objPtr;
+}
+
+template<class T>
+inline T* SmartPointer<T>::operator->()
+{
+	return *objPtr;
+}
+
+template<class T>
+inline void SmartPointer<T>::decrement()
+{
+	if (--(*countCache).smartCount == 0)
+	{
+		delete objPtr;
+	}
 }
