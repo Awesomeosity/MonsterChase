@@ -6,13 +6,16 @@ template <class T>
 class WeakPointer
 {
 public:
-	static WeakPointer<T> makePointer(SmartPointer<T> sPtr);
+	template<class t>
+	static WeakPointer<T> makePointer(SmartPointer<t> sPtr);
 	WeakPointer(const WeakPointer& ptr);
 	WeakPointer& operator=(const WeakPointer& ptr);
 	~WeakPointer();
 
 	operator bool();
-
+	//Promotes a weak pointer to become a strong pointer. Will convert, even if there is no valid obj pointer.
+	template<class t>
+	SmartPointer<t> Promote();
 
 private:
 	WeakPointer();
@@ -23,7 +26,8 @@ private:
 };
 
 template<class T>
-inline WeakPointer<T> WeakPointer<T>::makePointer(SmartPointer<T> sPtr)
+template<class t>
+static inline WeakPointer<T> WeakPointer<T>::makePointer(SmartPointer<t> sPtr)
 {
 	WeakPointer<T> newPtr = new WeakPointer<T>();
 	newPtr.objPtr = sPtr.objPtr;
@@ -77,6 +81,14 @@ template<class T>
 inline WeakPointer<T>::operator bool()
 {
 	return (objPtr != nullptr);
+}
+
+template<class T>
+template<class t>
+inline SmartPointer<t> WeakPointer<T>::Promote()
+{
+
+	return new SmartPointer<T>();
 }
 
 template<class T>

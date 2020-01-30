@@ -88,10 +88,10 @@
       <Filter>Physics</Filter>
     </ClInclude>
     <ClInclude Include="Objects\SmartPointer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Objects\WeakPointer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -132,10 +132,10 @@
       <Filter>Physics</Filter>
     </ClCompile>
     <ClCompile Include="Objects\SmartPointer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Objects\WeakPointer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

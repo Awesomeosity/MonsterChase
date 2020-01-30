@@ -1,6 +1,5 @@
 #pragma once
 #include <assert.h>
-
 struct ptrCount
 {
 	int smartCount{ 1 };
@@ -14,7 +13,7 @@ public:
 	explicit SmartPointer(T *ptr);
 	SmartPointer(const SmartPointer& ptr);
 	SmartPointer& operator=(const SmartPointer& ptr);
-	~SmartPointer();
+	~SmartPointer<T>();
 
 	T& operator*();
 	T* operator->();
