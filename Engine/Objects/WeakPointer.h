@@ -101,12 +101,22 @@ inline WeakPointer<T>::~WeakPointer()
 template<class T>
 inline T& WeakPointer<T>::operator*() const
 {
+	if (countCache->smartCount == 0)
+	{
+		return nullptr;
+	}
+
 	return (*objPtr);
 }
 
 template<class T>
 inline T* WeakPointer<T>::operator->() const
 {
+	if (countCache->smartCount == 0)
+	{
+		return nullptr;
+	}
+
 	return objPtr;
 }
 
@@ -177,12 +187,11 @@ inline void WeakPointer<T>::decrement()
 {
 	if (--(countCache->weakCount) == 0)
 	{
-		//Failsafe
+		//Just because the count cache no longer has any weak pointers doesn't mean we should automatically delete the count cache
+		//Check if the smart count is 0, and if so, then we should be safe to delete the cache.
 		if (countCache->smartCount == 0)
 		{
-			delete objPtr;
+			delete countCache;
 		}
-		delete countCache;
-
 	}
 }
