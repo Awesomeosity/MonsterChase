@@ -17,10 +17,10 @@ public:
 	SmartPointer& operator=(SmartPointer&& ptr) noexcept;
 	~SmartPointer();
 
-	inline T& operator*() const;
-	inline T* operator->() const;
-	inline operator bool() const;
-	inline T& operator[](int index) const;
+	T& operator*() const;
+	T* operator->() const;
+	operator bool() const;
+	T& operator[](int index) const;
 
 	void Reset();
 	void Swap(SmartPointer<T>& ptr);
@@ -43,13 +43,13 @@ inline SmartPointer<T>::SmartPointer()
 }
 
 template<class T>
-SmartPointer<T>::SmartPointer(const T* ptr)
+inline SmartPointer<T>::SmartPointer(const T* ptr)
 	: objPtr(ptr), countCache(new ptrCount)
 {
 }
 
 template<class T>
-SmartPointer<T>::SmartPointer(const SmartPointer<T>& ptr)
+inline SmartPointer<T>::SmartPointer(const SmartPointer<T>& ptr)
 	: objPtr(ptr.objPtr), countCache(ptr.countCache)
 {
 	assert(ptr != nullptr);
