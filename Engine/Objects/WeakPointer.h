@@ -1,6 +1,5 @@
 #pragma once
 #include "SmartPointer.h"
-#include <assert.h>
 struct ptrCount;
 template <class T>
 class WeakPointer : public SmartPointer<T>
@@ -46,16 +45,12 @@ template<class T>
 inline WeakPointer<T>::WeakPointer(const WeakPointer& ptr)
 	: objPtr(ptr.objPtr), countCache(ptr.countCache)
 {
-	assert(ptr != nullptr);
-
 	countCache->weakCount++;
 }
 
 template<class T>
 inline WeakPointer<T>& WeakPointer<T>::operator=(const WeakPointer& ptr)
 {
-	assert(ptr != nullptr);
-	
 	if (ptr == this)
 	{
 		return this;
@@ -74,8 +69,6 @@ inline WeakPointer<T>& WeakPointer<T>::operator=(const WeakPointer& ptr)
 template<class T>
 inline WeakPointer<T>& WeakPointer<T>::operator=(WeakPointer&& ptr) noexcept
 {
-	assert(ptr != nullptr);
-
 	if (ptr == this)
 	{
 		return this;
@@ -148,8 +141,6 @@ inline void WeakPointer<T>::Reset()
 template<class T>
 inline void WeakPointer<T>::Swap(const WeakPointer&& ptr)
 {
-	assert(ptr.objPtr != nullptr);
-
 	if (ptr == this)
 	{
 		return;
