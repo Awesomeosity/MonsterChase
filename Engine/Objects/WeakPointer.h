@@ -7,6 +7,7 @@ class WeakPointer : public SmartPointer<T>
 public:
 	static WeakPointer<T> makePointer(const SmartPointer<T> sPtr);
 	WeakPointer(const WeakPointer& ptr);
+	WeakPointer(WeakPointer&& ptr) noexcept;
 	WeakPointer& operator=(const WeakPointer& ptr);
 	WeakPointer& operator=(WeakPointer&& ptr) noexcept;
 	~WeakPointer();
@@ -16,7 +17,7 @@ public:
 	operator bool() const;
 	T& operator[](int index) const;
 
-	//Promotes a weak pointer to become a strong pointer. Will convert, even if there is no valid obj pointer.
+	//Generates a SmartPointer from this WeakPointer. Will convert, even if there is no valid obj pointer.
 	SmartPointer<T> Promote() const;
 	void Reset();
 	void Swap(const WeakPointer&& ptr);
@@ -46,6 +47,14 @@ inline WeakPointer<T>::WeakPointer(const WeakPointer& ptr)
 	: objPtr(ptr.objPtr), countCache(ptr.countCache)
 {
 	countCache->weakCount++;
+}
+
+template<class T>
+inline WeakPointer<T>::WeakPointer(WeakPointer&& ptr) noexcept
+	: objPtr(ptr.objPtr), countCache(ptr.countCache)
+{
+	ptr.objPtr = nullptr;
+	ptr.countCache = nullptr;
 }
 
 template<class T>
@@ -92,22 +101,12 @@ inline WeakPointer<T>::~WeakPointer()
 template<class T>
 inline T& WeakPointer<T>::operator*() const
 {
-	if (objPtr == nullptr)
-	{
-		return nullptr;
-	}
-
 	return (*objPtr);
 }
 
 template<class T>
 inline T* WeakPointer<T>::operator->() const
 {
-	if (objPtr == nullptr)
-	{
-		return nullptr;
-	}
-
 	return objPtr;
 }
 
@@ -178,12 +177,12 @@ inline void WeakPointer<T>::decrement()
 {
 	if (--(countCache->weakCount) == 0)
 	{
-		delete countCache;
-
 		//Failsafe
 		if (countCache->smartCount == 0)
 		{
 			delete objPtr;
 		}
+		delete countCache;
+
 	}
 }
