@@ -19,8 +19,8 @@ public:
 	WeakPointer<GameObject> AddObject();
 	WeakPointer<GameObject> AddObject(Point2D pt);
 	
-	//Checks if all Weak Pointers to an object no longer exist, so we can delete the object from memory.
-	void Dispose();
+	//If called by any system, disposes the given object given by a weakpointer.
+	void Dispose(WeakPointer<GameObject> ptr);
 private:
 	std::vector<SmartPointer<GameObject>> allObjects;
 };

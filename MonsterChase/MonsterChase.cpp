@@ -278,7 +278,7 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 {
 	//_CrtSetBreakAlloc();
 	//TEMP: Floating Point Unit Test
-	FloatCalcs::floatingUnitTest();
+	//FloatCalcs::floatingUnitTest();
 	unsigned short ID = 65535;
 	float playX = 10.0f;
 	float playY = 10.0f;
@@ -290,18 +290,13 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 	unsigned int* maxMonsters = &monsterCount;
 	Point2D* zero = new Point2D(0, 0);
 	GameObject* playerObj = new GameObject(*zero);
-	std::vector<IGameObjectController*>* controllers = new std::vector<IGameObjectController*>();
-	std::vector<MonsterController*>* monsters = new std::vector<MonsterController*>();
-	std::vector<RandomController*>* randoms = new std::vector<RandomController*>();
 
 	PlayerController* player = new PlayerController();
-	controllers->push_back(player);
 
 	PhysicsData* playerPhysics = new PhysicsData(playerObj, 1, 0);
 
-
-	GameObject* generated = MonsterCreateLoop(playX, playY, maxMonsters, playerObj, controllers, monsters, randoms);
-	CreatePlayer(playX, playY, player, playerObj);
+	player->SetGameObject(playerObj);
+	player->Setup(const_cast<char*>("lmao"), playX, playY);
 
 	if (bSuccess)
 	{
@@ -312,7 +307,6 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 
 		Timing::startTime();
 
-		//float beforePosX, beforePosY, afterPosX, afterPosY;
 		bool bQuit = false;
 
 		do
@@ -366,35 +360,6 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 					GLib::Sprites::RenderSprite(*pGoodGuy, Offset, 0);
 				}
 
-				if (pBadGuy)
-				{
-					for (size_t i = 0; i < (*monsters).size(); i++)
-					{
-						if ((*monsters)[i]->getActive())
-						{
-							float monsterSpritePos_X = (*monsters)[i]->getPosition()->GetX() * 50;
-							float monsterSpritePos_Y = (*monsters)[i]->getPosition()->GetY() * 50;
-
-							static GLib::Point2D	Offset = { monsterSpritePos_X, monsterSpritePos_Y };
-
-							GLib::Sprites::RenderSprite(*pBadGuy, Offset, 0);
-
-						}
-					}
-					for (size_t i = 0; i < (*randoms).size(); i++)
-					{
-						if ((*randoms)[i]->getActive())
-						{
-							float monsterSpritePos_X = (*randoms)[i]->getPosition()->GetX() * 50;
-							float monsterSpritePos_Y = (*randoms)[i]->getPosition()->GetY() * 50;
-
-							static GLib::Point2D	Offset = { monsterSpritePos_X, monsterSpritePos_Y };
-
-							GLib::Sprites::RenderSprite(*pBadGuy, Offset, 0);
-
-						}
-					}
-				}
 				GLib::Sprites::EndRendering();
 				GLib::EndRendering();
 			}
@@ -405,18 +370,9 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 		GLib::Shutdown();
 	}
 
-	for (size_t i = 0; i < controllers->size(); i++)
-	{
-		delete (*controllers)[i];
-	}
-	delete controllers;
-	delete monsters;
-	delete randoms;
 	delete playerObj;
 	delete zero;
-	delete[] generated;
 	_CrtDumpMemoryLeaks();
-
 }
 
 int main()

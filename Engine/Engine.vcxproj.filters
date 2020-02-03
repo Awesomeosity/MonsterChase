@@ -94,7 +94,7 @@
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Objects\World.h">
-      <Filter>Header Files</Filter>
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -141,7 +141,7 @@
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Objects\World.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

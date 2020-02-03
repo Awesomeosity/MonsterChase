@@ -27,3 +27,11 @@ void GetName(char* name)
 		}
 	}
 }
+
+void Run()
+{
+	while (1)
+	{
+
+	}
+}

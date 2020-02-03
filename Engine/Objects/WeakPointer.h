@@ -2,10 +2,10 @@
 #include "SmartPointer.h"
 struct ptrCount;
 template <class T>
-class WeakPointer : public SmartPointer<T>
+class WeakPointer
 {
 public:
-	static WeakPointer<T> makePointer(const SmartPointer<T> sPtr);
+	static WeakPointer<T> makePointer(SmartPointer<T> ptr);
 	WeakPointer(const WeakPointer& ptr);
 	WeakPointer(WeakPointer&& ptr) noexcept;
 	WeakPointer& operator=(const WeakPointer& ptr);
@@ -20,7 +20,7 @@ public:
 	//Generates a SmartPointer from this WeakPointer. Will convert, even if there is no valid obj pointer.
 	SmartPointer<T> Promote() const;
 	void Reset();
-	void Swap(const WeakPointer&& ptr);
+	void Swap(const WeakPointer<T>& ptr);
 	int UseCount() const;
 	int WeakCount() const;
 	bool Peek() const;
@@ -33,13 +33,19 @@ private:
 };
 
 template<class T>
-static inline WeakPointer<T> WeakPointer<T>::makePointer(const SmartPointer<T> sPtr)
+inline WeakPointer<T> WeakPointer<T>::makePointer(SmartPointer<T> sPtr)
 {
-	WeakPointer<T> newPtr = new WeakPointer<T>();
-	newPtr.objPtr = sPtr.objPtr;
-	newPtr.countCache = sPtr.countCache;
+	WeakPointer<T> newPtr = WeakPointer<T>();
+	T* i_objPtr = nullptr;
+	ptrCount* i_countCache = nullptr;
+
+	sPtr.Downcast(i_objPtr, i_countCache);
+
+	newPtr.objPtr = i_objPtr;
+	newPtr.countCache = i_countCache;
 
 	newPtr.countCache->weakCount++;
+	return newPtr;
 }
 
 template<class T>
@@ -101,11 +107,6 @@ inline WeakPointer<T>::~WeakPointer()
 template<class T>
 inline T& WeakPointer<T>::operator*() const
 {
-	if (countCache->smartCount == 0)
-	{
-		return nullptr;
-	}
-
 	return (*objPtr);
 }
 
@@ -148,7 +149,7 @@ inline void WeakPointer<T>::Reset()
 }
 
 template<class T>
-inline void WeakPointer<T>::Swap(const WeakPointer&& ptr)
+inline void WeakPointer<T>::Swap(const WeakPointer<T>& ptr)
 {
 	if (ptr == this)
 	{
@@ -157,11 +158,14 @@ inline void WeakPointer<T>::Swap(const WeakPointer&& ptr)
 
 	decrement();
 
+	T* tempPtr = objPtr;
+	ptrCount* tempCache = countCache;
+
 	objPtr = ptr.objPtr;
 	countCache = ptr.countCache;
 
-	ptr.objPtr = nullptr;
-	ptr.countCache = nullptr;
+	ptr.objPtr = tempPtr;
+	ptr.countCache = tempCache;
 }
 
 template<class T>
@@ -179,7 +183,7 @@ inline int WeakPointer<T>::WeakCount() const
 template<class T>
 inline bool WeakPointer<T>::Peek() const
 {
-	return (opjPtr == nullptr);
+	return (objPtr == nullptr);
 }
 
 template<class T>

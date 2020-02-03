@@ -10,7 +10,7 @@ class SmartPointer
 {
 public:
 	SmartPointer();
-	explicit SmartPointer(const T *ptr);
+	explicit SmartPointer(T *ptr);
 	SmartPointer(const SmartPointer& ptr);
 	SmartPointer(SmartPointer&& ptr) noexcept;
 	SmartPointer& operator=(const SmartPointer& ptr);
@@ -24,9 +24,11 @@ public:
 
 	void Reset();
 	void Swap(SmartPointer<T>& ptr);
-	bool Peek();
-	int UseCount();
-	int WeakCount();
+	bool Peek() const;
+	int UseCount() const;
+	int WeakCount() const;
+	//A very bad idea
+	void Downcast(T* o_objPtr, ptrCount* o_countCache);
 
 private:
 	void decrement();
@@ -44,7 +46,7 @@ inline SmartPointer<T>::SmartPointer()
 }
 
 template<class T>
-inline SmartPointer<T>::SmartPointer(const T* ptr)
+inline SmartPointer<T>::SmartPointer(T* ptr)
 	: objPtr(ptr), countCache(new ptrCount)
 {
 }
@@ -53,7 +55,7 @@ template<class T>
 inline SmartPointer<T>::SmartPointer(const SmartPointer<T>& ptr)
 	: objPtr(ptr.objPtr), countCache(ptr.countCache)
 {
-	countCache.smartCount++;
+	(countCache->smartCount)++;
 }
 
 template<class T>
@@ -68,9 +70,9 @@ template<class T>
 inline SmartPointer<T>& SmartPointer<T>::operator=(const SmartPointer<T>& ptr)
 {
 	//Prevent erroneous self-assignment
-	if (ptr == this)
+	if (ptr.objPtr == this->objPtr)
 	{
-		return this;
+		return *this;
 	}
 
 	decrement();
@@ -80,15 +82,15 @@ inline SmartPointer<T>& SmartPointer<T>::operator=(const SmartPointer<T>& ptr)
 
 	countCache->smartCount++;
 
-	return this;
+	return *this;
 }
 
 template<class T>
 inline SmartPointer<T>& SmartPointer<T>::operator=(SmartPointer<T>&& ptr) noexcept
 {
-	if (ptr == this)
+	if (ptr.objPtr == this->objPtr)
 	{
-		return this;
+		return *this;
 	}
 
 	decrement();
@@ -99,7 +101,7 @@ inline SmartPointer<T>& SmartPointer<T>::operator=(SmartPointer<T>&& ptr) noexce
 	ptr.objPtr = nullptr;
 	ptr.countCache = nullptr;
 
-	return this;
+	return *this;
 }
 
 template<class T>
@@ -151,35 +153,45 @@ inline void SmartPointer<T>::Swap(SmartPointer<T>& ptr)
 
 	decrement();
 
+	T* tempPtr = objPtr;
+	ptrCount* tempCache = countCache;
+
 	objPtr = ptr.objPtr;
 	countCache = ptr.countCache;
 
-	ptr.objPtr = nullptr;
-	ptr.countCache = nullptr;
+	ptr.objPtr = tempPtr;
+	ptr.countCache = tempCache;
 }
 
 template<class T>
-inline bool SmartPointer<T>::Peek()
+inline bool SmartPointer<T>::Peek() const
 {
 	return objPtr == nullptr;
 }
 
 template<class T>
-inline int SmartPointer<T>::UseCount()
+inline int SmartPointer<T>::UseCount() const
 {
 	return countCache->smartCount;
 }
 
 template<class T>
-inline int SmartPointer<T>::WeakCount()
+inline int SmartPointer<T>::WeakCount() const
 {
 	return countCache->weakCount;
 }
 
 template<class T>
+inline void SmartPointer<T>::Downcast(T* o_objPtr, ptrCount* o_countCache)
+{
+	o_objPtr = objPtr;
+	o_countCache = countCache;
+}
+
+template<class T>
 inline bool operator==(const SmartPointer<T>& i_ptr1, const SmartPointer<T>& i_ptr2)
 {
-	return &(*i_ptr1) == &(*i_ptr2);
+	return i_ptr1.objPtr == i_ptr2.objPtr;
 }
 
 template<class T>
@@ -198,7 +210,7 @@ inline bool operator==(std::nullptr_t, const SmartPointer<T>& i_ptr1)
 template<class T>
 inline bool operator!=(const SmartPointer<T>& i_ptr1, const SmartPointer<T>& i_ptr2)
 {
-	return &(*i_ptr1) != &(*i_ptr2);
+	return i_ptr1.objPtr != i_ptr2.objPtr;
 }
 
 template<class T>
@@ -212,7 +224,6 @@ inline bool operator!=(std::nullptr_t, const SmartPointer<T>& i_ptr1)
 {
 	return (bool)i_ptr1;
 }
-
 
 template<class T>
 inline void SmartPointer<T>::decrement()

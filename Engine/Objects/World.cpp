@@ -10,7 +10,7 @@ World::World()
 
 World::~World()
 {
-	for(int i = 0; i < allObjects.size; i++)
+	for(int i = 0; i < allObjects.size(); i++)
 	{
 		allObjects[i].Reset();
 	}
@@ -30,20 +30,21 @@ WeakPointer<GameObject> World::AddObject(Point2D pt)
 	return WeakPointer<GameObject>::makePointer(newObjPtr);
 }
 
-void World::Dispose()
+void World::Dispose(WeakPointer<GameObject> ptr)
 {
+	SmartPointer<GameObject> targ;
 	auto it = allObjects.begin();
-	while (it != allObjects.end())
+	for (; it != allObjects.end(); it++)
 	{
-		if (it->WeakCount() == 0)
+		//cursed comparison
+		if (&(**it) == &(*ptr))
 		{
-			it->Reset();
-			it = allObjects.erase(it);
-		}
-		else
-		{
-			it++;
+			break;
 		}
 	}
+
+	targ = *it;
+	targ.Reset();
+	allObjects.erase(it);
 }
 
