@@ -1,5 +1,7 @@
 #pragma once
 #include "../Types/Point2D.h"
+#include <map>
+#include <string>
 class GameObject
 {
 public:
@@ -12,7 +14,10 @@ public:
 	~GameObject();
 	Point2D* GetPoint();
 	void SetPoint(Point2D i_point);
+	void AddComponent(std::string str, void* ptr);
+	void* GetComponent(const std::string str) const;
 private:
 	Point2D _point;
+	std::map<std::string, void*> _components;
 };
 

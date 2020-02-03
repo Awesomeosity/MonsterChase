@@ -1,5 +1,7 @@
 #include "GameObject.h"
 #include <iostream>
+#include <map>
+#include <string>
 
 GameObject::GameObject() : _point()
 {
@@ -54,4 +56,14 @@ Point2D* GameObject::GetPoint()
 void GameObject::SetPoint(Point2D i_point)
 {
 	_point = i_point;
+}
+
+void GameObject::AddComponent(std::string str, void* ptr)
+{
+	_components.insert(std::pair<std::string, void*>(str, ptr));
+}
+
+void* GameObject::GetComponent(const std::string str) const
+{
+	return _components.find(str)->second;
 }
