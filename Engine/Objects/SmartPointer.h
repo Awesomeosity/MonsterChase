@@ -1,5 +1,4 @@
 #pragma once
-#include <assert.h>
 struct ptrCount
 {
 	int smartCount{ 1 };
@@ -52,16 +51,12 @@ template<class T>
 inline SmartPointer<T>::SmartPointer(const SmartPointer<T>& ptr)
 	: objPtr(ptr.objPtr), countCache(ptr.countCache)
 {
-	assert(ptr != nullptr);
-
 	countCache.smartCount++;
 }
 
 template<class T>
 inline SmartPointer<T>& SmartPointer<T>::operator=(const SmartPointer<T>& ptr)
 {
-	assert(ptr != nullptr);
-
 	//Prevent erroneous self-assignment
 	if (ptr == this)
 	{
@@ -81,8 +76,6 @@ inline SmartPointer<T>& SmartPointer<T>::operator=(const SmartPointer<T>& ptr)
 template<class T>
 inline SmartPointer<T>& SmartPointer<T>::operator=(SmartPointer<T>&& ptr) noexcept
 {
-	assert(ptr != nullptr);
-
 	if (ptr == this)
 	{
 		return this;
@@ -151,8 +144,6 @@ inline void SmartPointer<T>::Reset()
 template<class T>
 inline void SmartPointer<T>::Swap(SmartPointer<T>& ptr)
 {
-	assert(ptr.objPtr != nullptr);
-
 	if (ptr == this)
 	{
 		return;
