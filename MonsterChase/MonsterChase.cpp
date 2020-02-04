@@ -19,6 +19,8 @@
 #include "../Engine/Physics/Physics.h"
 #include "../Engine/Physics/FloatCalcs.h"
 #include "../Engine/Types/Point2D.h"
+#include "../Engine/Objects/SmartPointer.h"
+#include "../Engine/Objects/WeakPointer.h"
 #include <vector>
 
 unsigned int currKey = 0;
@@ -272,13 +274,92 @@ void TestKeyCallback(unsigned int i_VKeyID, bool bWentDown)
 #endif // __DEBUG
 }
 
+void SmPtrUnitTest()
+{
+	SmartPointer<int>* smPtr_0 = new SmartPointer<int>();
+	assert(!smPtr_0->Peek());
+	assert(smPtr_0->UseCount() == 0);
+	assert(smPtr_0->WeakCount() == 0);
+
+	int* testPtr_1 = new int();
+	SmartPointer<int>* smPtr_1 = new SmartPointer<int>(testPtr_1);
+	assert(smPtr_1->Peek());
+	assert(smPtr_1->UseCount() == 1);
+	assert(smPtr_1->WeakCount() == 0);
+
+	{
+		SmartPointer<int> smPtr_2 = SmartPointer<int>(*smPtr_1);
+		assert(smPtr_2.Peek());
+		assert(smPtr_2.UseCount() == 2);
+		assert(smPtr_2.WeakCount() == 0);
+	}
+
+	assert(smPtr_1->UseCount() == 1);
+	assert(smPtr_1->Peek());
+
+	SmartPointer<int>* smPtr_3 = new SmartPointer<int>(*smPtr_1);
+	assert(smPtr_1->UseCount() == 2);
+	assert(smPtr_3->UseCount() == 2);
+
+	delete smPtr_3;
+	assert(smPtr_1->UseCount() == 1);
+
+	assert(smPtr_1);
+
+	SmartPointer<int>* smPtr_4 = new SmartPointer<int>(*smPtr_1);
+	SmartPointer<int>* smPtr_5 = new SmartPointer<int>(*smPtr_4);
+
+	assert(smPtr_1->UseCount() == 3);
+	assert(smPtr_4->UseCount() == 3);
+	assert(smPtr_5->UseCount() == 3);
+
+	smPtr_4->Reset();
+	assert(smPtr_1->UseCount() == 2);
+	assert(smPtr_5->UseCount() == 2);
+
+	assert(!smPtr_4->Peek());
+
+	smPtr_5->Swap(*smPtr_0);
+	assert(smPtr_0->Peek());
+	assert(smPtr_0->UseCount() == 2);
+	assert(!smPtr_5->Peek());
+
+	assert(*smPtr_1 == *smPtr_0);
+	assert(!(*smPtr_1 == nullptr));
+	assert(!(nullptr == *smPtr_1));
+	assert(*smPtr_5 == nullptr);
+	assert(nullptr == *smPtr_5);
+
+	assert(!(*smPtr_1 != *smPtr_0));
+	assert(*smPtr_1 != nullptr);
+	assert(nullptr != *smPtr_1);
+	assert(!(*smPtr_5 != nullptr));
+	assert(!(nullptr != *smPtr_5));
+	
+	//Weak Pointer test
+	WeakPointer<int>* wkPtr_0 = WeakPointer<int>::makePointer(smPtr_5);
+	WeakPointer<int>* wkPtr_1 = WeakPointer<int>::makePointer(smPtr_1);
+	assert(wkPtr_1->WeakCount() == 1);
+	assert(wkPtr_1->UseCount() == 2);
+	SmartPointer<int>* smPtr_6 = wkPtr_1->Promote();
+
+	delete smPtr_5;
+	delete smPtr_4;
+	delete smPtr_1;
+	delete wkPtr_1;
+	delete smPtr_0;
+
+	_CrtDumpMemoryLeaks();
+}
+
 
 
 int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_lpCmdLine, int i_nCmdShow)
 {
-	//_CrtSetBreakAlloc();
+	//_CrtSetBreakAlloc(218);
 	//TEMP: Floating Point Unit Test
 	//FloatCalcs::floatingUnitTest();
+	SmPtrUnitTest();
 	unsigned short ID = 65535;
 	float playX = 10.0f;
 	float playY = 10.0f;
@@ -311,8 +392,10 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 
 		do
 		{
+			//Timing
 			long dt = Timing::deltaTime();
 			float dt_ms = (float)dt / 1000.0f;
+
 			GLib::Service(bQuit);
 			
 			if (!bQuit)
@@ -344,8 +427,11 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 					force = Point2D(0, 0);
 					break;
 				}
+
+				//Physics
 				Physics::calcNewPos(dt_ms, playerPhysics, force);
 
+				//Render
 				GLib::BeginRendering();
 				GLib::Sprites::BeginRendering();
 				if (pGoodGuy)
