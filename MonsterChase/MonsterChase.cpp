@@ -324,32 +324,87 @@ void SmPtrUnitTest()
 	assert(smPtr_0->UseCount() == 2);
 	assert(!smPtr_5->Peek());
 
+	int* testPtr_2 = new int();
+	SmartPointer<int>* smPtr_7 = new SmartPointer<int>(testPtr_2);
+
 	assert(*smPtr_1 == *smPtr_0);
 	assert(!(*smPtr_1 == nullptr));
 	assert(!(nullptr == *smPtr_1));
 	assert(*smPtr_5 == nullptr);
 	assert(nullptr == *smPtr_5);
 
+	assert(!(*smPtr_1 == *smPtr_7));
+
 	assert(!(*smPtr_1 != *smPtr_0));
 	assert(*smPtr_1 != nullptr);
 	assert(nullptr != *smPtr_1);
 	assert(!(*smPtr_5 != nullptr));
 	assert(!(nullptr != *smPtr_5));
+
+	assert(*smPtr_1 != *smPtr_7);
 	
 	//Weak Pointer test
 	WeakPointer<int>* wkPtr_0 = WeakPointer<int>::makePointer(smPtr_5);
 	WeakPointer<int>* wkPtr_1 = WeakPointer<int>::makePointer(smPtr_1);
 	assert(wkPtr_1->WeakCount() == 1);
 	assert(wkPtr_1->UseCount() == 2);
+
 	SmartPointer<int>* smPtr_6 = wkPtr_1->Promote();
+	assert(wkPtr_1->UseCount() == 3);
+	assert(wkPtr_1->WeakCount() == 1);
+	assert(smPtr_6->UseCount() == 3);
+	assert(smPtr_6->WeakCount() == 1);
+
+	WeakPointer<int>* wkPtr_2 = new WeakPointer<int>(*wkPtr_1);
+	assert(wkPtr_2->WeakCount() == 2);
+	assert(wkPtr_2->Peek());
+
+	assert(*wkPtr_2 == *wkPtr_1);
+	assert(*wkPtr_2 == *smPtr_6);
+	assert(*smPtr_6 == *wkPtr_1);
+	assert(!(*wkPtr_2 == *wkPtr_0));
+	assert(!(*wkPtr_0 == *wkPtr_2));
+
+	assert(!(*wkPtr_2 != *wkPtr_1));
+	assert(!(*wkPtr_2 != *smPtr_6));
+	assert(!(*smPtr_6 != *wkPtr_1));
+	assert(*wkPtr_2 != *wkPtr_0);
+	assert(*wkPtr_0 != *wkPtr_2);
+
+	WeakPointer<int>* wkPtr_3 = WeakPointer<int>::makePointer(smPtr_7);
+
+	assert(!(*wkPtr_2 == *wkPtr_3));
+	assert(!(*wkPtr_2 == *smPtr_7));
+	assert(!(*smPtr_7 == *wkPtr_1));
+	assert(nullptr == *wkPtr_0);
+	assert(*wkPtr_0 == nullptr);
+
+	assert(*wkPtr_2 != *wkPtr_3);
+	assert(*wkPtr_2 != *smPtr_7);
+	assert(*smPtr_7 != *wkPtr_1);
+	assert(!(nullptr != *wkPtr_0));
+	assert(!(*wkPtr_0 != nullptr));
+
+		
+	wkPtr_1->Reset();
+	assert(wkPtr_2->WeakCount() == 1);
+
+	wkPtr_2->Swap(*wkPtr_1);
+	assert(!wkPtr_2->Peek());
+	assert(wkPtr_1->WeakCount() == 1);
+	assert(wkPtr_1->UseCount() == 3);
+
+	delete wkPtr_1;
+
+	assert(smPtr_6->UseCount() == 3);
+	assert(smPtr_6->WeakCount() == 0);
+
 
 	delete smPtr_5;
 	delete smPtr_4;
 	delete smPtr_1;
-	delete wkPtr_1;
+	//delete wkPtr_1;
 	delete smPtr_0;
-
-	_CrtDumpMemoryLeaks();
 }
 
 
