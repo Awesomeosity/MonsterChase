@@ -17,10 +17,17 @@ public:
 	operator bool() const;
 	T& operator[](int index) const;
 
+	bool operator==(const WeakPointer<T>& ptr) const;
+	bool operator==(const SmartPointer<T>& ptr) const;
+	bool operator==(std::nullptr_t) const;
+	bool operator!=(const WeakPointer<T>& ptr) const;
+	bool operator!=(const SmartPointer<T>& ptr) const;
+	bool operator!=(std::nullptr_t) const;
+
 	//Generates a SmartPointer from this WeakPointer. Will convert, even if there is no valid obj pointer.
 	SmartPointer<T>* Promote() const;
 	void Reset();
-	void Swap(const WeakPointer<T>& ptr);
+	void Swap(WeakPointer<T>& ptr);
 	int UseCount() const;
 	int WeakCount() const;
 	bool Peek() const;
@@ -148,9 +155,47 @@ inline T& WeakPointer<T>::operator[](int index) const
 }
 
 template<class T>
+inline bool WeakPointer<T>::operator==(const WeakPointer<T>& ptr) const
+{
+	return objPtr == ptr.objPtr;
+}
+
+template<class T>
+inline bool WeakPointer<T>::operator==(const SmartPointer<T>& ptr) const
+{
+	return objPtr == &(*ptr);
+}
+
+template<class T>
+inline bool WeakPointer<T>::operator==(std::nullptr_t) const
+{
+	return objPtr == nullptr;
+}
+
+template<class T>
+inline bool WeakPointer<T>::operator!=(const WeakPointer<T>& ptr) const
+{
+	return objPtr != ptr.objPtr;
+}
+
+template<class T>
+inline bool WeakPointer<T>::operator!=(const SmartPointer<T>& ptr) const
+{
+	return objPtr != &(*ptr);
+}
+
+template<class T>
+inline bool WeakPointer<T>::operator!=(std::nullptr_t) const
+{
+	return objPtr != nullptr;
+}
+
+template<class T>
 inline SmartPointer<T>* WeakPointer<T>::Promote() const
 {
-	return SmartPointer<T>(this);
+	T** i_objPtr = new T*(objPtr);
+	ptrCount** i_countCache = new ptrCount*(countCache);
+	return new SmartPointer<T>(i_objPtr, i_countCache);
 }
 
 template<class T>
@@ -163,14 +208,12 @@ inline void WeakPointer<T>::Reset()
 }
 
 template<class T>
-inline void WeakPointer<T>::Swap(const WeakPointer<T>& ptr)
+inline void WeakPointer<T>::Swap(WeakPointer<T>& ptr)
 {
-	if (ptr == this)
+	if (ptr.objPtr == this->objPtr)
 	{
 		return;
 	}
-
-	decrement();
 
 	T* tempPtr = objPtr;
 	ptrCount* tempCache = countCache;
@@ -203,6 +246,11 @@ inline bool WeakPointer<T>::Peek() const
 template<class T>
 inline void WeakPointer<T>::decrement()
 {
+	if (countCache == nullptr)
+	{
+		return;
+	}
+
 	if (--(countCache->weakCount) == 0)
 	{
 		//Just because the count cache no longer has any weak pointers doesn't mean we should automatically delete the count cache
@@ -212,4 +260,28 @@ inline void WeakPointer<T>::decrement()
 			delete countCache;
 		}
 	}
+}
+
+template<class T>
+bool operator==(std::nullptr_t, WeakPointer<T>& ptr)
+{
+	return !ptr.Peek();
+}
+
+template<class T>
+bool operator==(SmartPointer<T>& ptr_1, WeakPointer<T>& ptr_2)
+{
+	return &(*ptr_1) == &(*ptr_2);
+}
+
+template<class T>
+bool operator!=(std::nullptr_t, WeakPointer<T>& ptr)
+{
+	return ptr.Peek();
+}
+
+template<class T>
+bool operator!=(SmartPointer<T>& ptr_1, WeakPointer<T>& ptr_2)
+{
+	return &(*ptr_1) != &(*ptr_2);
 }
