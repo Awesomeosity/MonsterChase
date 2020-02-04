@@ -16,6 +16,7 @@ class SmartPointer
 public:
 	SmartPointer();
 	explicit SmartPointer(T *ptr);
+	SmartPointer(T* _objPtr, ptrCount* _countCache);
 	SmartPointer(const SmartPointer& ptr);
 	SmartPointer(SmartPointer&& ptr) noexcept;
 	SmartPointer& operator=(const SmartPointer& ptr);
@@ -55,6 +56,14 @@ inline SmartPointer<T>::SmartPointer(T* ptr)
 }
 
 template<class T>
+inline SmartPointer<T>::SmartPointer(T* _objPtr, ptrCount* _countCache)
+{
+	objPtr = _objPtr;
+	countCache = _countCache;
+}
+
+template<class T>
+SmartPointer<T>::SmartPointer(const SmartPointer& ptr)
 inline SmartPointer<T>::SmartPointer(const SmartPointer<T>& ptr)
 	: objPtr(ptr.objPtr), countCache(ptr.countCache)
 {
@@ -105,6 +114,15 @@ inline SmartPointer<T>& SmartPointer<T>::operator=(SmartPointer<T>&& ptr) noexce
 	ptr.countCache = nullptr;
 
 	return *this;
+}
+
+template<class T>
+inline SmartPointer<T>::SmartPointer(WeakPointer<T> ptr)
+{
+	objPtr = ptr.objPtr;
+	countCache = ptr.countCache;
+
+	(*countCache).smartCount++;
 }
 
 template<class T>
