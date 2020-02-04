@@ -16,12 +16,12 @@ public:
 	~World();
 
 	//Adds an object to the world reference. This should be called to create any object.
-	WeakPointer<GameObject> AddObject();
-	WeakPointer<GameObject> AddObject(Point2D pt);
+	WeakPointer<GameObject>* AddObject();
+	WeakPointer<GameObject>* AddObject(Point2D pt);
 	
 	//If called by any system, disposes the given object given by a weakpointer.
 	void Dispose(WeakPointer<GameObject> ptr);
 private:
-	std::vector<SmartPointer<GameObject>> allObjects;
+	std::vector<SmartPointer<GameObject>*> allObjects;
 };
 
