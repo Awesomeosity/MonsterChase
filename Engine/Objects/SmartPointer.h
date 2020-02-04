@@ -1,8 +1,13 @@
 #pragma once
 struct ptrCount
 {
-	int smartCount{ 1 };
+	int smartCount{ 0 };
 	int weakCount{ 0 };
+
+	ptrCount(int sc, int wc)
+		: smartCount(sc), weakCount(wc)
+	{
+	}
 };
 
 template <class T>
@@ -28,26 +33,24 @@ public:
 	int UseCount() const;
 	int WeakCount() const;
 	//A very bad idea
-	void Downcast(T* o_objPtr, ptrCount* o_countCache);
+	void Downcast(T** o_objPtr, ptrCount** o_countCache);
 
-private:
+protected:
 	void decrement();
 	T* objPtr;
 	ptrCount* countCache;
 };
 
-
-
 template<class T>
 inline SmartPointer<T>::SmartPointer()
-	: objPtr(nullptr), countCache(new ptrCount)
+	: objPtr(nullptr), countCache()
 {
 
 }
 
 template<class T>
 inline SmartPointer<T>::SmartPointer(T* ptr)
-	: objPtr(ptr), countCache(new ptrCount)
+	: objPtr(ptr), countCache(new ptrCount(1, 0))
 {
 }
 
@@ -134,6 +137,7 @@ inline T& SmartPointer<T>::operator[](int index) const
 	return objPtr[index];
 }
 
+
 template<class T>
 inline void SmartPointer<T>::Reset()
 {
@@ -146,12 +150,10 @@ inline void SmartPointer<T>::Reset()
 template<class T>
 inline void SmartPointer<T>::Swap(SmartPointer<T>& ptr)
 {
-	if (ptr == this)
+	if (ptr.objPtr == this->objPtr)
 	{
 		return;
 	}
-
-	decrement();
 
 	T* tempPtr = objPtr;
 	ptrCount* tempCache = countCache;
@@ -166,61 +168,69 @@ inline void SmartPointer<T>::Swap(SmartPointer<T>& ptr)
 template<class T>
 inline bool SmartPointer<T>::Peek() const
 {
-	return objPtr == nullptr;
+	return objPtr != nullptr;
 }
 
 template<class T>
 inline int SmartPointer<T>::UseCount() const
 {
+	if (countCache == nullptr)
+	{
+		return 0;
+	}
 	return countCache->smartCount;
 }
 
 template<class T>
 inline int SmartPointer<T>::WeakCount() const
 {
+	if (countCache == nullptr)
+	{
+		return 0;
+	}
+
 	return countCache->weakCount;
 }
 
 template<class T>
-inline void SmartPointer<T>::Downcast(T* o_objPtr, ptrCount* o_countCache)
+inline void SmartPointer<T>::Downcast(T** o_objPtr, ptrCount** o_countCache)
 {
-	o_objPtr = objPtr;
-	o_countCache = countCache;
+	(*o_objPtr) = objPtr;
+	(*o_countCache) = countCache;
+}
+
+template <class T>
+inline bool operator==(const SmartPointer<T>& ptr_1, const SmartPointer<T>& ptr_2)
+{
+	return *ptr_1 == *ptr_2;
 }
 
 template<class T>
-inline bool operator==(const SmartPointer<T>& i_ptr1, const SmartPointer<T>& i_ptr2)
+bool operator==(const SmartPointer<T>& i_ptr1, std::nullptr_t)
 {
-	return i_ptr1.objPtr == i_ptr2.objPtr;
+	return !i_ptr1;
 }
 
 template<class T>
-inline bool operator==(const SmartPointer<T>& i_ptr1, std::nullptr_t)
+bool operator==(std::nullptr_t, const SmartPointer<T>& i_ptr1)
 {
 	return !i_ptr1;
 }
 
 template<class T>
-inline bool operator==(std::nullptr_t, const SmartPointer<T>& i_ptr1)
+bool operator!=(const SmartPointer<T>& i_ptr1, const SmartPointer<T>& i_ptr2)
 {
-	return !i_ptr1;
-}
-
-
-template<class T>
-inline bool operator!=(const SmartPointer<T>& i_ptr1, const SmartPointer<T>& i_ptr2)
-{
-	return i_ptr1.objPtr != i_ptr2.objPtr;
+	return *i_ptr1 != *i_ptr2;
 }
 
 template<class T>
-inline bool operator!=(const SmartPointer<T>& i_ptr1, std::nullptr_t)
+bool operator!=(const SmartPointer<T>& i_ptr1, std::nullptr_t)
 {
 	return (bool)i_ptr1;
 }
 
 template<class T>
-inline bool operator!=(std::nullptr_t, const SmartPointer<T>& i_ptr1)
+bool operator!=(std::nullptr_t, const SmartPointer<T>& i_ptr1)
 {
 	return (bool)i_ptr1;
 }
@@ -228,6 +238,11 @@ inline bool operator!=(std::nullptr_t, const SmartPointer<T>& i_ptr1)
 template<class T>
 inline void SmartPointer<T>::decrement()
 {
+	if (countCache == nullptr)
+	{
+		return;
+	}
+
 	if (--(countCache->smartCount) == 0)
 	{
 		delete objPtr;

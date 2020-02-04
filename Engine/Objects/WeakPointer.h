@@ -5,7 +5,7 @@ template <class T>
 class WeakPointer
 {
 public:
-	static WeakPointer<T> makePointer(SmartPointer<T> ptr);
+	static WeakPointer<T>* makePointer(SmartPointer<T>* ptr);
 	WeakPointer(const WeakPointer& ptr);
 	WeakPointer(WeakPointer&& ptr) noexcept;
 	WeakPointer& operator=(const WeakPointer& ptr);
@@ -18,7 +18,7 @@ public:
 	T& operator[](int index) const;
 
 	//Generates a SmartPointer from this WeakPointer. Will convert, even if there is no valid obj pointer.
-	SmartPointer<T> Promote() const;
+	SmartPointer<T>* Promote() const;
 	void Reset();
 	void Swap(const WeakPointer<T>& ptr);
 	int UseCount() const;
@@ -33,18 +33,32 @@ private:
 };
 
 template<class T>
-inline WeakPointer<T> WeakPointer<T>::makePointer(SmartPointer<T> sPtr)
+WeakPointer<T>::WeakPointer()
+	: objPtr(nullptr), countCache(nullptr)
 {
-	WeakPointer<T> newPtr = WeakPointer<T>();
-	T* i_objPtr = nullptr;
-	ptrCount* i_countCache = nullptr;
 
-	sPtr.Downcast(i_objPtr, i_countCache);
+}
 
-	newPtr.objPtr = i_objPtr;
-	newPtr.countCache = i_countCache;
+template<class T>
+inline WeakPointer<T>* WeakPointer<T>::makePointer(SmartPointer<T>* sPtr)
+{
+	WeakPointer<T>* newPtr = new WeakPointer<T>();
+	T** i_objPtr = new T*();
+	ptrCount** i_countCache = new ptrCount*();
 
-	newPtr.countCache->weakCount++;
+	sPtr->Downcast(i_objPtr, i_countCache);
+
+	newPtr->objPtr = *i_objPtr;
+	newPtr->countCache = *i_countCache;
+
+	delete i_objPtr;
+	delete i_countCache;
+
+	if (newPtr->objPtr == nullptr && newPtr->countCache == nullptr)
+	{
+		return newPtr;
+	}
+	newPtr->countCache->weakCount++;
 	return newPtr;
 }
 
@@ -134,7 +148,7 @@ inline T& WeakPointer<T>::operator[](int index) const
 }
 
 template<class T>
-inline SmartPointer<T> WeakPointer<T>::Promote() const
+inline SmartPointer<T>* WeakPointer<T>::Promote() const
 {
 	return SmartPointer<T>(this);
 }
@@ -183,7 +197,7 @@ inline int WeakPointer<T>::WeakCount() const
 template<class T>
 inline bool WeakPointer<T>::Peek() const
 {
-	return (objPtr == nullptr);
+	return (objPtr != nullptr);
 }
 
 template<class T>
