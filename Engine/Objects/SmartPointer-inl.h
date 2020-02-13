@@ -56,6 +56,13 @@ inline SmartPointer<T>::SmartPointer(SmartPointer&& ptr) noexcept
 }
 
 template<class T>
+inline SmartPointer<T>::SmartPointer(std::nullptr_t)
+	: objPtr(nullptr), countCache()
+{
+	
+}
+
+template<class T>
 inline SmartPointer<T>& SmartPointer<T>::operator=(const SmartPointer<T>& ptr)
 {
 	//Prevent erroneous self-assignment
@@ -89,6 +96,17 @@ inline SmartPointer<T>& SmartPointer<T>::operator=(SmartPointer<T>&& ptr) noexce
 
 	ptr.objPtr = nullptr;
 	ptr.countCache = nullptr;
+
+	return *this;
+}
+
+template<class T>
+inline SmartPointer<T>& SmartPointer<T>::operator=(std::nullptr_t)
+{
+	decrement();
+
+	objPtr = nullptr;
+	countCache = nullptr;
 
 	return *this;
 }

@@ -23,8 +23,10 @@ public:
 	SmartPointer(const WeakPointer<T>& ptr);
 	SmartPointer(const SmartPointer& ptr);
 	SmartPointer(SmartPointer&& ptr) noexcept;
+	SmartPointer(std::nullptr_t);
 	SmartPointer& operator=(const SmartPointer& ptr);
 	SmartPointer& operator=(SmartPointer&& ptr) noexcept;
+	SmartPointer& operator=(std::nullptr_t);
 	~SmartPointer();
 
 	T& operator*() const;
