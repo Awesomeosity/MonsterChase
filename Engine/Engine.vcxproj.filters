@@ -96,6 +96,12 @@
     <ClInclude Include="Objects\World.h">
       <Filter>Objects</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\SmartPointer-inl.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\WeakPointer-inl.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
