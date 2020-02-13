@@ -1,6 +1,6 @@
 #pragma once
-#include "SmartPointer.h"
 #include "WeakPointer.h"
+#include "SmartPointer.h"
 template<class T>
 inline SmartPointer<T>::SmartPointer()
 	: objPtr(nullptr), countCache(nullptr)
@@ -18,7 +18,11 @@ template<class T>
 inline SmartPointer<T>::SmartPointer(const WeakPointer<T>& ptr)
 	: objPtr(ptr.objPtr), countCache(ptr.countCache)
 {
-	ptr.countCache->smartCount++;
+	if (objPtr && countCache->smartCount != 0)
+	{
+		ptr.countCache->smartCount++;
+
+	}
 }
 
 //template<class T>
@@ -37,7 +41,10 @@ template<class T>
 inline SmartPointer<T>::SmartPointer(const SmartPointer<T>& ptr)
 	: objPtr(ptr.objPtr), countCache(ptr.countCache)
 {
-	(countCache->smartCount)++;
+	if (objPtr && countCache->smartCount != 0)
+	{
+		(countCache->smartCount)++;
+	}
 }
 
 template<class T>
@@ -129,6 +136,12 @@ inline bool SmartPointer<T>::operator==(std::nullptr_t) const
 }
 
 template<class T>
+inline bool SmartPointer<T>::operator==(const WeakPointer<T>& ptr) const
+{
+	return objPtr == ptr.objPtr;
+}
+
+template<class T>
 inline bool SmartPointer<T>::operator!=(const SmartPointer<T>& ptr) const
 {
 	return objPtr != ptr.objPtr;
@@ -138,6 +151,12 @@ template<class T>
 inline bool SmartPointer<T>::operator!=(std::nullptr_t) const
 {
 	return objPtr != nullptr;
+}
+
+template<class T>
+inline bool SmartPointer<T>::operator!=(const WeakPointer<T>& ptr) const
+{
+	return objPtr != ptr.objPtr;
 }
 
 

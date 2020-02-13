@@ -43,6 +43,7 @@ private:
 
 	template<class T>
 	friend class SmartPointer;
+
 };
 
 #include "WeakPointer-inl.h"

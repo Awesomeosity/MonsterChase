@@ -33,8 +33,11 @@ public:
 	T& operator[](int index) const;
 	bool operator==(const SmartPointer<T>& ptr) const;
 	bool operator==(std::nullptr_t) const;
+	bool operator==(const WeakPointer<T>& ptr) const;
 	bool operator!=(const SmartPointer<T>& ptr) const;
 	bool operator!=(std::nullptr_t) const;
+	bool operator!=(const WeakPointer<T>& ptr) const;
+
 
 	void Reset();
 	void Swap(SmartPointer<T>& ptr);
@@ -42,7 +45,7 @@ public:
 	int UseCount() const;
 	int WeakCount() const;
 
-protected:
+private:
 	void decrement();
 	T* objPtr;
 	ptrCount* countCache;
