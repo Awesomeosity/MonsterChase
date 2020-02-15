@@ -184,12 +184,14 @@ void GetName(char* name)
 SmartPointer<GameObject> CreateActor(const char* i_pScriptFilename)
 {
 	using json = nlohmann::json;
-	std::vector<uint8_t> playerData = LoadFileToBuffer(i_pScriptFilename);
+	std::vector<uint8_t> data = LoadFileToBuffer(i_pScriptFilename);
 
-	if (!playerData.empty())
+	if (!data.empty())
 	{
-		json PlayerJSON = json::parse(playerData);
-		return CreatePlayer(PlayerJSON);
+		json createdJSON = json::parse(data);
+		//TODO create structure for json decision tree
+		//TODO verification
+		//TODO return SmartPointer
 	}
 }
 
