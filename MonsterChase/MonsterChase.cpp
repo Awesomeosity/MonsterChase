@@ -414,15 +414,15 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 	//_CrtSetBreakAlloc(218);
 	//TEMP: Floating Point Unit Test
 	//FloatCalcs::floatingUnitTest();
-	SmPtrUnitTest();
+	//SmPtrUnitTest();
 	unsigned short ID = 65535;
-	float playX = 10.0f;
-	float playY = 10.0f;
+	//float playX = 10.0f;
+	//float playY = 10.0f;
 
 	// IMPORTANT: first we need to initialize GLib
 	bool bSuccess = GLib::Initialize(i_hInstance, i_nCmdShow, "Monster Mash", ID, static_cast<unsigned int>(playX) * 50 * 2, static_cast<unsigned int>(playY) * 50 * 2);
 	
-	unsigned int monsterCount = 0;
+	/*unsigned int monsterCount = 0;
 	unsigned int* maxMonsters = &monsterCount;
 	Point2D* zero = new Point2D(0, 0);
 	GameObject* playerObj = new GameObject(*zero);
@@ -433,6 +433,7 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 
 	player->SetGameObject(playerObj);
 	player->Setup(const_cast<char*>("lmao"), playX, playY);
+	*/
 
 	if (bSuccess)
 	{

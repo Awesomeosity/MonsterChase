@@ -1,7 +1,8 @@
 // Engine.cpp : Defines the functions for the static library.
 //
 
-#include "pch.h"
+#include "GLib/BasicTypes.h"
+#include "GLib/GLib.h"
 #include "framework.h"
 #include <iostream>
 
@@ -28,8 +29,16 @@ void GetName(char* name)
 	}
 }
 
+void CreateActor(const char* i_pScriptFilename)
+{
+
+}
+
 void Run()
 {
+	// IMPORTANT: first we need to initialize GLib
+	bool bSuccess = GLib::Initialize(i_hInstance, i_nCmdShow, "Monster Mash", ID, static_cast<unsigned int>(playX) * 50 * 2, static_cast<unsigned int>(playY) * 50 * 2);
+
 	while (1)
 	{
 
