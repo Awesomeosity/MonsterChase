@@ -12,8 +12,6 @@
 
 #include "../Engine/Engine.cpp"
 #include "../Engine/Timing/Timing.h"
-#include "../Engine/GLib/BasicTypes.h"
-#include "../Engine/GLib/GLib.h"
 #include "../Engine/Objects/GameObject.h"
 #include "../Engine/Physics/PhysicsData.h"
 #include "../Engine/Physics/Physics.h"
@@ -23,7 +21,6 @@
 #include "../Engine/Objects/WeakPointer.h"
 #include <vector>
 
-unsigned int currKey = 0;
 
 void inline GetMonsterCount(unsigned int* const maxMonsters)
 {
@@ -253,26 +250,6 @@ void inline CreatePlayer(const float playX, const float playY, PlayerController*
 	player->Setup(playerName, playX, playY);
 }
 
-void TestKeyCallback(unsigned int i_VKeyID, bool bWentDown)
-{
-#ifdef _DEBUG
-	const size_t	lenBuffer = 65;
-	char			Buffer[lenBuffer];
-
-	sprintf_s(Buffer, lenBuffer, "VKey 0x%04x went %s\n", i_VKeyID, bWentDown ? "down" : "up");
-	OutputDebugStringA(Buffer);
-
-	if (bWentDown)
-	{
-		//TODO: Implement multiple key detection
-		currKey = i_VKeyID;
-	}
-	else
-	{
-		currKey = 0;
-	}
-#endif // __DEBUG
-}
 
 void SmPtrUnitTest()
 {
@@ -415,12 +392,7 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 	//TEMP: Floating Point Unit Test
 	//FloatCalcs::floatingUnitTest();
 	//SmPtrUnitTest();
-	unsigned short ID = 65535;
-	//float playX = 10.0f;
-	//float playY = 10.0f;
 
-	// IMPORTANT: first we need to initialize GLib
-	bool bSuccess = GLib::Initialize(i_hInstance, i_nCmdShow, "Monster Mash", ID, static_cast<unsigned int>(playX) * 50 * 2, static_cast<unsigned int>(playY) * 50 * 2);
 	
 	/*unsigned int monsterCount = 0;
 	unsigned int* maxMonsters = &monsterCount;
@@ -435,85 +407,10 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 	player->Setup(const_cast<char*>("lmao"), playX, playY);
 	*/
 
-	if (bSuccess)
-	{
-		GLib::SetKeyStateChangeCallback(TestKeyCallback);
+	Run(i_hInstance, i_hPrevInstance);
 
-		GLib::Sprites::Sprite* pGoodGuy = CreateSprite("data\\GoodGuy.dds");
-		GLib::Sprites::Sprite* pBadGuy = CreateSprite("data\\BadGuy.dds");
-
-		Timing::startTime();
-
-		bool bQuit = false;
-
-		do
-		{
-			//Timing
-			long dt = Timing::deltaTime();
-			float dt_ms = (float)dt / 1000.0f;
-
-			GLib::Service(bQuit);
-			
-			if (!bQuit)
-			{
-				Point2D force;
-				switch (currKey)
-				{
-				//W
-				case 87:
-					force = Point2D(0, 1);
-					break;
-				//S
-				case 83:
-					force = Point2D(0, -1);
-					break;
-				//A
-				case 65:
-					force = Point2D(-1, 0);
-					break;
-				//D
-				case 68:
-					force = Point2D(1, 0);
-					break;
-				case 81:
-					break;
-				//No key being held down.
-				case 0:
-				default:
-					force = Point2D(0, 0);
-					break;
-				}
-
-				//Physics
-				Physics::calcNewPos(dt_ms, playerPhysics, force);
-
-				//Render
-				GLib::BeginRendering();
-				GLib::Sprites::BeginRendering();
-				if (pGoodGuy)
-				{
-					float p_x = player->getPlayerPosition()->GetX();
-					float p_y = player->getPlayerPosition()->GetY();
-					float playerSpritePos_X = p_x * 50;
-					float playerSpritePos_Y = p_y * 50;
-
-					GLib::Point2D	Offset = { playerSpritePos_X, playerSpritePos_Y };
-
-					GLib::Sprites::RenderSprite(*pGoodGuy, Offset, 0);
-				}
-
-				GLib::Sprites::EndRendering();
-				GLib::EndRendering();
-			}
-
-		} while (bQuit == false);
-
-		// IMPORTANT:  Tell GLib to shutdown, releasing resources.
-		GLib::Shutdown();
-	}
-
-	delete playerObj;
-	delete zero;
+	//delete playerObj;
+	//delete zero;
 	_CrtDumpMemoryLeaks();
 }
 
