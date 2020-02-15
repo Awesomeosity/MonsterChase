@@ -1,14 +1,22 @@
 // Engine.cpp : Defines the functions for the static library.
 //
 
+#include <cassert>
+#include <iostream>
+#include "framework.h"
 #include "GLib/BasicTypes.h"
 #include "GLib/GLib.h"
-#include "framework.h"
-#include <iostream>
-#include <cassert>
+#include "Objects/SmartPointer.h"
+#include "Objects/WeakPointer.h"
+#include "Physics/Physics.h"
+#include "Physics/PhysicsData.h"
 #include "Timing/Timing.h"
 #include "Types/Point2D.h"
-#include "Physics/Physics.h"
+
+#include "External/nlohmann/json.hpp"
+#include "Objects/GameObject.h"
+#include "../MonsterChase/Controllers/PlayerController.h"
+
 
 unsigned int currKey = 0;
 
@@ -32,6 +40,41 @@ void TestKeyCallback(unsigned int i_VKeyID, bool bWentDown)
 	}
 #endif // __DEBUG
 }
+
+void* LoadFile(const char* i_pFilename, size_t& o_sizeFile)
+{
+	assert(i_pFilename != NULL);
+
+	FILE* pFile = NULL;
+
+	errno_t fopenError = fopen_s(&pFile, i_pFilename, "rb");
+	if (fopenError != 0)
+		return NULL;
+
+	assert(pFile != NULL);
+
+	int FileIOError = fseek(pFile, 0, SEEK_END);
+	assert(FileIOError == 0);
+
+	long FileSize = ftell(pFile);
+	assert(FileSize >= 0);
+
+	FileIOError = fseek(pFile, 0, SEEK_SET);
+	assert(FileIOError == 0);
+
+	uint8_t* pBuffer = new uint8_t[FileSize];
+	assert(pBuffer);
+
+	size_t FileRead = fread(pBuffer, 1, FileSize, pFile);
+	assert(FileRead == FileSize);
+
+	fclose(pFile);
+
+	o_sizeFile = FileSize;
+
+	return pBuffer;
+}
+
 
 GLib::Sprites::Sprite* CreateSprite(const char* i_pFilename)
 {
@@ -81,40 +124,38 @@ GLib::Sprites::Sprite* CreateSprite(const char* i_pFilename)
 	return pSprite;
 }
 
-void* LoadFile(const char* i_pFilename, size_t& o_sizeFile)
+std::vector<uint8_t> LoadFileToBuffer(const char* i_pFilename)
 {
-	assert(i_pFilename != NULL);
+	assert(i_pFilename != nullptr);
 
-	FILE* pFile = NULL;
+	std::vector<uint8_t> Buffer;
 
-	errno_t fopenError = fopen_s(&pFile, i_pFilename, "rb");
-	if (fopenError != 0)
-		return NULL;
+	FILE* pFile = nullptr;
 
-	assert(pFile != NULL);
+	if (fopen_s(&pFile, i_pFilename, "rb") == 0)
+	{
+		assert(pFile != nullptr);
 
-	int FileIOError = fseek(pFile, 0, SEEK_END);
-	assert(FileIOError == 0);
+		int FileIOError = fseek(pFile, 0, SEEK_END);
+		assert(FileIOError == 0);
 
-	long FileSize = ftell(pFile);
-	assert(FileSize >= 0);
+		long FileSize = ftell(pFile);
+		assert(FileSize >= 0);
 
-	FileIOError = fseek(pFile, 0, SEEK_SET);
-	assert(FileIOError == 0);
+		FileIOError = fseek(pFile, 0, SEEK_SET);
+		assert(FileIOError == 0);
 
-	uint8_t* pBuffer = new uint8_t[FileSize];
-	assert(pBuffer);
+		Buffer.reserve(FileSize);
+		Buffer.resize(FileSize);
 
-	size_t FileRead = fread(pBuffer, 1, FileSize, pFile);
-	assert(FileRead == FileSize);
+		size_t FileRead = fread(&Buffer[0], 1, FileSize, pFile);
+		assert(FileRead == FileSize);
 
-	fclose(pFile);
+		fclose(pFile);
+	}
 
-	o_sizeFile = FileSize;
-
-	return pBuffer;
+	return Buffer;
 }
-
 
 
 void fnEngine()
@@ -140,9 +181,16 @@ void GetName(char* name)
 	}
 }
 
-void CreateActor(const char* i_pScriptFilename)
+SmartPointer<GameObject> CreateActor(const char* i_pScriptFilename)
 {
+	using json = nlohmann::json;
+	std::vector<uint8_t> playerData = LoadFileToBuffer(i_pScriptFilename);
 
+	if (!playerData.empty())
+	{
+		json PlayerJSON = json::parse(playerData);
+		return CreatePlayer(PlayerJSON);
+	}
 }
 
 void Run(HINSTANCE i_hInstance, int i_nCmdShow)
@@ -151,6 +199,17 @@ void Run(HINSTANCE i_hInstance, int i_nCmdShow)
 	float playY = 10.0f;
 
 	unsigned short ID = 65535;
+
+	Point2D* zero = new Point2D(0, 0);
+	GameObject* playerObj = new GameObject(*zero);
+
+	PlayerController* player = new PlayerController();
+
+	PhysicsData* playerPhysics = new PhysicsData(playerObj, 1, 0);
+
+	player->SetGameObject(playerObj);
+	player->Setup(const_cast<char*>("lmao"), playX, playY);
+
 
 	// IMPORTANT: first we need to initialize GLib
 	bool bSuccess = GLib::Initialize(i_hInstance, i_nCmdShow, "Monster Mash", ID, static_cast<unsigned int>(playX) * 50 * 2, static_cast<unsigned int>(playY) * 50 * 2);
@@ -162,7 +221,6 @@ void Run(HINSTANCE i_hInstance, int i_nCmdShow)
 			GLib::SetKeyStateChangeCallback(TestKeyCallback);
 
 			GLib::Sprites::Sprite* pGoodGuy = CreateSprite("data\\GoodGuy.dds");
-			GLib::Sprites::Sprite* pBadGuy = CreateSprite("data\\BadGuy.dds");
 
 			Timing::startTime();
 
@@ -205,6 +263,8 @@ void Run(HINSTANCE i_hInstance, int i_nCmdShow)
 						force = Point2D(0, 0);
 						break;
 					}
+					//Reset key press each frame;
+					currKey = 0;
 
 					//Physics
 					Physics::calcNewPos(dt_ms, playerPhysics, force);
