@@ -7,6 +7,8 @@ void Renderable::AddRenderable(SmartPointer<GameObject> gameObj, GLib::Sprites::
 
 void Renderable::RenderAll()
 {
+	GLib::BeginRendering();
+	GLib::Sprites::BeginRendering();
 	for (int i = 0; i < renderables.size(); i++)
 	{
 		float p_x = renderables[i].gameObj->GetPoint()->GetX();
@@ -18,4 +20,7 @@ void Renderable::RenderAll()
 
 		GLib::Sprites::RenderSprite(*(renderables[i].sprPtr), Offset, 0);
 	}
+
+	GLib::Sprites::EndRendering();
+	GLib::EndRendering();
 }
