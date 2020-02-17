@@ -241,8 +241,8 @@ void SmPtrUnitTest()
 	assert(*smPtr_1 != *smPtr_7);
 	
 	//Weak Pointer test
-	WeakPointer<int>* wkPtr_0 = WeakPointer<int>::makePointer(smPtr_5);
-	WeakPointer<int>* wkPtr_1 = WeakPointer<int>::makePointer(smPtr_1);
+	WeakPointer<int>* wkPtr_0 = WeakPointer<int>::makePointer(*smPtr_5);
+	WeakPointer<int>* wkPtr_1 = WeakPointer<int>::makePointer(*smPtr_1);
 	assert(wkPtr_1->WeakCount() == 1);
 	assert(wkPtr_1->UseCount() == 2);
 
@@ -268,7 +268,7 @@ void SmPtrUnitTest()
 	assert(*wkPtr_2 != *wkPtr_0);
 	assert(*wkPtr_0 != *wkPtr_2);
 
-	WeakPointer<int>* wkPtr_3 = WeakPointer<int>::makePointer(smPtr_7);
+	WeakPointer<int>* wkPtr_3 = WeakPointer<int>::makePointer(*smPtr_7);
 
 	assert(!(*wkPtr_2 == *wkPtr_3));
 	assert(!(*wkPtr_2 == *smPtr_7));
@@ -327,7 +327,43 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 	player->Setup(const_cast<char*>("lmao"), playX, playY);
 	*/
 
-	Run(i_hInstance, i_nCmdShow);
+	float playX = 10.0f;
+	float playY = 10.0f;
+
+	unsigned short ID = 65535;
+
+	std::vector<const char*> charArray;
+	charArray.push_back("data\\player.json");
+	//TODO: Set up actor classes
+	for (int i = 0; i < charArray.size(); i++)
+	{
+		int* conType = new int();
+		SmartPointer<GameObject> newObj = CreateActor(charArray[i], *conType);
+
+		assert(*conType != -1);
+
+		//TODO set up controllers to add to AI Engine
+		switch (*conType)
+		{
+		case 0:
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		default:
+			break;
+		}
+	}
+
+	// IMPORTANT: first we need to initialize GLib
+	bool bSuccess = GLib::Initialize(i_hInstance, i_nCmdShow, "Monster Mash", ID, static_cast<unsigned int>(playX) * 50 * 2, static_cast<unsigned int>(playY) * 50 * 2);
+	
+	if (bSuccess)
+	{
+		Run(i_hInstance, i_nCmdShow);
+	}
+
 
 	//delete playerObj;
 	//delete zero;
