@@ -174,6 +174,7 @@
     <ClInclude Include="Physics\PhysicsData.h" />
     <ClInclude Include="Physics\Physics.h" />
     <ClInclude Include="Objects\SmartPointer.h" />
+    <ClInclude Include="Renderable.h" />
     <ClInclude Include="Timing\Timing.h" />
     <ClInclude Include="Types\Point2D-inl.h" />
     <ClInclude Include="Types\Point2D.h" />
@@ -197,6 +198,7 @@
     <ClCompile Include="Physics\PhysicsData.cpp" />
     <ClCompile Include="Physics\Physics.cpp" />
     <ClCompile Include="Objects\SmartPointer.cpp" />
+    <ClCompile Include="Renderable.cpp" />
     <ClCompile Include="Timing\Timing.cpp" />
     <ClCompile Include="Types\Point2D.cpp" />
     <ClCompile Include="Objects\WeakPointer.cpp" />
