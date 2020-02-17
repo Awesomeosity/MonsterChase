@@ -12,16 +12,19 @@
 #include "Physics/PhysicsData.h"
 #include "Timing/Timing.h"
 #include "Types/Point2D.h"
+#include "Renderable.h"
 
 #include "External/nlohmann/json.hpp"
 #include "Objects/GameObject.h"
 
 unsigned int currKey = 0;
 Physics physSystem;
+Renderable renderSystem;
 
 void initEngine()
 {
 	physSystem = Physics();
+	renderSystem = Renderable();
 }
 
 void TestKeyCallback(unsigned int i_VKeyID, bool bWentDown)
@@ -190,71 +193,70 @@ SmartPointer<GameObject> CreateActor(const char* i_pScriptFilename, int& o_contr
 	using json = nlohmann::json;
 	std::vector<uint8_t> data = LoadFileToBuffer(i_pScriptFilename);
 
-	if (!data.empty())
+	assert(!data.empty());
+	json obJSON = json::parse(data);
+
+	assert(obJSON.contains("position"));
+	assert(obJSON["position"].is_array());
+	assert(obJSON["position"].size() == 2);
+	Point2D* actorPos = new Point2D(obJSON["position"][0], obJSON["position"][1]);
+
+	GameObject* actorObj = new GameObject(*actorPos);
+	SmartPointer<GameObject> actorSmPtr = SmartPointer<GameObject>(actorObj);
+
+	if (obJSON.contains("collision_data"))
 	{
-		json obJSON = json::parse(data);
+		assert(obJSON["collision_data"]["mass"].is_number_float());
+		assert(obJSON["collision_data"]["kd"].is_number_float());
+		float actorMass = obJSON["collision_data"]["mass"];
+		float actorKD = obJSON["collision_data"]["kd"];
 
-		assert(obJSON.contains("position"));
-		assert(obJSON["position"].is_array());
-		assert(obJSON["position"].size() == 2);
-		Point2D* actorPos = new Point2D(obJSON["position"][0], obJSON["position"][1]);
-
-		GameObject* actorObj = new GameObject(*actorPos);
-		SmartPointer<GameObject> actorSmPtr = SmartPointer<GameObject>(actorObj);
-
-		if (obJSON.contains("collision_data"))
-		{
-			assert(obJSON["collision_data"]["mass"].is_number_float());
-			assert(obJSON["collision_data"]["kd"].is_number_float());
-			float actorMass = obJSON["collision_data"]["mass"];
-			float actorKD = obJSON["collision_data"]["kd"];
-
-			physSystem.AddCollidableObject(actorSmPtr, actorMass, actorKD);
-		}
-
-		if (obJSON.contains("render_data"))
-		{
-			assert(obJSON["render_data"]["sprite"].is_string());
-
-			std::string Sprite = obJSON["render_data"]["sprite"];
-
-			//TODO: Add renderable classes
-		}
-
-		assert(obJSON.contains("name"));
-		assert(obJSON["name"].is_string());
-		std::string name = obJSON["name"];
-		char* name_c = const_cast<char*>(name.c_str());
-
-
-		if (obJSON.contains("controller"))
-		{
-			assert(obJSON["controller"].is_string());
-			std::string conType = obJSON["controller"];
-		
-			if (conType == "player")
-			{
-				o_controllerType = 0;
-			}
-			else if (conType == "normal")
-			{
-				o_controllerType = 1;
-			}
-			else if (conType == "random")
-			{
-				o_controllerType = 2;
-			}
-			else
-			{
-				o_controllerType = -1;
-			}
-		}
-
-		return actorSmPtr;
+		physSystem.AddCollidableObject(actorSmPtr, actorMass, actorKD);
 	}
+
+	if (obJSON.contains("render_data"))
+	{
+		assert(obJSON["render_data"]["sprite"].is_string());
+
+		std::string Sprite = obJSON["render_data"]["sprite"];
+
+		//TODO: Add renderable classes
+	}
+
+	assert(obJSON.contains("name"));
+	assert(obJSON["name"].is_string());
+	//TODO: Return name too? I guess?
+	//std::string name = obJSON["name"];
+	//char* name_c = const_cast<char*>(name.c_str());
+
+
+	if (obJSON.contains("controller"))
+	{
+		assert(obJSON["controller"].is_string());
+		std::string conType = obJSON["controller"];
+		
+		if (conType == "player")
+		{
+			o_controllerType = 0;
+		}
+		else if (conType == "normal")
+		{
+			o_controllerType = 1;
+		}
+		else if (conType == "random")
+		{
+			o_controllerType = 2;
+		}
+		else
+		{
+			o_controllerType = -1;
+		}
+	}
+
+	return actorSmPtr;
 }
 
-void Run(HINSTANCE i_hInstance, int i_nCmdShow)
+void Run()
 {
 
 	//GLib::Sprites::Sprite* pGoodGuy = CreateSprite("data\\GoodGuy.dds");
@@ -305,25 +307,28 @@ void Run(HINSTANCE i_hInstance, int i_nCmdShow)
 			currKey = 0;
 
 			//Physics
-			Physics::calcNewPos(dt_ms, playerPhysics, force);
+			//Physics::calcNewPos(dt_ms, playerPhysics, force);
+			physSystem.RunPhysics(dt_ms);
 
 			//Render
-			GLib::BeginRendering();
-			GLib::Sprites::BeginRendering();
-			if (pGoodGuy)
-			{
-				float p_x = player->getPlayerPosition()->GetX();
-				float p_y = player->getPlayerPosition()->GetY();
-				float playerSpritePos_X = p_x * 50;
-				float playerSpritePos_Y = p_y * 50;
+			//GLib::BeginRendering();
+			//GLib::Sprites::BeginRendering();
+			//if (pGoodGuy)
+			//{
+			//	float p_x = player->getPlayerPosition()->GetX();
+			//	float p_y = player->getPlayerPosition()->GetY();
+			//	float playerSpritePos_X = p_x * 50;
+			//	float playerSpritePos_Y = p_y * 50;
+			//
+			//	GLib::Point2D	Offset = { playerSpritePos_X, playerSpritePos_Y };
+			//
+			//	GLib::Sprites::RenderSprite(*pGoodGuy, Offset, 0);
+			//}
 
-				GLib::Point2D	Offset = { playerSpritePos_X, playerSpritePos_Y };
+			//GLib::Sprites::EndRendering();
+			//GLib::EndRendering();
 
-				GLib::Sprites::RenderSprite(*pGoodGuy, Offset, 0);
-			}
-
-			GLib::Sprites::EndRendering();
-			GLib::EndRendering();
+			renderSystem.RenderAll();
 		}
 
 	} while (bQuit == false);
