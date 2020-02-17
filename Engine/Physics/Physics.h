@@ -1,8 +1,7 @@
 #pragma once
 #include <vector>
 #include "../Objects/WeakPointer.h"
-class Point2D;
-
+#include "../Types/Point2D.h"
 template <class T>
 class SmartPointer;
 class GameObject;

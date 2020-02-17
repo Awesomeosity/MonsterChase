@@ -18,7 +18,7 @@ void Physics::RunPhysics(float dt_ms)
 	for(int i = 0; i < collidables.size(); i++)
 	{
 		//TODO: Figure out how to pass forces to physics... Soon?
-		//calcNewPos(dt_ms, collidables[i], );
+		calcNewPos(dt_ms, collidables[i], Point2D(0, 1));
 	}
 }
 
