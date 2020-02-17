@@ -173,135 +173,129 @@ void inline CreatePlayer(const float playX, const float playY, PlayerController*
 
 void SmPtrUnitTest()
 {
-	SmartPointer<int>* smPtr_0 = new SmartPointer<int>();
-	assert(!smPtr_0->Peek());
-	assert(smPtr_0->UseCount() == 0);
-	assert(smPtr_0->WeakCount() == 0);
+	SmartPointer<int> smPtr_0 = SmartPointer<int>();
+	assert(!smPtr_0.Peek());
+	assert(smPtr_0.UseCount() == 0);
+	assert(smPtr_0.WeakCount() == 0);
 
 	int* testPtr_1 = new int();
-	SmartPointer<int>* smPtr_1 = new SmartPointer<int>(testPtr_1);
-	assert(smPtr_1->Peek());
-	assert(smPtr_1->UseCount() == 1);
-	assert(smPtr_1->WeakCount() == 0);
+	SmartPointer<int> smPtr_1 = SmartPointer<int>(testPtr_1);
+	assert(smPtr_1.Peek());
+	assert(smPtr_1.UseCount() == 1);
+	assert(smPtr_1.WeakCount() == 0);
 
 	{
-		SmartPointer<int> smPtr_2 = SmartPointer<int>(*smPtr_1);
+		SmartPointer<int> smPtr_2 = SmartPointer<int>(smPtr_1);
 		assert(smPtr_2.Peek());
 		assert(smPtr_2.UseCount() == 2);
 		assert(smPtr_2.WeakCount() == 0);
 	}
 
-	assert(smPtr_1->UseCount() == 1);
-	assert(smPtr_1->Peek());
+	assert(smPtr_1.UseCount() == 1);
+	assert(smPtr_1.Peek());
 
-	SmartPointer<int>* smPtr_3 = new SmartPointer<int>(*smPtr_1);
-	assert(smPtr_1->UseCount() == 2);
-	assert(smPtr_3->UseCount() == 2);
+	SmartPointer<int> smPtr_3 = SmartPointer<int>(smPtr_1);
+	assert(smPtr_1.UseCount() == 2);
+	assert(smPtr_3.UseCount() == 2);
 
-	delete smPtr_3;
-	assert(smPtr_1->UseCount() == 1);
+	smPtr_3.Reset();
+
+	assert(smPtr_1.UseCount() == 1);
 
 	assert(smPtr_1);
 
-	SmartPointer<int>* smPtr_4 = new SmartPointer<int>(*smPtr_1);
-	SmartPointer<int>* smPtr_5 = new SmartPointer<int>(*smPtr_4);
+	SmartPointer<int> smPtr_4 = SmartPointer<int>(smPtr_1);
+	SmartPointer<int> smPtr_5 = SmartPointer<int>(smPtr_4);
 
-	assert(smPtr_1->UseCount() == 3);
-	assert(smPtr_4->UseCount() == 3);
-	assert(smPtr_5->UseCount() == 3);
+	assert(smPtr_1.UseCount() == 3);
+	assert(smPtr_4.UseCount() == 3);
+	assert(smPtr_5.UseCount() == 3);
 
-	smPtr_4->Reset();
-	assert(smPtr_1->UseCount() == 2);
-	assert(smPtr_5->UseCount() == 2);
+	smPtr_4.Reset();
+	assert(smPtr_1.UseCount() == 2);
+	assert(smPtr_5.UseCount() == 2);
 
-	assert(!smPtr_4->Peek());
+	assert(!smPtr_4.Peek());
 
-	smPtr_5->Swap(*smPtr_0);
-	assert(smPtr_0->Peek());
-	assert(smPtr_0->UseCount() == 2);
-	assert(!smPtr_5->Peek());
+	smPtr_5.Swap(smPtr_0);
+	assert(smPtr_0.Peek());
+	assert(smPtr_0.UseCount() == 2);
+	assert(!smPtr_5.Peek());
 
 	int* testPtr_2 = new int();
-	SmartPointer<int>* smPtr_7 = new SmartPointer<int>(testPtr_2);
+	SmartPointer<int> smPtr_7 = SmartPointer<int>(testPtr_2);
 
-	assert(*smPtr_1 == *smPtr_0);
-	assert(!(*smPtr_1 == nullptr));
-	assert(!(nullptr == *smPtr_1));
-	assert(*smPtr_5 == nullptr);
-	assert(nullptr == *smPtr_5);
+	assert(smPtr_1 == smPtr_0);
+	assert(!(smPtr_1 == nullptr));
+	assert(!(nullptr == smPtr_1));
+	assert(smPtr_5 == nullptr);
+	assert(nullptr == smPtr_5);
 
-	assert(!(*smPtr_1 == *smPtr_7));
+	assert(!(smPtr_1 == smPtr_7));
 
-	assert(!(*smPtr_1 != *smPtr_0));
-	assert(*smPtr_1 != nullptr);
-	assert(nullptr != *smPtr_1);
-	assert(!(*smPtr_5 != nullptr));
-	assert(!(nullptr != *smPtr_5));
+	assert(!(smPtr_1 != smPtr_0));
+	assert(smPtr_1 != nullptr);
+	assert(nullptr != smPtr_1);
+	assert(!(smPtr_5 != nullptr));
+	assert(!(nullptr != smPtr_5));
 
-	assert(*smPtr_1 != *smPtr_7);
+	assert(smPtr_1 != smPtr_7);
 	
 	//Weak Pointer test
-	WeakPointer<int>* wkPtr_0 = WeakPointer<int>::makePointer(*smPtr_5);
-	WeakPointer<int>* wkPtr_1 = WeakPointer<int>::makePointer(*smPtr_1);
-	assert(wkPtr_1->WeakCount() == 1);
-	assert(wkPtr_1->UseCount() == 2);
+	WeakPointer<int> wkPtr_0 = WeakPointer<int>(smPtr_5);
+	WeakPointer<int> wkPtr_1 = WeakPointer<int>(smPtr_1);
+	assert(wkPtr_1.WeakCount() == 1);
+	assert(wkPtr_1.UseCount() == 2);
 
-	SmartPointer<int>* smPtr_6 = wkPtr_1->Promote();
-	assert(wkPtr_1->UseCount() == 3);
-	assert(wkPtr_1->WeakCount() == 1);
-	assert(smPtr_6->UseCount() == 3);
-	assert(smPtr_6->WeakCount() == 1);
+	SmartPointer<int> smPtr_6 = wkPtr_1.Promote();
+	assert(wkPtr_1.UseCount() == 3);
+	assert(wkPtr_1.WeakCount() == 1);
+	assert(smPtr_6.UseCount() == 3);
+	assert(smPtr_6.WeakCount() == 1);
 
-	WeakPointer<int>* wkPtr_2 = new WeakPointer<int>(*wkPtr_1);
-	assert(wkPtr_2->WeakCount() == 2);
-	assert(wkPtr_2->Peek());
+	WeakPointer<int> wkPtr_2 =  WeakPointer<int>(wkPtr_1);
+	assert(wkPtr_2.WeakCount() == 2);
+	assert(wkPtr_2.Peek());
 
-	assert(*wkPtr_2 == *wkPtr_1);
-	assert(*wkPtr_2 == *smPtr_6);
-	assert(*smPtr_6 == *wkPtr_1);
-	assert(!(*wkPtr_2 == *wkPtr_0));
-	assert(!(*wkPtr_0 == *wkPtr_2));
+	assert(wkPtr_2 == wkPtr_1);
+	assert(wkPtr_2 == smPtr_6);
+	assert(smPtr_6 == wkPtr_1);
+	assert(!(wkPtr_2 == wkPtr_0));
+	assert(!(wkPtr_0 == wkPtr_2));
 
-	assert(!(*wkPtr_2 != *wkPtr_1));
-	assert(!(*wkPtr_2 != *smPtr_6));
-	assert(!(*smPtr_6 != *wkPtr_1));
-	assert(*wkPtr_2 != *wkPtr_0);
-	assert(*wkPtr_0 != *wkPtr_2);
+	assert(!(wkPtr_2 != wkPtr_1));
+	assert(!(wkPtr_2 != smPtr_6));
+	assert(!(smPtr_6 != wkPtr_1));
+	assert(wkPtr_2 != wkPtr_0);
+	assert(wkPtr_0 != wkPtr_2);
 
-	WeakPointer<int>* wkPtr_3 = WeakPointer<int>::makePointer(*smPtr_7);
+	WeakPointer<int> wkPtr_3 = WeakPointer<int>(smPtr_7);
 
-	assert(!(*wkPtr_2 == *wkPtr_3));
-	assert(!(*wkPtr_2 == *smPtr_7));
-	assert(!(*smPtr_7 == *wkPtr_1));
-	assert(nullptr == *wkPtr_0);
-	assert(*wkPtr_0 == nullptr);
+	assert(!(wkPtr_2 == wkPtr_3));
+	assert(!(wkPtr_2 == smPtr_7));
+	assert(!(smPtr_7 == wkPtr_1));
+	assert(nullptr == wkPtr_0);
+	assert(wkPtr_0 == nullptr);
 
-	assert(*wkPtr_2 != *wkPtr_3);
-	assert(*wkPtr_2 != *smPtr_7);
-	assert(*smPtr_7 != *wkPtr_1);
-	assert(!(nullptr != *wkPtr_0));
-	assert(!(*wkPtr_0 != nullptr));
+	assert(wkPtr_2 != wkPtr_3);
+	assert(wkPtr_2 != smPtr_7);
+	assert(smPtr_7 != wkPtr_1);
+	assert(!(nullptr != wkPtr_0));
+	assert(!(wkPtr_0 != nullptr));
 
 		
-	wkPtr_1->Reset();
-	assert(wkPtr_2->WeakCount() == 1);
+	wkPtr_1.Reset();
+	assert(wkPtr_2.WeakCount() == 1);
 
-	wkPtr_2->Swap(*wkPtr_1);
-	assert(!wkPtr_2->Peek());
-	assert(wkPtr_1->WeakCount() == 1);
-	assert(wkPtr_1->UseCount() == 3);
+	wkPtr_2.Swap(wkPtr_1);
+	assert(!wkPtr_2.Peek());
+	assert(wkPtr_1.WeakCount() == 1);
+	assert(wkPtr_1.UseCount() == 3);
 
-	delete wkPtr_1;
+	wkPtr_1.Reset();
 
-	assert(smPtr_6->UseCount() == 3);
-	assert(smPtr_6->WeakCount() == 0);
-
-
-	delete smPtr_5;
-	delete smPtr_4;
-	delete smPtr_1;
-	//delete wkPtr_1;
-	delete smPtr_0;
+	assert(smPtr_6.UseCount() == 3);
+	assert(smPtr_6.WeakCount() == 0);
 }
 
 
@@ -311,7 +305,7 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 	//_CrtSetBreakAlloc(218);
 	//TEMP: Floating Point Unit Test
 	//FloatCalcs::floatingUnitTest();
-	//SmPtrUnitTest();
+	SmPtrUnitTest();
 
 	
 	/*unsigned int monsterCount = 0;
@@ -361,7 +355,7 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 	
 	if (bSuccess)
 	{
-		Run(i_hInstance, i_nCmdShow);
+		Run();
 	}
 
 
