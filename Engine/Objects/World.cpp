@@ -20,14 +20,14 @@ WeakPointer<GameObject>* World::AddObject()
 {
 	SmartPointer<GameObject>* newObjPtr = new SmartPointer<GameObject>(new GameObject());
 	allObjects.push_back(newObjPtr);
-	return WeakPointer<GameObject>::makePointer(newObjPtr);
+	return new WeakPointer<GameObject>(*newObjPtr);
 }
 
 WeakPointer<GameObject>* World::AddObject(Point2D pt)
 {
 	SmartPointer<GameObject>* newObjPtr = new SmartPointer<GameObject>(new GameObject(pt));
 	allObjects.push_back(newObjPtr);
-	return WeakPointer<GameObject>::makePointer(newObjPtr);
+	return new WeakPointer<GameObject>(*newObjPtr);
 }
 
 void World::Dispose(WeakPointer<GameObject> ptr)

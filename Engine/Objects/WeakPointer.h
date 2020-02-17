@@ -8,7 +8,7 @@ template <class T>
 class WeakPointer
 {
 public:
-	static WeakPointer<T>* makePointer(SmartPointer<T>* ptr);
+	WeakPointer(SmartPointer<T>& ptr);
 	WeakPointer(const WeakPointer& ptr);
 	WeakPointer(WeakPointer&& ptr) noexcept;
 	WeakPointer& operator=(const WeakPointer& ptr);
