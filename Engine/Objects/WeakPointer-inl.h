@@ -28,7 +28,10 @@ template<class T>
 inline WeakPointer<T>::WeakPointer(SmartPointer<T>& ptr)
 	: objPtr(ptr.objPtr), countCache(ptr.countCache)
 {
-	countCache->weakCount++;
+	if (countCache)
+	{
+		countCache->weakCount++;
+	}
 }
 
 template<class T>
@@ -156,9 +159,9 @@ inline bool WeakPointer<T>::operator!=(std::nullptr_t) const
 }
 
 template<class T>
-inline SmartPointer<T>* WeakPointer<T>::Promote() const
+inline SmartPointer<T> WeakPointer<T>::Promote() const
 {
-	return new SmartPointer<T>(*this);
+	return SmartPointer<T>(*this);
 }
 
 template<class T>

@@ -28,7 +28,7 @@ public:
 	bool operator!=(std::nullptr_t) const;
 
 	//Generates a SmartPointer from this WeakPointer. Will convert, even if there is no valid obj pointer.
-	SmartPointer<T>* Promote() const;
+	SmartPointer<T> Promote() const;
 	void Reset();
 	void Swap(WeakPointer<T>& ptr);
 	int UseCount() const;
