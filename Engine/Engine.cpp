@@ -8,6 +8,7 @@
 #include "GLib/GLib.h"
 #include "Objects/SmartPointer.h"
 #include "Objects/WeakPointer.h"
+#include "Objects/World.h"
 #include "Physics/Physics.h"
 #include "Physics/PhysicsData.h"
 #include "Timing/Timing.h"
@@ -20,11 +21,13 @@
 unsigned int currKey = 0;
 Physics physSystem;
 Renderable renderSystem;
+World* world;
 
 void initEngine()
 {
 	physSystem = Physics();
 	renderSystem = Renderable();
+	world = new World();
 }
 
 void TestKeyCallback(unsigned int i_VKeyID, bool bWentDown)
@@ -188,7 +191,7 @@ void GetName(char* name)
 	}
 }
 
-SmartPointer<GameObject> CreateActor(const char* i_pScriptFilename, int& o_controllerType)
+WeakPointer<GameObject> CreateActor(const char* i_pScriptFilename, int& o_controllerType)
 {
 	using json = nlohmann::json;
 	std::vector<uint8_t> data = LoadFileToBuffer(i_pScriptFilename);
@@ -199,10 +202,9 @@ SmartPointer<GameObject> CreateActor(const char* i_pScriptFilename, int& o_contr
 	assert(obJSON.contains("position"));
 	assert(obJSON["position"].is_array());
 	assert(obJSON["position"].size() == 2);
-	Point2D* actorPos = new Point2D(obJSON["position"][0], obJSON["position"][1]);
+	Point2D actorPos = Point2D(obJSON["position"][0], obJSON["position"][1]);
 
-	GameObject* actorObj = new GameObject(*actorPos);
-	SmartPointer<GameObject> actorSmPtr = SmartPointer<GameObject>(actorObj);
+	WeakPointer<GameObject> actorPtr = world->AddObject(actorPos);
 
 	if (obJSON.contains("collision_data"))
 	{
@@ -211,16 +213,17 @@ SmartPointer<GameObject> CreateActor(const char* i_pScriptFilename, int& o_contr
 		float actorMass = obJSON["collision_data"]["mass"];
 		float actorKD = obJSON["collision_data"]["kd"];
 
-		physSystem.AddCollidableObject(actorSmPtr, actorMass, actorKD);
+		physSystem.AddCollidableObject(actorPtr, actorMass, actorKD);
 	}
 
 	if (obJSON.contains("render_data"))
 	{
 		assert(obJSON["render_data"]["sprite"].is_string());
 
-		std::string Sprite = obJSON["render_data"]["sprite"];
+		std::string sprite = obJSON["render_data"]["sprite"];
 
-		//TODO: Add renderable classes
+		GLib::Sprites::Sprite* pSprite = CreateSprite("data\\goodguy.dds");
+		renderSystem.AddRenderable(actorPtr, pSprite);
 	}
 
 	assert(obJSON.contains("name"));
@@ -253,12 +256,11 @@ SmartPointer<GameObject> CreateActor(const char* i_pScriptFilename, int& o_contr
 		}
 	}
 
-	return actorSmPtr;
+	return actorPtr;
 }
 
 void Run()
 {
-
 	//GLib::Sprites::Sprite* pGoodGuy = CreateSprite("data\\GoodGuy.dds");
 	GLib::SetKeyStateChangeCallback(TestKeyCallback);
 
