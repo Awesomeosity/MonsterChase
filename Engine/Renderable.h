@@ -17,7 +17,7 @@ struct renders
 class Renderable
 {
 public:
-	void AddRenderable(SmartPointer<GameObject> gameObj, GLib::Sprites::Sprite* sprPtr);
+	void AddRenderable(WeakPointer<GameObject> gameObj, GLib::Sprites::Sprite* sprPtr);
 	void RenderAll();
 private:
 	std::vector<renders> renderables;

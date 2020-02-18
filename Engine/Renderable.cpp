@@ -1,6 +1,6 @@
 #include "Renderable.h"
 
-void Renderable::AddRenderable(SmartPointer<GameObject> gameObj, GLib::Sprites::Sprite* sprPtr)
+void Renderable::AddRenderable(WeakPointer<GameObject> gameObj, GLib::Sprites::Sprite* sprPtr)
 {
 	renderables.push_back(renders(WeakPointer<GameObject>(gameObj), sprPtr));
 }
@@ -11,8 +11,8 @@ void Renderable::RenderAll()
 	GLib::Sprites::BeginRendering();
 	for (int i = 0; i < renderables.size(); i++)
 	{
-		float p_x = renderables[i].gameObj->GetPoint()->GetX();
-		float p_y = renderables[i].gameObj->GetPoint()->GetY();
+		float p_x = renderables[i].gameObj->GetPoint().GetX();
+		float p_y = renderables[i].gameObj->GetPoint().GetY();
 		float spritePos_X = p_x * 50;
 		float spritePos_Y = p_y * 50;
 

@@ -8,7 +8,7 @@ Physics::Physics()
 	collidables = std::vector<collidable>();
 }
 
-void Physics::AddCollidableObject(SmartPointer<GameObject> newObj, float mass, float kd)
+void Physics::AddCollidableObject(WeakPointer<GameObject> newObj, float mass, float kd)
 {
 	collidables.push_back(collidable(WeakPointer<GameObject>(newObj), mass, kd));
 }
@@ -25,7 +25,7 @@ void Physics::RunPhysics(float dt_ms)
 
 void Physics::calcNewPos(float dt_ms, collidable colliData, Point2D forces)
 {
-	Point2D currPos = *(colliData.obj->GetPoint());
+	Point2D currPos = colliData.obj->GetPoint();
 	Point2D prevPos = colliData.prevPoint;
 	float mass = colliData.mass;
 	float drag = colliData.kd;

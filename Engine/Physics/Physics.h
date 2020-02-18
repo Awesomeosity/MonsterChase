@@ -13,7 +13,7 @@ struct collidable
 	float kd;
 	Point2D prevPoint;
 	collidable(WeakPointer<GameObject> _obj, float _mass, float _kd)
-		:obj(_obj), mass(_mass), kd(_kd), prevPoint()
+		:obj(_obj), mass(_mass), kd(_kd), prevPoint(0, 0)
 	{
 		
 	}
@@ -24,7 +24,7 @@ class Physics
 public:
 	Physics();
 
-	void AddCollidableObject(SmartPointer<GameObject> newObj, float mass, float kd);
+	void AddCollidableObject(WeakPointer<GameObject> newObj, float mass, float kd);
 	void RunPhysics(float dt_ms);
 	static void calcNewPos(float dt_ms, collidable data, Point2D forces);
 private:
