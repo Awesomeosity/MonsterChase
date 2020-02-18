@@ -12,7 +12,7 @@ public:
 	GameObject& operator=(GameObject& i_gameObject);
 	GameObject& operator=(GameObject&& i_gameObject) noexcept;
 	~GameObject();
-	Point2D* GetPoint();
+	Point2D GetPoint();
 	void SetPoint(Point2D i_point);
 	void AddComponent(std::string str, void* ptr);
 	void* GetComponent(const std::string str) const;

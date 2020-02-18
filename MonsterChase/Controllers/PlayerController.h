@@ -14,7 +14,7 @@ public:
 	void Setup(char* const i_playerName, const float i_playX, const float i_playY);
 	void SetGameObject(GameObject* const i_object) override;
 	void UpdateGameObject() override;
-	Point2D* getPlayerPosition() const;
+	Point2D getPlayerPosition() const;
 private:
 	char getMovement();
 	void boundCheck();

@@ -110,7 +110,7 @@ void PlayerController::UpdateGameObject()
 	*/
 }
 
-Point2D* PlayerController::getPlayerPosition() const
+Point2D PlayerController::getPlayerPosition() const
 {
 	return player->GetPoint();
 }
@@ -163,23 +163,23 @@ char PlayerController::getMovement()
 
 void PlayerController::boundCheck()
 {
-	if (player->GetPoint()->GetX() > maxX)
-	{
-		player->GetPoint()->SetX(maxX * -1);
-	}
-
-	if (player->GetPoint()->GetX() < maxX * -1)
-	{
-		player->GetPoint()->SetX(maxX);
-	}
-
-	if (player->GetPoint()->GetY() > maxY)
-	{
-		player->GetPoint()->SetY(maxY * -1);
-	}
-
-	if (player->GetPoint()->GetY() < maxY * -1)
-	{
-		player->GetPoint()->SetY(maxY);
+	if (player->GetPoint().GetX() > maxX)
+	{					  
+		player->GetPoint().SetX(maxX * -1);
+	}					  
+						  
+	if (player->GetPoint().GetX() < maxX * -1)
+	{					  
+		player->GetPoint().SetX(maxX);
+	}					  
+						  
+	if (player->GetPoint().GetY() > maxY)
+	{					  
+		player->GetPoint().SetY(maxY * -1);
+	}					  
+						  
+	if (player->GetPoint().GetY() < maxY * -1)
+	{					  
+		player->GetPoint().SetY(maxY);
 	}
 }

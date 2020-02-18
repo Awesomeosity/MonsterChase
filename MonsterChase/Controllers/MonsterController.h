@@ -16,7 +16,7 @@ public:
 	void GetFocus(GameObject* const i_object);
 	void UpdateGameObject() override;
 	bool getActive() const;
-	Point2D* getPosition() const;
+	Point2D getPosition() const;
 private:
 	void checkAndSetTime();
 	unsigned int deathTime;

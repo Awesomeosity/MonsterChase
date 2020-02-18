@@ -14,7 +14,7 @@ public:
 	void SetGameObject(GameObject* const i_object) override;
 	void UpdateGameObject() override;
 	bool getActive() const;
-	Point2D* getPosition() const;
+	Point2D getPosition() const;
 private:
 	void checkAndSetTime();
 	unsigned int deathTime;

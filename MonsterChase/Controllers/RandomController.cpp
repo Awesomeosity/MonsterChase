@@ -13,8 +13,8 @@ RandomController::RandomController(bool i_active, float i_x, float i_y, GameObje
 
 	float monX = std::round(rand() / (RAND_MAX / maxX * 2) - maxX);
 	float monY = std::round(rand() / (RAND_MAX / maxY * 2) - maxY);
-	monster->GetPoint()->SetX(monX);
-	monster->GetPoint()->SetY(monY);
+	monster->GetPoint().SetX(monX);
+	monster->GetPoint().SetY(monY);
 
 }
 
@@ -115,7 +115,7 @@ bool RandomController::getActive() const
 	return isActive;
 }
 
-Point2D* RandomController::getPosition() const
+Point2D RandomController::getPosition() const
 {
 	return monster->GetPoint();
 }
@@ -132,8 +132,8 @@ void RandomController::checkAndSetTime()
 		{
 			float monX = std::round(rand() / (RAND_MAX / maxX * 2) - maxX);
 			float monY = std::round(rand() / (RAND_MAX / maxY * 2) - maxY);
-			monster->GetPoint()->SetX(monX);
-			monster->GetPoint()->SetY(monY);
+			monster->GetPoint().SetX(monX);
+			monster->GetPoint().SetY(monY);
 			std::cout << name << " has revived at [" << monX << ", " << monY << "]!\n";
 		}
 		if (!isActive)
@@ -146,6 +146,6 @@ void RandomController::checkAndSetTime()
 
 	else if (isActive)
 	{
-		std::cout << name << "'s current position is: [" << monster->GetPoint()->GetX() << ", " << monster->GetPoint()->GetY() << "].\n";
+		std::cout << name << "'s current position is: [" << monster->GetPoint().GetX() << ", " << monster->GetPoint().GetY() << "].\n";
 	}
 }

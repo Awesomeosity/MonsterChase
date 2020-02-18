@@ -11,7 +11,7 @@ GameObject::GameObject(Point2D& i_point) : _point(i_point)
 {
 }
 
-GameObject::GameObject(GameObject& i_gameObject) : _point(*(i_gameObject.GetPoint()))
+GameObject::GameObject(GameObject& i_gameObject) : _point(i_gameObject.GetPoint())
 {
 }
 
@@ -28,7 +28,7 @@ GameObject& GameObject::operator=(GameObject& i_gameObject)
 		return *this;
 	}
 
-	_point = *(i_gameObject.GetPoint());
+	_point = i_gameObject.GetPoint();
 
 	return *this;
 }
@@ -40,7 +40,7 @@ GameObject& GameObject::operator=(GameObject&& i_gameObject) noexcept
 		return *this;
 	}
 
-	_point = *(i_gameObject.GetPoint());
+	_point = i_gameObject.GetPoint();
 	return *this;
 }
 
@@ -48,9 +48,9 @@ GameObject::~GameObject()
 {
 }
 
-Point2D* GameObject::GetPoint()
+Point2D GameObject::GetPoint()
 {
-	return &_point;
+	return _point;
 }
 
 void GameObject::SetPoint(Point2D i_point)

@@ -52,19 +52,19 @@ void inline GetMonsterCount(unsigned int* const maxMonsters)
 
 bool inline CheckPlayer(PlayerController* const player, std::vector<MonsterController*>* monsters, std::vector<RandomController*>* randoms)
 {
-	float playerX = player->getPlayerPosition()->GetX();
-	float playerY = player->getPlayerPosition()->GetY();
+	float playerX = player->getPlayerPosition().GetX();
+	float playerY = player->getPlayerPosition().GetY();
 
 	for (size_t i = 0; i < (*monsters).size(); i++)
 	{
-		if ((*monsters)[i]->getActive() && (*monsters)[i]->getPosition()->GetX() == playerX && (*monsters)[i]->getPosition()->GetY() == playerY)
+		if ((*monsters)[i]->getActive() && (*monsters)[i]->getPosition().GetX() == playerX && (*monsters)[i]->getPosition().GetY() == playerY)
 		{
 			return false;
 		}
 	}
 	for (size_t i = 0; i < (*randoms).size(); i++)
 	{
-		if ((*randoms)[i]->getActive() && (*randoms)[i]->getPosition()->GetX() == playerX && (*randoms)[i]->getPosition()->GetY() == playerY)
+		if ((*randoms)[i]->getActive() && (*randoms)[i]->getPosition().GetX() == playerX && (*randoms)[i]->getPosition().GetY() == playerY)
 		{
 			return false;
 		}
@@ -79,15 +79,15 @@ void inline GameLoop(PlayerController* const player, const std::vector<IGameObje
 	bool isAlive = true;
 	while (isAlive)
 	{
-		beforePosX = player->getPlayerPosition()->GetX();
-		beforePosY = player->getPlayerPosition()->GetY();
+		beforePosX = player->getPlayerPosition().GetX();
+		beforePosY = player->getPlayerPosition().GetY();
 		for (size_t i = 0; i < controllers->size(); i++)
 		{
 			(*controllers)[i]->UpdateGameObject();
 			if (i == 0)
 			{
-				afterPosX = player->getPlayerPosition()->GetX();
-				afterPosY = player->getPlayerPosition()->GetY();
+				afterPosX = player->getPlayerPosition().GetX();
+				afterPosY = player->getPlayerPosition().GetY();
 				if (beforePosX == afterPosX && beforePosY == afterPosY)
 				{
 					//std::cout << "Quitting...\n";
@@ -305,7 +305,7 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 	//_CrtSetBreakAlloc(218);
 	//TEMP: Floating Point Unit Test
 	//FloatCalcs::floatingUnitTest();
-	SmPtrUnitTest();
+	//SmPtrUnitTest();
 
 	
 	/*unsigned int monsterCount = 0;
@@ -326,13 +326,16 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 
 	unsigned short ID = 65535;
 
+	initEngine();
+	bool bSuccess = GLib::Initialize(i_hInstance, i_nCmdShow, "Monster Mash", ID, static_cast<unsigned int>(playX) * 50 * 2, static_cast<unsigned int>(playY) * 50 * 2);
+
+
 	std::vector<const char*> charArray;
 	charArray.push_back("data\\player.json");
-	//TODO: Set up actor classes
 	for (int i = 0; i < charArray.size(); i++)
 	{
 		int* conType = new int();
-		SmartPointer<GameObject> newObj = CreateActor(charArray[i], *conType);
+		WeakPointer<GameObject> newObj = CreateActor(charArray[i], *conType);
 
 		assert(*conType != -1);
 
@@ -351,7 +354,6 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 	}
 
 	// IMPORTANT: first we need to initialize GLib
-	bool bSuccess = GLib::Initialize(i_hInstance, i_nCmdShow, "Monster Mash", ID, static_cast<unsigned int>(playX) * 50 * 2, static_cast<unsigned int>(playY) * 50 * 2);
 	
 	if (bSuccess)
 	{
