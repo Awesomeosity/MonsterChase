@@ -18,7 +18,7 @@ void Physics::RunPhysics(float dt_ms)
 	for(int i = 0; i < collidables.size(); i++)
 	{
 		//TODO: Figure out how to pass forces to physics... Soon?
-		calcNewPos(dt_ms, collidables[i], Point2D(0, 1));
+		calcNewPos(dt_ms, collidables[i], Point2D(0, 0.000001f));
 	}
 }
 
@@ -32,5 +32,8 @@ void Physics::calcNewPos(float dt_ms, collidable colliData, Point2D forces)
 
 	Point2D newPos = (currPos * (2.0f - drag)) - prevPos + ((forces / mass) * dt_ms) / 1000.0f;
 
-	colliData.prevPoint = newPos;
+	colliData.obj->SetPoint(newPos);
+
+	colliData.prevPoint.SetX(currPos.GetX());
+	colliData.prevPoint.SetY(currPos.GetY());
 }

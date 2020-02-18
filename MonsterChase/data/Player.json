@@ -2,8 +2,8 @@
   "name": "Joe",
   "position": [ 0.0, 0.0 ],
   "collision_data": {
-    "mass": 1.0,
-    "kd": 2.0
+    "mass": 1000.0,
+    "kd": 0.99
   },
   "render_data": {
     "sprite": "data\\goodguy.dds"
