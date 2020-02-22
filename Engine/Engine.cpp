@@ -42,11 +42,11 @@ void TestKeyCallback(unsigned int i_VKeyID, bool bWentDown)
 	if (bWentDown)
 	{
 		//TODO: Implement multiple key detection
-		currKey = i_VKeyID;
+		physSystem.currKey = i_VKeyID;
 	}
 	else
 	{
-		currKey = 0;
+		physSystem.currKey = 0;
 	}
 #endif // __DEBUG
 }
@@ -275,6 +275,9 @@ void Run()
 		float dt_ms = (float)dt / 1000.0f;
 
 		GLib::Service(bQuit);
+		
+		//TODO: Get Input
+
 
 		if (!bQuit)
 		{

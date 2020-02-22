@@ -15,25 +15,55 @@ void Physics::AddCollidableObject(WeakPointer<GameObject> newObj, float mass, fl
 
 void Physics::RunPhysics(float dt_ms)
 {
+	Point2D force;
+	switch (currKey)
+	{
+		//W
+	case 87:
+		force = Point2D(0, 10);
+		break;
+		//S
+	case 83:
+		force = Point2D(0, -10);
+		break;
+		//A
+	case 65:
+		force = Point2D(-10, 0);
+		break;
+		//D
+	case 68:
+		force = Point2D(10, 0);
+		break;
+	case 81:
+		break;
+		//No key being held down.
+	case 0:
+	default:
+		force = Point2D(0, 0);
+		break;
+	}
+
 	for(int i = 0; i < collidables.size(); i++)
 	{
 		//TODO: Figure out how to pass forces to physics... Soon?
-		calcNewPos(dt_ms, collidables[i], Point2D(0, 0.000001f));
+		calcNewPos(dt_ms, collidables[i], force);
 	}
 }
 
 
-void Physics::calcNewPos(float dt_ms, collidable colliData, Point2D forces)
+void Physics::calcNewPos(float dt_ms, collidable& colliData, Point2D forces)
 {
 	Point2D currPos = colliData.obj->GetPoint();
 	Point2D prevPos = colliData.prevPoint;
 	float mass = colliData.mass;
-	float drag = colliData.kd;
+	//float drag = colliData.kd;
 
-	Point2D newPos = (currPos * (2.0f - drag)) - prevPos + ((forces / mass) * dt_ms) / 1000.0f;
+	Point2D newPos = (currPos * 2.0f) - prevPos + ((forces / mass) * dt_ms) / 1000.0f;
 
 	colliData.obj->SetPoint(newPos);
 
-	colliData.prevPoint.SetX(currPos.GetX());
-	colliData.prevPoint.SetY(currPos.GetY());
+	float currX = currPos.GetX();
+	float currY = currPos.GetY();
+	colliData.prevPoint.SetX(currX);
+	colliData.prevPoint.SetY(currY);
 }

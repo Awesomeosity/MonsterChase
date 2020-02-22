@@ -26,7 +26,9 @@ public:
 
 	void AddCollidableObject(WeakPointer<GameObject> newObj, float mass, float kd);
 	void RunPhysics(float dt_ms);
-	static void calcNewPos(float dt_ms, collidable data, Point2D forces);
+	static void calcNewPos(float dt_ms, collidable& data, Point2D forces);
+
+	int currKey = 0;
 private:
 	std::vector<collidable> collidables;
 };

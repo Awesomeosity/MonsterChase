@@ -1,3 +1,4 @@
+#include "Point2D.h"
 #pragma once
 inline Point2D Point2D::operator=(const Point2D& i_point)
 {
@@ -75,6 +76,16 @@ inline Point2D operator-(const Point2D& i_p1, const Point2D& i_p2)
 inline Point2D operator*(const Point2D& i_p1, const float i_scalar)
 {
 	return Point2D(i_p1.GetX() * i_scalar, i_p1.GetY() * i_scalar);
+}
+
+inline Point2D operator*(const float i_scalar, const Point2D& i_p1)
+{
+	return Point2D(i_p1.GetX() * i_scalar, i_p1.GetY() * i_scalar);
+}
+
+inline Point2D operator*(const Point2D& i_p1, const Point2D& i_p2)
+{
+	return Point2D(i_p1.GetX() * i_p2.GetX(), i_p1.GetY() * i_p2.GetY());
 }
 
 inline Point2D operator/(const Point2D& i_p1, const float i_scalar)

@@ -29,6 +29,8 @@ inline Point2D operator+(const Point2D & i_p1, const Point2D & i_p2);
 inline Point2D operator-(const Point2D & i_Point2D);
 inline Point2D operator-(const Point2D & i_p1, const Point2D & i_p2);
 inline Point2D operator*(const Point2D& i_p1, const float i_scalar);
+inline Point2D operator*(const float i_scalar, const Point2D& i_p1);
+inline Point2D operator*(const Point2D& i_p1, const Point2D& i_p2);
 inline Point2D operator/(const Point2D& i_p1, const float i_scalar);
 inline bool operator==(const Point2D& i_p1, const Point2D& i_p2);
 inline bool operator!=(const Point2D& i_p1, const Point2D& i_p2);
