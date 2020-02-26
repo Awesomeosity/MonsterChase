@@ -57,7 +57,7 @@ inline SmartPointer<T>::SmartPointer(SmartPointer&& ptr) noexcept
 
 template<class T>
 inline SmartPointer<T>::SmartPointer(std::nullptr_t)
-	: objPtr(nullptr), countCache()
+	: objPtr(nullptr), countCache(nullptr)
 {
 	
 }

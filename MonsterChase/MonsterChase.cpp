@@ -302,7 +302,7 @@ void SmPtrUnitTest()
 
 int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_lpCmdLine, int i_nCmdShow)
 {
-	//_CrtSetBreakAlloc(218);
+	_CrtSetBreakAlloc(342);
 	//TEMP: Floating Point Unit Test
 	//FloatCalcs::floatingUnitTest();
 	//SmPtrUnitTest();
@@ -331,8 +331,9 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 
 
 	std::vector<const char*> charArray;
-	charArray.push_back("data\\player.json");
-	for (int i = 0; i < charArray.size(); i++)
+	std::string data_str_1("data\\player.json");
+	charArray.push_back(data_str_1.c_str());
+	for (size_t i = 0; i < charArray.size(); i++)
 	{
 		int* conType = new int();
 		WeakPointer<GameObject> newObj = CreateActor(charArray[i], *conType);
@@ -351,6 +352,8 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 		default:
 			break;
 		}
+
+		delete conType;
 	}
 
 	// IMPORTANT: first we need to initialize GLib
@@ -359,6 +362,8 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 	{
 		Run();
 	}
+
+	charArray.clear();
 
 
 	//delete playerObj;

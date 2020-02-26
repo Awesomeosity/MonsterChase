@@ -8,9 +8,18 @@ Physics::Physics()
 	collidables = std::vector<collidable>();
 }
 
+Physics::~Physics()
+{
+	for (size_t i = 0; i < collidables.size(); i++)
+	{
+		collidables[i].obj.Reset();
+	}
+
+}
+
 void Physics::AddCollidableObject(WeakPointer<GameObject> newObj, float mass, float kd)
 {
-	collidables.push_back(collidable(WeakPointer<GameObject>(newObj), mass, kd));
+	collidables.push_back(collidable(newObj, mass, kd));
 }
 
 void Physics::RunPhysics(float dt_ms)
@@ -43,7 +52,7 @@ void Physics::RunPhysics(float dt_ms)
 		break;
 	}
 
-	for(int i = 0; i < collidables.size(); i++)
+	for(size_t i = 0; i < collidables.size(); i++)
 	{
 		//TODO: Figure out how to pass forces to physics... Soon?
 		calcNewPos(dt_ms, collidables[i], force);
@@ -66,4 +75,12 @@ void Physics::calcNewPos(float dt_ms, collidable& colliData, Point2D forces)
 	float currY = currPos.GetY();
 	colliData.prevPoint.SetX(currX);
 	colliData.prevPoint.SetY(currY);
+}
+
+void Physics::Dispose()
+{
+	for (size_t i = 0; i < collidables.size(); i++)
+	{
+		collidables[i].obj.Reset();
+	}
 }

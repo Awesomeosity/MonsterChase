@@ -1,15 +1,42 @@
 #include "Renderable.h"
 
+Renderable::Renderable()
+{
+	renderables = std::vector<renders>();
+}
+
+Renderable::~Renderable()
+{
+	for (size_t i = 0; i < renderables.size(); i++)
+	{
+		renderables[i].gameObj.Reset();
+	}
+
+	renderables.clear();
+}
+
 void Renderable::AddRenderable(WeakPointer<GameObject> gameObj, GLib::Sprites::Sprite* sprPtr)
 {
-	renderables.push_back(renders(WeakPointer<GameObject>(gameObj), sprPtr));
+	renders newrend = renders(gameObj, sprPtr);
+	renderables.push_back(newrend);
+}
+
+void Renderable::ReleaseSprites()
+{
+	for (size_t i = 0; i < renderables.size(); i++)
+	{
+		if (renderables[i].sprPtr)
+		{
+			GLib::Sprites::Release(renderables[i].sprPtr);
+		}
+	}
 }
 
 void Renderable::RenderAll()
 {
 	GLib::BeginRendering();
 	GLib::Sprites::BeginRendering();
-	for (int i = 0; i < renderables.size(); i++)
+	for (size_t i = 0; i < renderables.size(); i++)
 	{
 		float p_x = renderables[i].gameObj->GetPoint().GetX();
 		float p_y = renderables[i].gameObj->GetPoint().GetY();
@@ -23,4 +50,15 @@ void Renderable::RenderAll()
 
 	GLib::Sprites::EndRendering();
 	GLib::EndRendering();
+}
+
+void Renderable::Dispose()
+{
+	for (size_t i = 0; i < renderables.size(); i++)
+	{
+		renderables[i].gameObj.Reset();
+	}
+
+	renderables.clear();
+
 }

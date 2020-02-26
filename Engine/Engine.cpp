@@ -32,7 +32,6 @@ void initEngine()
 
 void TestKeyCallback(unsigned int i_VKeyID, bool bWentDown)
 {
-#ifdef _DEBUG
 	const size_t	lenBuffer = 65;
 	char			Buffer[lenBuffer];
 
@@ -48,7 +47,6 @@ void TestKeyCallback(unsigned int i_VKeyID, bool bWentDown)
 	{
 		physSystem.currKey = 0;
 	}
-#endif // __DEBUG
 }
 
 void* LoadFile(const char* i_pFilename, size_t& o_sizeFile)
@@ -337,6 +335,12 @@ void Run()
 		}
 
 	} while (bQuit == false);
+
+	renderSystem.ReleaseSprites();
+	renderSystem.Dispose();
+	physSystem.Dispose();
+
+	delete world;
 
 	// IMPORTANT:  Tell GLib to shutdown, releasing resources.
 	GLib::Shutdown();

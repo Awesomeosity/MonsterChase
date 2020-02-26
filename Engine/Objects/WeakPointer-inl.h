@@ -55,9 +55,9 @@ inline WeakPointer<T>::WeakPointer(WeakPointer&& ptr) noexcept
 template<class T>
 inline WeakPointer<T>& WeakPointer<T>::operator=(const WeakPointer& ptr)
 {
-	if (ptr == this)
+	if (ptr == *this)
 	{
-		return this;
+		return *this;
 	}
 
 	decrement();
@@ -67,15 +67,15 @@ inline WeakPointer<T>& WeakPointer<T>::operator=(const WeakPointer& ptr)
 
 	countCache->weakCount++;
 
-	return this;
+	return *this;
 }
 
 template<class T>
 inline WeakPointer<T>& WeakPointer<T>::operator=(WeakPointer&& ptr) noexcept
 {
-	if (ptr == this)
+	if (ptr == *this)
 	{
-		return this;
+		return *this;
 	}
 
 	objPtr = ptr.objPtr;
@@ -84,7 +84,7 @@ inline WeakPointer<T>& WeakPointer<T>::operator=(WeakPointer&& ptr) noexcept
 	ptr.objPtr = nullptr;
 	ptr.countCache = nullptr;
 
-	return this;
+	return *this;
 }
 
 template<class T>
@@ -224,6 +224,7 @@ inline void WeakPointer<T>::decrement()
 		if (countCache->smartCount == 0)
 		{
 			delete countCache;
+			delete objPtr;
 		}
 	}
 }
