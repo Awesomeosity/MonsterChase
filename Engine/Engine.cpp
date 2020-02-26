@@ -25,8 +25,6 @@ World* world;
 
 void initEngine()
 {
-	physSystem = Physics();
-	renderSystem = Renderable();
 	world = new World();
 }
 
@@ -337,6 +335,10 @@ void Run()
 		}
 
 	} while (bQuit == false);
+
+	physSystem.Dispose();
+	renderSystem.Dispose();
+	delete world;
 
 	// IMPORTANT:  Tell GLib to shutdown, releasing resources.
 	GLib::Shutdown();

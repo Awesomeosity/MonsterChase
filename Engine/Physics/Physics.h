@@ -28,8 +28,10 @@ public:
 	void RunPhysics(float dt_ms);
 	static void calcNewPos(float dt_ms, collidable& data, Point2D forces);
 
+	void Dispose();
+
 	int currKey = 0;
 private:
-	std::vector<collidable> collidables;
+	std::vector<SmartPointer<collidable>> collidables;
 };
 

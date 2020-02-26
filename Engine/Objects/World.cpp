@@ -5,15 +5,16 @@
 #include "../Types/Point2D.h"
 World::World()
 {
-	allObjects = std::vector<SmartPointer<GameObject>>();
 }
 
 World::~World()
 {
-	for(int i = 0; i < allObjects.size(); i++)
+	for(size_t i = 0; i < allObjects.size(); i++)
 	{
 		allObjects[i].Reset();
 	}
+
+	allObjects.clear();
 }
 
 WeakPointer<GameObject> World::AddObject()

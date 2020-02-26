@@ -19,7 +19,8 @@ class Renderable
 public:
 	void AddRenderable(WeakPointer<GameObject> gameObj, GLib::Sprites::Sprite* sprPtr);
 	void RenderAll();
+	void Dispose();
 private:
-	std::vector<renders> renderables;
+	std::vector<SmartPointer<renders>> renderables;
 };
 
