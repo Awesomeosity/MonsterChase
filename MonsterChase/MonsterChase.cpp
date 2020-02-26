@@ -275,7 +275,7 @@ void TestKeyCallback(unsigned int i_VKeyID, bool bWentDown)
 
 int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_lpCmdLine, int i_nCmdShow)
 {
-	//_CrtSetBreakAlloc();
+	//_CrtSetBreakAlloc(234);
 	unsigned short ID = 65535;
 	float playX = 10.0f;
 	float playY = 10.0f;
@@ -398,6 +398,16 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 
 		} while (bQuit == false);
 
+		if (pBadGuy)
+		{
+			GLib::Sprites::Release(pBadGuy);
+		}
+		if (pGoodGuy)
+		{
+			GLib::Sprites::Release(pGoodGuy);
+		}
+
+		delete playerPhysics;
 		// IMPORTANT:  Tell GLib to shutdown, releasing resources.
 		GLib::Shutdown();
 	}
