@@ -401,6 +401,17 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 
 		} while (bQuit == false);
 
+		if (pBadGuy)
+		{
+			GLib::Sprites::Release(pBadGuy);
+		}
+		if (pGoodGuy)
+		{
+			GLib::Sprites::Release(pGoodGuy);
+		}
+
+		delete playerPhysics;
+
 		// IMPORTANT:  Tell GLib to shutdown, releasing resources.
 		GLib::Shutdown();
 	}
