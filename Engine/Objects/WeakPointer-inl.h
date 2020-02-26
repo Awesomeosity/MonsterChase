@@ -1,5 +1,6 @@
 #pragma once
 #include "SmartPointer.h"
+#include "WeakPointer.h"
 
 template<class T>
 inline WeakPointer<T>::WeakPointer()
@@ -9,18 +10,13 @@ inline WeakPointer<T>::WeakPointer()
 }
 
 template<class T>
-inline WeakPointer<T>* WeakPointer<T>::makePointer(SmartPointer<T>* sPtr)
+inline WeakPointer<T>::WeakPointer(SmartPointer<T>& ptr)
+	: objPtr(ptr.objPtr), countCache(ptr.countCache)
 {
-	WeakPointer<T>* newPtr = new WeakPointer<T>();
-
-	newPtr->objPtr = sPtr->objPtr;
-	newPtr->countCache = sPtr->countCache;
-
-	if (newPtr->objPtr != nullptr && newPtr->countCache != nullptr)
+	if (countCache)
 	{
-		newPtr->countCache->weakCount++;
+		countCache->weakCount++;
 	}
-	return newPtr;
 }
 
 template<class T>
@@ -148,9 +144,9 @@ inline bool WeakPointer<T>::operator!=(std::nullptr_t) const
 }
 
 template<class T>
-inline SmartPointer<T>* WeakPointer<T>::Promote() const
+inline SmartPointer<T> WeakPointer<T>::Promote() const
 {
-	return new SmartPointer<T>(*this);
+	return SmartPointer<T>(*this);
 }
 
 template<class T>

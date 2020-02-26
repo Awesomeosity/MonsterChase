@@ -5,29 +5,29 @@
 #include "../Types/Point2D.h"
 World::World()
 {
-	allObjects = std::vector<SmartPointer<GameObject>*>();
+	allObjects = std::vector<SmartPointer<GameObject>>();
 }
 
 World::~World()
 {
-	for(int i = 0; i < allObjects.size(); i++)
+	for (int i = 0; i < allObjects.size(); i++)
 	{
-		allObjects[i]->Reset();
+		allObjects[i].Reset();
 	}
 }
 
-WeakPointer<GameObject>* World::AddObject()
+WeakPointer<GameObject> World::AddObject()
 {
-	SmartPointer<GameObject>* newObjPtr = new SmartPointer<GameObject>(new GameObject());
+	SmartPointer<GameObject> newObjPtr = SmartPointer<GameObject>(new GameObject());
 	allObjects.push_back(newObjPtr);
-	return WeakPointer<GameObject>::makePointer(newObjPtr);
+	return WeakPointer<GameObject>(newObjPtr);
 }
 
-WeakPointer<GameObject>* World::AddObject(Point2D pt)
+WeakPointer<GameObject> World::AddObject(Point2D pt)
 {
-	SmartPointer<GameObject>* newObjPtr = new SmartPointer<GameObject>(new GameObject(pt));
+	SmartPointer<GameObject> newObjPtr = SmartPointer<GameObject>(new GameObject(pt));
 	allObjects.push_back(newObjPtr);
-	return WeakPointer<GameObject>::makePointer(newObjPtr);
+	return WeakPointer<GameObject>(newObjPtr);
 }
 
 void World::Dispose(WeakPointer<GameObject> ptr)

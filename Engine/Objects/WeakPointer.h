@@ -8,7 +8,7 @@ template <class T>
 class WeakPointer
 {
 public:
-	static WeakPointer<T>* makePointer(SmartPointer<T>* ptr);
+	WeakPointer(SmartPointer<T>& ptr);
 	WeakPointer(const WeakPointer& ptr);
 	WeakPointer(WeakPointer&& ptr) noexcept;
 	WeakPointer& operator=(const WeakPointer& ptr);
@@ -28,7 +28,7 @@ public:
 	bool operator!=(std::nullptr_t) const;
 
 	//Generates a SmartPointer from this WeakPointer. Will convert, even if there is no valid obj pointer.
-	SmartPointer<T>* Promote() const;
+	SmartPointer<T> Promote() const;
 	void Reset();
 	void Swap(WeakPointer<T>& ptr);
 	int UseCount() const;

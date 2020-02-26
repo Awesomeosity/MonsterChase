@@ -13,7 +13,7 @@ PlayerController::PlayerController(GameObject* i_player, char* i_name, float i_s
 
 PlayerController::~PlayerController()
 {
-	delete[] name;
+	//delete[] name;
 }
 
 PlayerController::PlayerController(const PlayerController& i_controller) :
