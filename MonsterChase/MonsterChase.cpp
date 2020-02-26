@@ -302,7 +302,7 @@ void SmPtrUnitTest()
 
 int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_lpCmdLine, int i_nCmdShow)
 {
-	//_CrtSetBreakAlloc(265);
+	_CrtSetBreakAlloc(373);
 
 	{
 		float playX = 10.0f;
@@ -347,10 +347,9 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 		}
 
 		charArray.clear();
-
-
 	}
 	_CrtDumpMemoryLeaks();
+
 }
 
 int main()

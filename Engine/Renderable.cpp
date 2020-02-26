@@ -2,8 +2,7 @@
 
 void Renderable::AddRenderable(WeakPointer<GameObject> gameObj, GLib::Sprites::Sprite* sprPtr)
 {
-	SmartPointer<renders> newRender = SmartPointer<renders>(new renders(WeakPointer<GameObject>(gameObj), sprPtr));
-	renderables.push_back(newRender);
+	renderables.push_back(SmartPointer<renders>(new renders(WeakPointer<GameObject>(gameObj), sprPtr)));
 }
 
 void Renderable::RenderAll()
