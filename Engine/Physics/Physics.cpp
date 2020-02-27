@@ -5,7 +5,6 @@
 
 Physics::Physics()
 {
-	collidables = std::vector<collidable>();
 }
 
 Physics::~Physics()
@@ -19,7 +18,8 @@ Physics::~Physics()
 
 void Physics::AddCollidableObject(WeakPointer<GameObject> newObj, float mass, float kd)
 {
-	collidables.push_back(collidable(newObj, mass, kd));
+	SmartPointer<collidable> newCollid = SmartPointer<collidable>(new collidable(WeakPointer<GameObject>(newObj), mass, kd));
+	collidables.push_back(newCollid);
 }
 
 void Physics::RunPhysics(float dt_ms)
@@ -55,7 +55,7 @@ void Physics::RunPhysics(float dt_ms)
 	for(size_t i = 0; i < collidables.size(); i++)
 	{
 		//TODO: Figure out how to pass forces to physics... Soon?
-		calcNewPos(dt_ms, collidables[i], force);
+		calcNewPos(dt_ms, *(collidables[i]), force);
 	}
 }
 
@@ -81,6 +81,9 @@ void Physics::Dispose()
 {
 	for (size_t i = 0; i < collidables.size(); i++)
 	{
-		collidables[i].obj.Reset();
+		collidables[i]->obj.Reset();
+		collidables[i].Reset();
 	}
+
+	collidables.clear();
 }

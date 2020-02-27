@@ -24,6 +24,6 @@ public:
 	void RenderAll();
 	void Dispose();
 private:
-	std::vector<renders> renderables;
+	std::vector<SmartPointer<renders>> renderables;
 };
 

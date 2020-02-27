@@ -5,7 +5,6 @@
 #include "../Types/Point2D.h"
 World::World()
 {
-	allObjects = std::vector<SmartPointer<GameObject>>();
 }
 
 World::~World()

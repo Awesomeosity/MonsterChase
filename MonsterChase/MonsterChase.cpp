@@ -26,7 +26,7 @@ void inline GetMonsterCount(unsigned int* const maxMonsters)
 {
 	//TEMP: Fixed Monster Count because no input lol
 	*maxMonsters = 5;
-	
+
 	/*
 	unsigned int monsterCount = 0;
 	while (true)
@@ -93,7 +93,7 @@ void inline GameLoop(PlayerController* const player, const std::vector<IGameObje
 					//std::cout << "Quitting...\n";
 					isAlive = false;
 					break;
-				} 
+				}
 				if (!CheckPlayer(player, monsters, randoms))
 				{
 					//std::cout << "You got hit!\n";
@@ -138,7 +138,7 @@ inline GameObject* MonsterCreateLoop(const float playX, const float playY, unsig
 			//TEMP: Change this back when we get inputs
 			strcpy_s(name, 256, "bruh");
 			MonsterController* newController = new MonsterController(isActive, playX, playY, &(monsterObjs[i]), player, name);
-			
+
 			controllers->push_back(newController);
 			monsters->push_back(newController);
 		}
@@ -240,7 +240,7 @@ void SmPtrUnitTest()
 	assert(!(nullptr != smPtr_5));
 
 	assert(smPtr_1 != smPtr_7);
-	
+
 	//Weak Pointer test
 	WeakPointer<int> wkPtr_0 = WeakPointer<int>(smPtr_5);
 	WeakPointer<int> wkPtr_1 = WeakPointer<int>(smPtr_1);
@@ -253,7 +253,7 @@ void SmPtrUnitTest()
 	assert(smPtr_6.UseCount() == 3);
 	assert(smPtr_6.WeakCount() == 1);
 
-	WeakPointer<int> wkPtr_2 =  WeakPointer<int>(wkPtr_1);
+	WeakPointer<int> wkPtr_2 = WeakPointer<int>(wkPtr_1);
 	assert(wkPtr_2.WeakCount() == 2);
 	assert(wkPtr_2.Peek());
 
@@ -283,7 +283,7 @@ void SmPtrUnitTest()
 	assert(!(nullptr != wkPtr_0));
 	assert(!(wkPtr_0 != nullptr));
 
-		
+
 	wkPtr_1.Reset();
 	assert(wkPtr_2.WeakCount() == 1);
 
@@ -302,73 +302,54 @@ void SmPtrUnitTest()
 
 int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_lpCmdLine, int i_nCmdShow)
 {
-	_CrtSetBreakAlloc(342);
-	//TEMP: Floating Point Unit Test
-	//FloatCalcs::floatingUnitTest();
-	//SmPtrUnitTest();
+	_CrtSetBreakAlloc(373);
 
-	
-	/*unsigned int monsterCount = 0;
-	unsigned int* maxMonsters = &monsterCount;
-	Point2D* zero = new Point2D(0, 0);
-	GameObject* playerObj = new GameObject(*zero);
-
-	PlayerController* player = new PlayerController();
-
-	PhysicsData* playerPhysics = new PhysicsData(playerObj, 1, 0);
-
-	player->SetGameObject(playerObj);
-	player->Setup(const_cast<char*>("lmao"), playX, playY);
-	*/
-
-	float playX = 10.0f;
-	float playY = 10.0f;
-
-	unsigned short ID = 65535;
-
-	initEngine();
-	bool bSuccess = GLib::Initialize(i_hInstance, i_nCmdShow, "Monster Mash", ID, static_cast<unsigned int>(playX) * 50 * 2, static_cast<unsigned int>(playY) * 50 * 2);
-
-
-	std::vector<const char*> charArray;
-	std::string data_str_1("data\\player.json");
-	charArray.push_back(data_str_1.c_str());
-	for (size_t i = 0; i < charArray.size(); i++)
 	{
-		int* conType = new int();
-		WeakPointer<GameObject> newObj = CreateActor(charArray[i], *conType);
+		float playX = 10.0f;
+		float playY = 10.0f;
 
-		assert(*conType != -1);
+		unsigned short ID = 65535;
 
-		//TODO set up controllers to add to AI Engine
-		switch (*conType)
+		initEngine();
+		bool bSuccess = GLib::Initialize(i_hInstance, i_nCmdShow, "Monster Mash", ID, static_cast<unsigned int>(playX) * 50 * 2, static_cast<unsigned int>(playY) * 50 * 2);
+
+
+		std::vector<const char*> charArray;
+		char* chText = const_cast<char*>("data\\player.json");
+
+		charArray.push_back(chText);
+		for (size_t i = 0; i < charArray.size(); i++)
 		{
-		case 0:
-			break;
-		case 1:
-			break;
-		case 2:
-			break;
-		default:
-			break;
+			int* conType = new int();
+			WeakPointer<GameObject> newObj = CreateActor(charArray[i], *conType);
+
+			assert(*conType != -1);
+
+			//TODO set up controllers to add to AI Engine
+			switch (*conType)
+			{
+			case 0:
+				break;
+			case 1:
+				break;
+			case 2:
+				break;
+			default:
+				break;
+			}
+
+			delete conType;
 		}
 
-		delete conType;
+		if (bSuccess)
+		{
+			Run();
+		}
+
+		charArray.clear();
 	}
-
-	// IMPORTANT: first we need to initialize GLib
-	
-	if (bSuccess)
-	{
-		Run();
-	}
-
-	charArray.clear();
-
-
-	//delete playerObj;
-	//delete zero;
 	_CrtDumpMemoryLeaks();
+
 }
 
 int main()
@@ -389,7 +370,7 @@ int main()
 
 	GameObject* generated = MonsterCreateLoop(playX, playY, maxMonsters, playerObj, controllers, monsters, randoms);
 	CreatePlayer(playX, playY, player, playerObj);
-	
+
 	GameLoop(player, controllers, monsters, randoms);
 
 	for (size_t i = 0; i < controllers->size(); i++)

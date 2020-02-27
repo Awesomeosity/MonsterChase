@@ -18,16 +18,15 @@
 #include "External/nlohmann/json.hpp"
 #include "Objects/GameObject.h"
 
-unsigned int currKey = 0;
-Physics physSystem;
-Renderable renderSystem;
+Physics* physSystem;
+Renderable* renderSystem;
 World* world;
 
 void initEngine()
 {
-	physSystem = Physics();
-	renderSystem = Renderable();
 	world = new World();
+	physSystem = new Physics();
+	renderSystem = new Renderable();
 }
 
 void TestKeyCallback(unsigned int i_VKeyID, bool bWentDown)
@@ -41,11 +40,11 @@ void TestKeyCallback(unsigned int i_VKeyID, bool bWentDown)
 	if (bWentDown)
 	{
 		//TODO: Implement multiple key detection
-		physSystem.currKey = i_VKeyID;
+		physSystem->currKey = i_VKeyID;
 	}
 	else
 	{
-		physSystem.currKey = 0;
+		physSystem->currKey = 0;
 	}
 }
 
@@ -211,7 +210,7 @@ WeakPointer<GameObject> CreateActor(const char* i_pScriptFilename, int& o_contro
 		float actorMass = obJSON["collision_data"]["mass"];
 		float actorKD = obJSON["collision_data"]["kd"];
 
-		physSystem.AddCollidableObject(actorPtr, actorMass, actorKD);
+		physSystem->AddCollidableObject(actorPtr, actorMass, actorKD);
 	}
 
 	if (obJSON.contains("render_data"))
@@ -221,7 +220,7 @@ WeakPointer<GameObject> CreateActor(const char* i_pScriptFilename, int& o_contro
 		std::string sprite = obJSON["render_data"]["sprite"];
 
 		GLib::Sprites::Sprite* pSprite = CreateSprite("data\\goodguy.dds");
-		renderSystem.AddRenderable(actorPtr, pSprite);
+		renderSystem->AddRenderable(actorPtr, pSprite);
 	}
 
 	assert(obJSON.contains("name"));
@@ -279,68 +278,18 @@ void Run()
 
 		if (!bQuit)
 		{
-			Point2D force;
-			switch (currKey)
-			{
-				//W
-			case 87:
-				force = Point2D(0, 1);
-				break;
-				//S
-			case 83:
-				force = Point2D(0, -1);
-				break;
-				//A
-			case 65:
-				force = Point2D(-1, 0);
-				break;
-				//D
-			case 68:
-				force = Point2D(1, 0);
-				break;
-			case 81:
-				break;
-				//No key being held down.
-			case 0:
-			default:
-				force = Point2D(0, 0);
-				break;
-			}
-			//Reset key press each frame;
-			currKey = 0;
+			physSystem->RunPhysics(dt_ms);
 
-			//Physics
-			//Physics::calcNewPos(dt_ms, playerPhysics, force);
-			physSystem.RunPhysics(dt_ms);
-
-			//Render
-			//GLib::BeginRendering();
-			//GLib::Sprites::BeginRendering();
-			//if (pGoodGuy)
-			//{
-			//	float p_x = player->getPlayerPosition()->GetX();
-			//	float p_y = player->getPlayerPosition()->GetY();
-			//	float playerSpritePos_X = p_x * 50;
-			//	float playerSpritePos_Y = p_y * 50;
-			//
-			//	GLib::Point2D	Offset = { playerSpritePos_X, playerSpritePos_Y };
-			//
-			//	GLib::Sprites::RenderSprite(*pGoodGuy, Offset, 0);
-			//}
-
-			//GLib::Sprites::EndRendering();
-			//GLib::EndRendering();
-
-			renderSystem.RenderAll();
+			renderSystem->RenderAll();
 		}
 
 	} while (bQuit == false);
 
-	renderSystem.ReleaseSprites();
-	renderSystem.Dispose();
-	physSystem.Dispose();
-
+	physSystem->Dispose();
+	renderSystem->Dispose();
 	delete world;
+	delete physSystem;
+	delete renderSystem;
 
 	// IMPORTANT:  Tell GLib to shutdown, releasing resources.
 	GLib::Shutdown();
