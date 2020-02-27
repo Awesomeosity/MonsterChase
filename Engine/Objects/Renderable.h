@@ -1,8 +1,8 @@
 #pragma once
-#include "GLib/BasicTypes.h"
-#include "GLib/GLib.h"
-#include "Objects/WeakPointer.h"
-#include "Objects/GameObject.h"
+#include "../GLib/BasicTypes.h"
+#include "../GLib/GLib.h"
+#include "WeakPointer.h"
+#include "GameObject.h"
 #include <vector>
 struct renders
 {

@@ -105,8 +105,8 @@
     <ClInclude Include="External\nlohmann\json.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Renderable.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Objects\Renderable.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -155,8 +155,8 @@
     <ClCompile Include="Objects\World.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Renderable.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Objects\Renderable.cpp">
+      <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

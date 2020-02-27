@@ -6,6 +6,7 @@
 #include "framework.h"
 #include "GLib/BasicTypes.h"
 #include "GLib/GLib.h"
+#include "Objects/Renderable.h"
 #include "Objects/SmartPointer.h"
 #include "Objects/WeakPointer.h"
 #include "Objects/World.h"
@@ -13,7 +14,6 @@
 #include "Physics/PhysicsData.h"
 #include "Timing/Timing.h"
 #include "Types/Point2D.h"
-#include "Renderable.h"
 
 #include "External/nlohmann/json.hpp"
 #include "Objects/GameObject.h"
