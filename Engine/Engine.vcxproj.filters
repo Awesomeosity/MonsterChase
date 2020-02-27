@@ -31,6 +31,9 @@
     <Filter Include="Physics">
       <UniqueIdentifier>{08e9d619-9901-443b-ac9c-86f3f1e2fde2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="JobSystem">
+      <UniqueIdentifier>{2dc1d60c-f0e2-4a85-b9a3-80cacd318511}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -108,6 +111,9 @@
     <ClInclude Include="Objects\Renderable.h">
       <Filter>Objects</Filter>
     </ClInclude>
+    <ClInclude Include="JobSystem\JobSystem.h">
+      <Filter>JobSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -157,6 +163,9 @@
     </ClCompile>
     <ClCompile Include="Objects\Renderable.cpp">
       <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="JobSystem\JobSystem.cpp">
+      <Filter>JobSystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

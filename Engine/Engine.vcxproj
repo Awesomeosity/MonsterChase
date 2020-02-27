@@ -173,6 +173,7 @@
   <ItemGroup>
     <ClInclude Include="Containers\BitArray.h" />
     <ClInclude Include="External\nlohmann\json.hpp" />
+    <ClInclude Include="JobSystem\JobSystem.h" />
     <ClInclude Include="Objects\SmartPointer-inl.h" />
     <ClInclude Include="Objects\WeakPointer-inl.h" />
     <ClInclude Include="Physics\FloatCalcs-inl.h" />
@@ -200,6 +201,7 @@
   <ItemGroup>
     <ClCompile Include="Containers\BitArray.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="JobSystem\JobSystem.cpp" />
     <ClCompile Include="Physics\FloatCalcs.cpp" />
     <ClCompile Include="Memory\FixedSizeAllocator.cpp" />
     <ClCompile Include="Memory\HeapManager.cpp" />
