@@ -21,156 +21,6 @@
 #include "../Engine/Objects/WeakPointer.h"
 #include <vector>
 
-
-void inline GetMonsterCount(unsigned int* const maxMonsters)
-{
-	//TEMP: Fixed Monster Count because no input lol
-	*maxMonsters = 5;
-
-	/*
-	unsigned int monsterCount = 0;
-	while (true)
-	{
-		std::cout << "Please enter the initial amount of monsters: ";
-		std::cin >> monsterCount;
-
-		if (std::cin.fail() || monsterCount > UINT_MAX - 10)
-		{
-			std::cin.clear();
-			std::cin.ignore(INT_MAX, '\n');
-			std::cout << "Invalid input. Please try entering an positive integer.\n";
-		}
-		else
-		{
-			std::cin.ignore(INT_MAX, '\n');
-			*maxMonsters = monsterCount;
-			break;
-		}
-	}
-	*/
-}
-
-bool inline CheckPlayer(PlayerController* const player, std::vector<MonsterController*>* monsters, std::vector<RandomController*>* randoms)
-{
-	float playerX = player->getPlayerPosition().GetX();
-	float playerY = player->getPlayerPosition().GetY();
-
-	for (size_t i = 0; i < (*monsters).size(); i++)
-	{
-		if ((*monsters)[i]->getActive() && (*monsters)[i]->getPosition().GetX() == playerX && (*monsters)[i]->getPosition().GetY() == playerY)
-		{
-			return false;
-		}
-	}
-	for (size_t i = 0; i < (*randoms).size(); i++)
-	{
-		if ((*randoms)[i]->getActive() && (*randoms)[i]->getPosition().GetX() == playerX && (*randoms)[i]->getPosition().GetY() == playerY)
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-void inline GameLoop(PlayerController* const player, const std::vector<IGameObjectController*>* controllers, std::vector<MonsterController*>* monsters, std::vector<RandomController*>* randoms)
-{
-	float beforePosX, beforePosY, afterPosX, afterPosY;
-	bool isAlive = true;
-	while (isAlive)
-	{
-		beforePosX = player->getPlayerPosition().GetX();
-		beforePosY = player->getPlayerPosition().GetY();
-		for (size_t i = 0; i < controllers->size(); i++)
-		{
-			(*controllers)[i]->UpdateGameObject();
-			if (i == 0)
-			{
-				afterPosX = player->getPlayerPosition().GetX();
-				afterPosY = player->getPlayerPosition().GetY();
-				if (beforePosX == afterPosX && beforePosY == afterPosY)
-				{
-					//std::cout << "Quitting...\n";
-					isAlive = false;
-					break;
-				}
-				if (!CheckPlayer(player, monsters, randoms))
-				{
-					//std::cout << "You got hit!\n";
-					isAlive = false;
-					break;
-				}
-			}
-		}
-
-	}
-}
-
-inline GameObject* MonsterCreateLoop(const float playX, const float playY, unsigned int* const maxMonsters, GameObject* player, std::vector<IGameObjectController*>* controllers, std::vector<MonsterController*>* monsters, std::vector<RandomController*>* randoms)
-{
-	unsigned int i = 0;
-	bool isActive = false;
-	GetMonsterCount(maxMonsters);
-	//std::cout << *maxMonsters << " is the initial amount of monsters.\n";
-	GameObject* monsterObjs = new GameObject[*maxMonsters + 10];
-	for (; i < *maxMonsters + 10; i++)
-	{
-		char* name = new char[256]();
-
-		if (isActive)
-		{
-			//TEMP: Change this back when we get inputs
-			//std::cout << "Please enter Monster #" << i - 9 << "'s name: ";
-			//GetName(name);
-		}
-		else
-		{
-			char beginning[256] = "Monster #";
-			char buffer[256];
-			buffer[0] = '\0';
-			_itoa_s(i, buffer, 10);
-			strcat_s(beginning, buffer);
-			strcpy_s(name, 256, beginning);
-		}
-
-		if (rand() / (RAND_MAX / 2) == 0)
-		{
-			//TEMP: Change this back when we get inputs
-			strcpy_s(name, 256, "bruh");
-			MonsterController* newController = new MonsterController(isActive, playX, playY, &(monsterObjs[i]), player, name);
-
-			controllers->push_back(newController);
-			monsters->push_back(newController);
-		}
-		else
-		{
-			RandomController* newController = new RandomController(isActive, playX, playY, &(monsterObjs[i]), name);
-			controllers->push_back(newController);
-			randoms->push_back(newController);
-		}
-
-		if (i == 9)
-		{
-			isActive = true;
-		}
-	}
-
-	return monsterObjs;
-}
-
-
-
-void inline CreatePlayer(const float playX, const float playY, PlayerController* player, GameObject* playerObj)
-{
-	//TEMP: Change this back when we get inputs
-	char* playerName = new char[256]();
-	strcpy_s(playerName, 256, "bruh");
-	//GetName(playerName);
-	player->SetGameObject(playerObj);
-	player->Setup(playerName, playX, playY);
-}
-
-
 void SmPtrUnitTest()
 {
 	SmartPointer<int> smPtr_0 = SmartPointer<int>();
@@ -298,8 +148,6 @@ void SmPtrUnitTest()
 	assert(smPtr_6.WeakCount() == 0);
 }
 
-
-
 int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_lpCmdLine, int i_nCmdShow)
 {
 	//_CrtSetBreakAlloc(373);
@@ -310,7 +158,7 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 
 		unsigned short ID = 65535;
 
-		initEngine();
+		Engine::initEngine();
 		bool bSuccess = GLib::Initialize(i_hInstance, i_nCmdShow, "Monster Mash", ID, static_cast<unsigned int>(playX) * 50 * 2, static_cast<unsigned int>(playY) * 50 * 2);
 
 
@@ -321,7 +169,7 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 		for (size_t i = 0; i < charArray.size(); i++)
 		{
 			int* conType = new int();
-			WeakPointer<GameObject> newObj = CreateActor(charArray[i], *conType);
+			WeakPointer<GameObject> newObj = Engine::CreateActor(charArray[i], *conType);
 
 			assert(*conType != -1);
 
@@ -343,7 +191,7 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 
 		if (bSuccess)
 		{
-			Run();
+			Engine::Run();
 		}
 
 		charArray.clear();
@@ -351,54 +199,3 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 	_CrtDumpMemoryLeaks();
 
 }
-
-int main()
-{
-	float playX = 10.0f;
-	float playY = 10.0f;
-	unsigned int monsterCount = 0;
-	unsigned int* maxMonsters = &monsterCount;
-	Point2D* zero = new Point2D(0, 0);
-	GameObject* playerObj = new GameObject(*zero);
-	std::vector<IGameObjectController*>* controllers = new std::vector<IGameObjectController*>();
-	std::vector<MonsterController*>* monsters = new std::vector<MonsterController*>();
-	std::vector<RandomController*>* randoms = new std::vector<RandomController*>();
-
-	PlayerController* player = new PlayerController();
-	controllers->push_back(player);
-
-
-	GameObject* generated = MonsterCreateLoop(playX, playY, maxMonsters, playerObj, controllers, monsters, randoms);
-	CreatePlayer(playX, playY, player, playerObj);
-
-	GameLoop(player, controllers, monsters, randoms);
-
-	for (size_t i = 0; i < controllers->size(); i++)
-	{
-		delete (*controllers)[i];
-	}
-	delete controllers;
-	delete monsters;
-	delete randoms;
-	delete playerObj;
-	delete zero;
-	delete[] generated;
-	_CrtDumpMemoryLeaks();
-
-#pragma warning (disable: 6031)
-	_getch();
-#pragma warning (disable: 6031)
-
-	return 0;
-}
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
