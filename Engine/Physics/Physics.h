@@ -22,14 +22,11 @@ struct collidable
 class Physics
 {
 public:
-	Physics();
 	~Physics();
 
 	void AddCollidableObject(WeakPointer<GameObject> newObj, float mass, float kd);
 	void RunPhysics(float dt_ms);
 	static void calcNewPos(float dt_ms, collidable& data, Point2D forces);
-	void Dispose();
-
 	void Dispose();
 
 	int currKey = 0;

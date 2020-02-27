@@ -17,7 +17,6 @@ struct renders
 class Renderable
 {
 public:
-	Renderable();
 	~Renderable();
 	void AddRenderable(WeakPointer<GameObject> gameObj, GLib::Sprites::Sprite* sprPtr);
 	void ReleaseSprites();

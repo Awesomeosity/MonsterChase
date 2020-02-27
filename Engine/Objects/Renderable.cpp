@@ -1,15 +1,10 @@
 #include "Renderable.h"
 
-Renderable::Renderable()
-{
-	renderables = std::vector<renders>();
-}
-
 Renderable::~Renderable()
 {
 	for (size_t i = 0; i < renderables.size(); i++)
 	{
-		renderables[i].gameObj.Reset();
+		renderables[i]->gameObj.Reset();
 	}
 
 	renderables.clear();
@@ -24,9 +19,9 @@ void Renderable::ReleaseSprites()
 {
 	for (size_t i = 0; i < renderables.size(); i++)
 	{
-		if (renderables[i].sprPtr)
+		if (renderables[i]->sprPtr)
 		{
-			GLib::Sprites::Release(renderables[i].sprPtr);
+			GLib::Sprites::Release(renderables[i]->sprPtr);
 		}
 	}
 }

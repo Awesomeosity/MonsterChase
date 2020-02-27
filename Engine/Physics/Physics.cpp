@@ -3,15 +3,11 @@
 #include "../Objects/SmartPointer.h"
 #include "../Types/Point2D.h"
 
-Physics::Physics()
-{
-}
-
 Physics::~Physics()
 {
 	for (size_t i = 0; i < collidables.size(); i++)
 	{
-		collidables[i].obj.Reset();
+		collidables[i]->obj.Reset();
 	}
 
 }
