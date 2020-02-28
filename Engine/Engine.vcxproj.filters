@@ -114,6 +114,12 @@
     <ClInclude Include="JobSystem\JobSystem.h">
       <Filter>JobSystem</Filter>
     </ClInclude>
+    <ClInclude Include="JobSystem\JobQueue.h">
+      <Filter>JobSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="JobSystem\JobRunner.h">
+      <Filter>JobSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -165,6 +171,12 @@
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="JobSystem\JobSystem.cpp">
+      <Filter>JobSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="JobSystem\JobQueue.cpp">
+      <Filter>JobSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="JobSystem\\JobRunner.cpp">
       <Filter>JobSystem</Filter>
     </ClCompile>
   </ItemGroup>
