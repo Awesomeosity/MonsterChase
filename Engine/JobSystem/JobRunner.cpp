@@ -16,17 +16,17 @@ namespace Engine
 			bool finished = false;
 			do
 			{
-				struct Job* newJob = threadQueue->getNewJob();
+				struct Job* newJob = threadQueue->GetNewJob();
 				if (newJob)
 				{
 					newJob->Function();
 					delete newJob;
 					
 					//Report to queue that job was finished
-					threadQueue->reportFinished();
+					threadQueue->ReportFinished();
 				}
 
-				finished = ShutdownRequest();
+				finished = ShutdownRequested();
 			} while (!finished);
 			return 0;
 		}

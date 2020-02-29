@@ -16,8 +16,8 @@ namespace Engine
 			}
 		};
 
-		void CreateQueue();
-		void RunJob();
+		void CreateQueue(const std::string i_queueName, unsigned int i_numRunners);
+		void RunJob(const std::string i_jobName, const std::string i_queueName, std::function<void()> i_jobFunction);
 		void RequestShutdown();
 		bool ShutdownRequested();
 	};
