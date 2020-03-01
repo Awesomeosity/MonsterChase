@@ -56,13 +56,70 @@ namespace Engine
 			newRunner->threadQueue.queueHolder = &(allQueues[i_queueName]->queue);
 
 			newRunner->threadHandle = CreateThread(NULL, 0, doJob, &(newRunner->threadQueue), CREATE_SUSPENDED, &newRunner->threadID);
+
+			ResumeThread(newRunner->threadHandle);
+		}
+
+		void RunJob(const std::string i_queueName, std::function<void()> i_jobFunction)
+		{
+			auto iter = allQueues.find(i_queueName);
+			iter->second->queue.AddJobs(new Job(i_jobFunction));
 		}
 
 		void RequestShutdown()
 		{
 			shutdownSet = true;
+			std::vector<HANDLE> allThreads;
 
+			auto iter = allQueues.begin();
 
+			//Grab all Thread Handles
+			while (iter != allQueues.end())
+			{
+				if (iter->second)
+				{
+					iter->second->queue.ShutdownRequest();
+					const size_t count = iter->second->queueRunners.size();
+
+					for (size_t i = 0; i < count; i++)
+					{
+						JobRunnerData* runner = iter->second->queueRunners[i];
+						if (runner && runner->threadHandle != NULL)
+						{
+							allThreads.push_back(runner->threadHandle);
+						}
+					}
+
+					iter++;
+				}
+			}
+
+			//Wait for all Threads to finish
+			DWORD result = WaitForMultipleObjects(static_cast<DWORD>(allThreads.size()), &allThreads[0], TRUE, INFINITE);
+			assert(result == WAIT_OBJECT_0);
+
+			//Delete Runner Data pointers
+			iter = allQueues.begin();
+			while (iter != allQueues.end())
+			{
+				if (iter->second)
+				{
+					const size_t count = iter->second->queueRunners.size();
+
+					for (size_t i = 0; i < count; i++)
+					{
+						JobRunnerData* runner = iter->second->queueRunners[i];
+						if (runner)
+						{
+							delete runner;
+						}
+
+						delete iter->second;
+					}
+				}
+			}
+
+			allQueues.clear();
 		}
 
 		bool ShutdownRequested()

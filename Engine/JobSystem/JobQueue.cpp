@@ -11,6 +11,7 @@ namespace Engine
 			InitializeConditionVariable(&checkForJobs);
 			InitializeCriticalSection(&queueModification);
 		}
+
 		bool JobQueue::AddJobs(Job* i_newJob)
 		{
 			assert(i_newJob);
@@ -34,15 +35,15 @@ namespace Engine
 
 		bool JobQueue::HasJobs()
 		{
-			bool retBool = true;
+			bool hasJob = true;
 			EnterCriticalSection(&queueModification);
 			if (!runningJob && queueJobs.empty())
 			{
-				retBool = false;
+				hasJob = false;
 			}
 			LeaveCriticalSection(&queueModification);
 
-			return retBool;
+			return hasJob;
 		}
 
 		Job* JobQueue::GetNewJob()
@@ -61,7 +62,7 @@ namespace Engine
 				}
 			}
 
-			if (!queueJobs.empty)
+			if (!queueJobs.empty())
 			{
 				retJob = queueJobs.front();
 				queueJobs.pop();
