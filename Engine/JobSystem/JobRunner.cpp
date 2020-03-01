@@ -8,9 +8,9 @@ namespace Engine
 		DWORD __stdcall doJob(void* i_threadInput)
 		{
 			assert(i_threadInput);
-			assert(((RunnerData*)i_threadInput)->queueHolder);
+			assert(((RunnerQueue*)i_threadInput)->queueHolder);
 
-			RunnerData* threadData = reinterpret_cast<RunnerData*>(i_threadInput);
+			RunnerQueue* threadData = reinterpret_cast<RunnerQueue*>(i_threadInput);
 			JobQueue* threadQueue = reinterpret_cast<JobQueue*>(threadData->queueHolder);
 
 			bool finished = false;

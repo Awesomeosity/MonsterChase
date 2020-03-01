@@ -1,5 +1,6 @@
 #pragma once
 #include <functional>
+#include <string>
 
 namespace Engine
 {
@@ -16,7 +17,10 @@ namespace Engine
 			}
 		};
 
-		void CreateQueue(const std::string i_queueName, unsigned int i_numRunners);
+		void CreateQueue(std::string i_queueName, unsigned int i_numRunners);
+		bool HasJobs(const std::string& i_queueName);
+		void AddRunner(const std::string& i_queueName);
+		
 		void RunJob(const std::string i_jobName, const std::string i_queueName, std::function<void()> i_jobFunction);
 		void RequestShutdown();
 		bool ShutdownRequested();

@@ -5,13 +5,9 @@ namespace Engine
 {
 	namespace JobSystem
 	{
-		struct RunnerData
+		struct RunnerQueue
 		{
 			JobQueue* queueHolder; //The queue that this runner is attached to
-
-#if _DEBUG
-			std::string identifier;
-#endif
 		};
 
 		DWORD WINAPI doJob(void* i_threadInput);
