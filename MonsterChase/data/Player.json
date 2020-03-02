@@ -6,6 +6,6 @@
     "kd": 0.001
   },
   "render_data": {
-    "sprite": "data\\goodguy.dds"
+    "sprite": "data\\GoodGuy.dds"
   }
 }

@@ -1,4 +1,8 @@
 #include "Renderable.h"
+Renderable::Renderable()
+{
+	InitializeCriticalSection(&queueModification);
+}
 
 Renderable::~Renderable()
 {
@@ -12,7 +16,9 @@ Renderable::~Renderable()
 
 void Renderable::AddRenderable(WeakPointer<GameObject> gameObj, GLib::Sprites::Sprite* sprPtr)
 {
+	EnterCriticalSection(&queueModification);
 	renderables.push_back(SmartPointer<renders>(new renders(WeakPointer<GameObject>(gameObj), sprPtr)));
+	LeaveCriticalSection(&queueModification);
 }
 
 void Renderable::ReleaseSprites()
@@ -34,8 +40,8 @@ void Renderable::RenderAll()
 	{
 		float p_x = renderables[i]->gameObj->GetPoint().GetX();
 		float p_y = renderables[i]->gameObj->GetPoint().GetY();
-		float spritePos_X = p_x * 50;
-		float spritePos_Y = p_y * 50;
+		float spritePos_X = p_x * 1;
+		float spritePos_Y = p_y * 1;
 
 		GLib::Point2D	Offset = { spritePos_X, spritePos_Y };
 

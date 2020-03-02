@@ -207,9 +207,9 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 
 
 		std::vector<const char*> charArray;
-		char* chText = const_cast<char*>("data\\player.json");
+		charArray.push_back("data\\Player.json");
 
-		charArray.push_back(chText);
+		charArray.push_back("data\\Enemy.json");
 
 		makeGameObjs(charArray);
 

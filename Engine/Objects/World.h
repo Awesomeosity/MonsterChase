@@ -3,6 +3,8 @@
 #include "../Types/Point2D.h"
 #include "SmartPointer.h"
 #include "WeakPointer.h"
+#include <Windows.h>
+
 class GameObject;
 
 class World
@@ -24,5 +26,6 @@ public:
 	void Dispose(WeakPointer<GameObject> ptr);
 private:
 	std::vector<SmartPointer<GameObject>> allObjects;
+	mutable CRITICAL_SECTION queueModification;
 };
 

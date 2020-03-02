@@ -17,6 +17,7 @@ struct renders
 class Renderable
 {
 public:
+	Renderable();
 	~Renderable();
 	void AddRenderable(WeakPointer<GameObject> gameObj, GLib::Sprites::Sprite* sprPtr);
 	void ReleaseSprites();
@@ -24,5 +25,6 @@ public:
 	void Dispose();
 private:
 	std::vector<SmartPointer<renders>> renderables;
+	mutable CRITICAL_SECTION queueModification;
 };
 

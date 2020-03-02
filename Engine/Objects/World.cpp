@@ -5,6 +5,7 @@
 #include "../Types/Point2D.h"
 World::World()
 {
+	InitializeCriticalSection(&queueModification);
 }
 
 World::~World()
@@ -20,14 +21,20 @@ World::~World()
 WeakPointer<GameObject> World::AddObject()
 {
 	SmartPointer<GameObject> newObjPtr = SmartPointer<GameObject>(new GameObject());
+	EnterCriticalSection(&queueModification);
 	allObjects.push_back(newObjPtr);
+	LeaveCriticalSection(&queueModification);
+
 	return WeakPointer<GameObject>(newObjPtr);
 }
 
 WeakPointer<GameObject> World::AddObject(Point2D pt)
 {
 	SmartPointer<GameObject> newObjPtr = SmartPointer<GameObject>(new GameObject(pt));
+	EnterCriticalSection(&queueModification);
 	allObjects.push_back(newObjPtr);
+	LeaveCriticalSection(&queueModification);
+
 	return WeakPointer<GameObject>(newObjPtr);
 }
 

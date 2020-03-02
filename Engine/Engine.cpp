@@ -214,7 +214,7 @@ namespace Engine
 
 			std::string sprite = obJSON["render_data"]["sprite"];
 
-			GLib::Sprites::Sprite* pSprite = CreateSprite("data\\goodguy.dds");
+			GLib::Sprites::Sprite* pSprite = CreateSprite(sprite.c_str());
 			renderSystem->AddRenderable(actorPtr, pSprite);
 		}
 

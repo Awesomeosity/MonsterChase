@@ -2,6 +2,10 @@
 #include "../Objects/GameObject.h"
 #include "../Objects/SmartPointer.h"
 #include "../Types/Point2D.h"
+Physics::Physics()
+{
+	InitializeCriticalSection(&queueModification);
+}
 
 Physics::~Physics()
 {
@@ -14,8 +18,10 @@ Physics::~Physics()
 
 void Physics::AddCollidableObject(WeakPointer<GameObject> newObj, float mass, float kd)
 {
+	EnterCriticalSection(&queueModification);
 	SmartPointer<collidable> newCollid = SmartPointer<collidable>(new collidable(WeakPointer<GameObject>(newObj), mass, kd));
 	collidables.push_back(newCollid);
+	LeaveCriticalSection(&queueModification);
 }
 
 void Physics::RunPhysics(float dt_ms)
