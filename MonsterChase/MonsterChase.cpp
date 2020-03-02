@@ -19,6 +19,8 @@
 #include "../Engine/Types/Point2D.h"
 #include "../Engine/Objects/SmartPointer.h"
 #include "../Engine/Objects/WeakPointer.h"
+#include "../Engine/JobSystem/JobSystem.h"
+
 #include <vector>
 
 void SmPtrUnitTest()
@@ -146,6 +148,41 @@ void SmPtrUnitTest()
 
 	assert(smPtr_6.UseCount() == 3);
 	assert(smPtr_6.WeakCount() == 0);
+}
+
+void gameObjHandler(const char* i_fileName)
+{
+	int* controllerType = new int();
+	WeakPointer<GameObject> newObj = Engine::CreateActor(i_fileName, *controllerType);
+	assert(*controllerType != -1);
+
+	//TODO set up controllers to add to AI Engine
+	switch (*controllerType)
+	{
+	case 0:
+		break;
+	case 1:
+		break;
+	case 2:
+		break;
+	default:
+		break;
+	}
+
+	delete controllerType;
+}
+
+void makeGameObjs(std::vector<const char*> i_fileNames)
+{
+	Engine::JobSystem::CreateQueue("OBJMaker", 4);
+
+	for (size_t i = 0; i < i_fileNames.size(); i++)
+	{
+		const char* fileName = i_fileNames[i];
+		Engine::JobSystem::RunJob("OBJMaker", [fileName](const char* fileName) {
+			gameObjHandler(fileName);
+		});
+	}
 }
 
 int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_lpCmdLine, int i_nCmdShow)

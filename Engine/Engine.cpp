@@ -166,13 +166,6 @@ namespace Engine
 		return Buffer;
 	}
 
-
-	void fnEngine()
-	{
-		std::cout << "Engine Test\n";
-
-	}
-
 	void GetName(char* name)
 	{
 		while (true)
@@ -260,7 +253,6 @@ namespace Engine
 
 	void Run()
 	{
-		//GLib::Sprites::Sprite* pGoodGuy = CreateSprite("data\\GoodGuy.dds");
 		GLib::SetKeyStateChangeCallback(TestKeyCallback);
 
 		Timing::startTime();
@@ -274,9 +266,6 @@ namespace Engine
 			float dt_ms = (float)dt / 1000.0f;
 
 			GLib::Service(bQuit);
-
-			//TODO: Get Input
-
 
 			if (!bQuit)
 			{
