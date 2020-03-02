@@ -179,15 +179,22 @@ void makeGameObjs(std::vector<const char*> i_fileNames)
 	for (size_t i = 0; i < i_fileNames.size(); i++)
 	{
 		const char* fileName = i_fileNames[i];
-		Engine::JobSystem::RunJob("OBJMaker", [fileName](const char* fileName) {
+		Engine::JobSystem::RunJob("OBJMaker", [fileName]() {
 			gameObjHandler(fileName);
 		});
 	}
+
+	do
+	{
+		Sleep(10);
+	} while (Engine::JobSystem::HasJobs("OBJMaker"));
+
+	Engine::JobSystem::RequestShutdown();
 }
 
 int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_lpCmdLine, int i_nCmdShow)
 {
-	//_CrtSetBreakAlloc(373);
+	_CrtSetBreakAlloc(216);
 
 	{
 		float playX = 10.0f;
@@ -203,28 +210,8 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 		char* chText = const_cast<char*>("data\\player.json");
 
 		charArray.push_back(chText);
-		for (size_t i = 0; i < charArray.size(); i++)
-		{
-			int* conType = new int();
-			WeakPointer<GameObject> newObj = Engine::CreateActor(charArray[i], *conType);
 
-			assert(*conType != -1);
-
-			//TODO set up controllers to add to AI Engine
-			switch (*conType)
-			{
-			case 0:
-				break;
-			case 1:
-				break;
-			case 2:
-				break;
-			default:
-				break;
-			}
-
-			delete conType;
-		}
+		makeGameObjs(charArray);
 
 		if (bSuccess)
 		{

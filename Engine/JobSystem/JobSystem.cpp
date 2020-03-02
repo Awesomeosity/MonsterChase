@@ -22,15 +22,15 @@ namespace Engine
 			std::vector<JobRunnerData*> queueRunners;
 		};
 
-		bool shutdownSet = false;
-		std::map<std::string, JobQueueData*> allQueues;
+		bool* shutdownSet = new bool(false);
+		std::map<std::string, JobQueueData*>* allQueues = new std::map<std::string, JobQueueData*>();
 
 		void CreateQueue(std::string i_queueName, unsigned int i_numRunners)
 		{
-			assert(allQueues.find(i_queueName) == allQueues.end());
+			assert(allQueues->find(i_queueName) == allQueues->end());
 			JobQueueData* newQueue = new JobQueueData();
 
-			allQueues[i_queueName] = newQueue;
+			(*allQueues)[i_queueName] = newQueue;
 
 			for (size_t i = 0; i < i_numRunners; i++)
 			{
@@ -40,20 +40,20 @@ namespace Engine
 
 		bool HasJobs(const std::string& i_queueName)
 		{
-			if (allQueues.find(i_queueName) == allQueues.end())
+			if (allQueues->find(i_queueName) == allQueues->end())
 			{
 				return false;
 			}
 
-			return allQueues[i_queueName]->queue.HasJobs();
+			return (*allQueues)[i_queueName]->queue.HasJobs();
 		}
 
 		void AddRunner(const std::string& i_queueName)
 		{
 			JobRunnerData* newRunner = new JobRunnerData();
-			allQueues[i_queueName]->queueRunners.push_back(newRunner);
+			(*allQueues)[i_queueName]->queueRunners.push_back(newRunner);
 
-			newRunner->threadQueue.queueHolder = &(allQueues[i_queueName]->queue);
+			newRunner->threadQueue.queueHolder = &((*allQueues)[i_queueName]->queue);
 
 			newRunner->threadHandle = CreateThread(NULL, 0, doJob, &(newRunner->threadQueue), CREATE_SUSPENDED, &newRunner->threadID);
 
@@ -62,19 +62,19 @@ namespace Engine
 
 		void RunJob(const std::string i_queueName, std::function<void()> i_jobFunction)
 		{
-			auto iter = allQueues.find(i_queueName);
+			auto iter = allQueues->find(i_queueName);
 			iter->second->queue.AddJobs(new Job(i_jobFunction));
 		}
 
 		void RequestShutdown()
 		{
-			shutdownSet = true;
+			*shutdownSet = true;
 			std::vector<HANDLE> allThreads;
 
-			auto iter = allQueues.begin();
+			auto iter = allQueues->begin();
 
 			//Grab all Thread Handles
-			while (iter != allQueues.end())
+			while (iter != allQueues->end())
 			{
 				if (iter->second)
 				{
@@ -99,8 +99,8 @@ namespace Engine
 			assert(result == WAIT_OBJECT_0);
 
 			//Delete Runner Data pointers
-			iter = allQueues.begin();
-			while (iter != allQueues.end())
+			iter = allQueues->begin();
+			while (iter != allQueues->end())
 			{
 				if (iter->second)
 				{
@@ -114,12 +114,18 @@ namespace Engine
 							delete runner;
 						}
 
-						delete iter->second;
 					}
+
+					delete iter->second;
 				}
+
+				iter++;
 			}
 
-			allQueues.clear();
+			allQueues->clear();
+
+			delete shutdownSet;
+			delete allQueues;
 		}
 
 		bool ShutdownRequested()
