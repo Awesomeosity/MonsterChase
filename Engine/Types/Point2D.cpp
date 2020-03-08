@@ -1,6 +1,6 @@
 #include "Point2D.h"
 #include "../Physics/FloatCalcs.h"
-#include <cassert>
+#include <assert.h>
 
 Point2D::Point2D()
 	:_X(0), _Y(0)

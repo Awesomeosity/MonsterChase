@@ -1,5 +1,5 @@
-#include "Point2D.h"
 #pragma once
+#include "Point2D.h"
 inline Point2D Point2D::operator=(const Point2D& i_point)
 {
 	if (*this == i_point)
