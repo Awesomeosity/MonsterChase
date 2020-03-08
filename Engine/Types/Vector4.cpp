@@ -123,3 +123,4 @@ void Vector4::SetW(const float value)
 	assert(!FloatCalcs::isNaN(value));
 	_W = value;
 }
+

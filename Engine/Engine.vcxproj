@@ -199,6 +199,8 @@
     <ClInclude Include="Types\Point2D.h" />
     <ClInclude Include="Objects\WeakPointer.h" />
     <ClInclude Include="Objects\World.h" />
+    <ClInclude Include="Types\Vector4-inl.h" />
+    <ClInclude Include="Types\Vector4.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Containers\BitArray.cpp" />
@@ -225,6 +227,7 @@
     <ClCompile Include="Types\Point2D.cpp" />
     <ClCompile Include="Objects\WeakPointer.cpp" />
     <ClCompile Include="Objects\World.cpp" />
+    <ClCompile Include="Types\Vector4.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
