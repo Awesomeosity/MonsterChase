@@ -88,7 +88,7 @@ void Matrix4::Transpose()
 	swap(11, 14);
 }
 
-Matrix4 Matrix4::GenerateTranspose()
+Matrix4 Matrix4::GenerateTranspose() const
 {
 	return Matrix4(values[0], values[4], values[8], values[12],
 					values[1], values[5], values[9], values[13],
@@ -98,15 +98,48 @@ Matrix4 Matrix4::GenerateTranspose()
 
 void Matrix4::Invert()
 {
+	assert(FloatCalcs::isZero(values[12]));
+	assert(FloatCalcs::isZero(values[13]));
+	assert(FloatCalcs::isZero(values[14]));
+	assert(FloatCalcs::relativeEquality(values[15], 1.0f));
 	if (FloatCalcs::isZero(values[12]) && FloatCalcs::isZero(values[13]) && FloatCalcs::isZero(values[14]) && FloatCalcs::relativeEquality(values[15], 1.0f))
 	{
+		float tx_1 = -values[0] * values[3] - values[1] * values[7] - values[2] * values[11];
+		float tx_2 = -values[4] * values[3] - values[5] * values[7] - values[6] * values[11];
+		float tx_3 = -values[8] * values[3] - values[9] * values[7] - values[10] * values[11];
 
+		swap(1, 4);
+		swap(2, 8);
+		swap(6, 9);
+
+		values[3] = tx_1;
+		values[7] = tx_2;
+		values[11] = tx_3;
 	}
 }
 
-Matrix4 Matrix4::GenerateInvert()
+Matrix4 Matrix4::GenerateInvert() const
 {
-	return Matrix4();
+	assert(FloatCalcs::isZero(values[12]));
+	assert(FloatCalcs::isZero(values[13]));
+	assert(FloatCalcs::isZero(values[14]));
+	assert(FloatCalcs::relativeEquality(values[15], 1.0f));
+
+	float tx_1 = 0.0f;
+	float tx_2 = 0.0f;
+	float tx_3 = 0.0f;
+
+	if (FloatCalcs::isZero(values[12]) && FloatCalcs::isZero(values[13]) && FloatCalcs::isZero(values[14]) && FloatCalcs::relativeEquality(values[15], 1.0f))
+	{
+		tx_1 = -values[0] * values[3] - values[1] * values[7] - values[2] * values[11];
+		tx_2 = -values[4] * values[3] - values[5] * values[7] - values[6] * values[11];
+		tx_3 = -values[8] * values[3] - values[9] * values[7] - values[10] * values[11];
+	}
+
+	return Matrix4(values[0], values[4], values[8], tx_1, 
+					values[1], values[5], values[9], tx_2,
+					values[2], values[6], values[10], tx_3,
+					0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 void Matrix4::swap(int index_1, int index_2)

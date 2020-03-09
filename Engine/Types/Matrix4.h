@@ -14,6 +14,7 @@ public:
 	Matrix4(Matrix4&& i_matrix) noexcept;
 	Matrix4& operator=(Matrix4&& i_matrix) noexcept;
 
+	inline Matrix4 operator=(const Matrix4& i_matrix);
 	inline Matrix4 operator+=(const Matrix4& i_matrix);
 	inline Matrix4 operator-=(const Matrix4& i_matrix);
 	inline Matrix4 operator*=(const float i_scalar);
@@ -24,13 +25,12 @@ public:
 	friend inline Matrix4 operator*(const Matrix4& i_m, const float scalar);
 	friend inline Matrix4 operator*(const float scalar, const Matrix4& i_m);
 	friend inline Matrix4 operator/(const Matrix4& i_m, const float scalar);
-	friend inline Matrix4 operator/(const float scalar, const Matrix4& i_m);
-	friend inline Matrix4 operator==(const Matrix4& i_m1, const Matrix4& i_m2);
-	friend inline Matrix4 operator!=(const Matrix4& i_m1, const Matrix4& i_m2);
+	friend inline bool operator==(const Matrix4& i_m1, const Matrix4& i_m2);
+	friend inline bool operator!=(const Matrix4& i_m1, const Matrix4& i_m2);
 
 	//Matrix multiplication
-	friend inline Matrix4 operator*(const Matrix4& i_m, const Vector4& i_v);
-	friend inline Matrix4 operator*(const Vector4& i_v, const Matrix4& i_m);
+	friend inline Vector4 operator*(const Matrix4& i_m, const Vector4& i_v);
+	friend inline Vector4 operator*(const Vector4& i_v, const Matrix4& i_m);
 
 	//Static functions for generating matrices based on given values
 	static Matrix4 GenerateRotationMatrix(const float angle);
@@ -39,13 +39,13 @@ public:
 	
 	//Transpose and Inversion
 	void Transpose();
-	Matrix4 GenerateTranspose();
+	Matrix4 GenerateTranspose() const;
 
 	void Invert();
-	Matrix4 GenerateInvert();
+	Matrix4 GenerateInvert() const;
 
 	//General access
-	inline float operator()();
+	inline float operator()(unsigned int x, unsigned int y);
 private:
 	void swap(int index_1, int index_2);
 	std::array<float, 16> values;
@@ -56,11 +56,10 @@ inline Matrix4 operator-(const Matrix4& i_m1, const Matrix4& i_m2);
 inline Matrix4 operator*(const Matrix4& i_m, const float scalar);
 inline Matrix4 operator*(const float scalar, const Matrix4& i_m);
 inline Matrix4 operator/(const Matrix4& i_m, const float scalar);
-inline Matrix4 operator/(const float scalar, const Matrix4& i_m);
-inline Matrix4 operator==(const Matrix4& i_m1, const Matrix4& i_m2);
-inline Matrix4 operator!=(const Matrix4& i_m1, const Matrix4& i_m2);
+inline bool operator==(const Matrix4& i_m1, const Matrix4& i_m2);
+inline bool operator!=(const Matrix4& i_m1, const Matrix4& i_m2);
 
 //Matrix multiplication
-inline Matrix4 operator*(const Matrix4& i_m, const Vector4& i_v);
-inline Matrix4 operator*(const Vector4& i_v, const Matrix4& i_m);
+inline Vector4 operator*(const Matrix4& i_m, const Vector4& i_v);
+inline Vector4 operator*(const Vector4& i_v, const Matrix4& i_m);
 #include "Matrix4-inl.h"
