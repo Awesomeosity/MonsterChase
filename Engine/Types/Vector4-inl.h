@@ -64,11 +64,7 @@ inline Vector4 Vector4::operator*=(const float i_scalar)
 
 inline Vector4 Vector4::operator/=(const float i_scalar)
 {
-	if (FloatCalcs::isZero(i_scalar))
-	{
-		return;
-	}
-
+	assert(!FloatCalcs::isZero(i_scalar));
 	assert(!FloatCalcs::isNaN(i_scalar));
 	_X /= i_scalar;
 	_Y /= i_scalar;
@@ -150,7 +146,7 @@ inline Vector4 operator*(const Vector4& i_v1, const Vector4& i_v2)
 inline Vector4 operator/(const Vector4& i_v1, const float i_scalar)
 {
 	assert(!FloatCalcs::isNaN(i_scalar));
-	assert(i_scalar != 0);
+	assert(!FloatCalcs::isZero(i_scalar));
 	return Vector4(i_v1.GetX() / i_scalar,
 		i_v1.GetY() / i_scalar,
 		i_v1.GetZ() / i_scalar,
