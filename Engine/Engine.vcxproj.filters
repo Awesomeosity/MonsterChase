@@ -126,6 +126,12 @@
     <ClInclude Include="Types\Vector4-inl.h">
       <Filter>Types</Filter>
     </ClInclude>
+    <ClInclude Include="Types\Matrix4.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Matrix4-inl.h">
+      <Filter>Types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -186,6 +192,9 @@
       <Filter>JobSystem</Filter>
     </ClCompile>
     <ClCompile Include="Types\Vector4.cpp">
+      <Filter>Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Types\Matrix4.cpp">
       <Filter>Types</Filter>
     </ClCompile>
   </ItemGroup>

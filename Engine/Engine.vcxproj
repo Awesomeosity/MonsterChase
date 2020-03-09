@@ -195,6 +195,8 @@
     <ClInclude Include="Objects\SmartPointer.h" />
     <ClInclude Include="Objects\Renderable.h" />
     <ClInclude Include="Timing\Timing.h" />
+    <ClInclude Include="Types\Matrix4-inl.h" />
+    <ClInclude Include="Types\Matrix4.h" />
     <ClInclude Include="Types\Point2D-inl.h" />
     <ClInclude Include="Types\Point2D.h" />
     <ClInclude Include="Objects\WeakPointer.h" />
@@ -224,6 +226,7 @@
     <ClCompile Include="Objects\SmartPointer.cpp" />
     <ClCompile Include="Objects\Renderable.cpp" />
     <ClCompile Include="Timing\Timing.cpp" />
+    <ClCompile Include="Types\Matrix4.cpp" />
     <ClCompile Include="Types\Point2D.cpp" />
     <ClCompile Include="Objects\WeakPointer.cpp" />
     <ClCompile Include="Objects\World.cpp" />
