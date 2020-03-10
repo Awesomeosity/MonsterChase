@@ -52,8 +52,12 @@ namespace Engine
 			EnterCriticalSection(&queueModification);
 			if (!shuttingDown && queueJobs.empty())
 			{
+#if _DEBUG
 				bool result = SleepConditionVariableCS(&checkForJobs, &queueModification, INFINITE);
 				assert(result != 0);
+#else
+				SleepConditionVariableCS(&checkForJobs, &queueModification, INFINITE);
+#endif
 
 				if (shuttingDown)
 				{

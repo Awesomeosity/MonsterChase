@@ -1,6 +1,7 @@
 #pragma once
 #include <array>
 #include "Vector4.h"
+
 class Matrix4
 {
 public:
@@ -24,6 +25,7 @@ public:
 	friend inline Matrix4 operator-(const Matrix4& i_m1, const Matrix4& i_m2);
 	friend inline Matrix4 operator*(const Matrix4& i_m, const float scalar);
 	friend inline Matrix4 operator*(const float scalar, const Matrix4& i_m);
+	friend inline Matrix4 operator*(const Matrix4& i_m1, const Matrix4& i_m2);
 	friend inline Matrix4 operator/(const Matrix4& i_m, const float scalar);
 	friend inline bool operator==(const Matrix4& i_m1, const Matrix4& i_m2);
 	friend inline bool operator!=(const Matrix4& i_m1, const Matrix4& i_m2);
@@ -36,6 +38,7 @@ public:
 	static Matrix4 GenerateRotationMatrix(const float angle);
 	static Matrix4 GenerateScalingMatrix(const float scale_X, const float scale_Y);
 	static Matrix4 GenerateTransformMatrix(const float dX, const float dY, const float dZ);
+	static Matrix4 GenerateHomogenous(const float dX, const float dY, const float angle);
 	
 	//Transpose and Inversion
 	void Transpose();
@@ -45,7 +48,8 @@ public:
 	Matrix4 GenerateInvert() const;
 
 	//General access
-	inline float operator()(unsigned int x, unsigned int y);
+	inline float& operator()(unsigned int x, unsigned int y);
+
 private:
 	void swap(int index_1, int index_2);
 	std::array<float, 16> values;
@@ -55,6 +59,7 @@ inline Matrix4 operator+(const Matrix4& i_m1, const Matrix4& i_m2);
 inline Matrix4 operator-(const Matrix4& i_m1, const Matrix4& i_m2);
 inline Matrix4 operator*(const Matrix4& i_m, const float scalar);
 inline Matrix4 operator*(const float scalar, const Matrix4& i_m);
+inline Matrix4 operator*(const Matrix4& i_m1, const Matrix4& i_m2);
 inline Matrix4 operator/(const Matrix4& i_m, const float scalar);
 inline bool operator==(const Matrix4& i_m1, const Matrix4& i_m2);
 inline bool operator!=(const Matrix4& i_m1, const Matrix4& i_m2);

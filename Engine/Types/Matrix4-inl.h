@@ -1,6 +1,8 @@
 #pragma once
 #include "Matrix4.h"
 #include <assert.h>
+#include "../Physics/FloatCalcs.h"
+#include "Vector4.h"
 inline Matrix4 Matrix4::operator=(const Matrix4& i_matrix)
 {
 	if (*this == i_matrix)
@@ -131,10 +133,10 @@ inline Matrix4 Matrix4::operator/=(const float i_scalar)
 
 }
 
-inline float Matrix4::operator()(unsigned int x, unsigned int y)
+inline float& Matrix4::operator()(unsigned int x, unsigned int y)
 {
-	assert(x * 4 + y < 16);
-	return values[4 * x + y];
+	assert(y * 4 + x < 16);
+	return values[y * 4 + x];
 }
 
 inline Matrix4 operator+(const Matrix4& i_m1, const Matrix4& i_m2)
@@ -169,6 +171,23 @@ inline Matrix4 operator*(const float scalar, const Matrix4& i_m)
 		i_m.values[4] * scalar, i_m.values[5] * scalar, i_m.values[6] * scalar, i_m.values[7] * scalar,
 		i_m.values[8] * scalar, i_m.values[9] * scalar, i_m.values[10] * scalar, i_m.values[11] * scalar,
 		i_m.values[12] * scalar, i_m.values[13] * scalar, i_m.values[14] * scalar, i_m.values[15] * scalar);
+}
+
+inline Matrix4 operator*(const Matrix4& i_m1, const Matrix4& i_m2)
+{
+	Matrix4 retMatrix = Matrix4();
+	for (int i = 0; i < 16; i++)
+	{
+		int x = i % 4;
+		int y = i / 4;
+
+		float v_1 = i_m1.values[y + 0] * i_m2.values[x];
+		float v_2 = i_m1.values[y + 1] * i_m2.values[4 + x];
+		float v_3 = i_m1.values[y + 2] * i_m2.values[8 + x];
+		float v_4 = i_m1.values[y + 3] * i_m2.values[12 + x];
+		retMatrix.values[i] = v_1 + v_2 + v_3 + v_4;
+	}
+	return retMatrix;
 }
 
 inline Matrix4 operator/(const Matrix4& i_m, const float scalar)

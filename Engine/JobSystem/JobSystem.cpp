@@ -95,9 +95,12 @@ namespace Engine
 			}
 
 			//Wait for all Threads to finish
+#if _DEBUG
 			DWORD result = WaitForMultipleObjects(static_cast<DWORD>(allThreads.size()), &allThreads[0], TRUE, INFINITE);
 			assert(result == WAIT_OBJECT_0);
-
+#else
+			WaitForMultipleObjects(static_cast<DWORD>(allThreads.size()), &allThreads[0], TRUE, INFINITE);
+#endif
 			//Delete Runner Data pointers
 			iter = allQueues->begin();
 			while (iter != allQueues->end())

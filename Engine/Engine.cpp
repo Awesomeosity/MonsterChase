@@ -74,9 +74,10 @@ namespace Engine
 		uint8_t* pBuffer = new uint8_t[FileSize];
 		assert(pBuffer);
 
+#if _DEBUG
 		size_t FileRead = fread(pBuffer, 1, FileSize, pFile);
-		assert(FileRead == FileSize);
-
+		assert(FileRead == (size_t)FileSize);
+#endif
 		fclose(pFile);
 
 		o_sizeFile = FileSize;
@@ -109,10 +110,14 @@ namespace Engine
 		unsigned int height = 0;
 		unsigned int depth = 0;
 
+#if _DEBUG
 		// Get the dimensions of the texture. We'll use this to determine how big it is on screen
 		bool result = GLib::GetDimensions(pTexture, width, height, depth);
 		assert(result == true);
 		assert((width > 0) && (height > 0));
+#else
+		GLib::GetDimensions(pTexture, width, height, depth);
+#endif
 
 		// Define the sprite edges
 		GLib::Sprites::SpriteEdges	Edges = { -float(width / 2.0f), float(height), float(width / 2.0f), 0.0f };
@@ -157,9 +162,10 @@ namespace Engine
 			Buffer.reserve(FileSize);
 			Buffer.resize(FileSize);
 
+#if _DEBUG
 			size_t FileRead = fread(&Buffer[0], 1, FileSize, pFile);
-			assert(FileRead == FileSize);
-
+			assert(FileRead == (size_t)FileSize);
+#endif
 			fclose(pFile);
 		}
 

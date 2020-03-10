@@ -16,6 +16,7 @@
 #include "../Engine/Physics/PhysicsData.h"
 #include "../Engine/Physics/Physics.h"
 #include "../Engine/Physics/FloatCalcs.h"
+#include "../Engine/Types/Matrix4.h"
 #include "../Engine/Types/Point2D.h"
 #include "../Engine/Objects/SmartPointer.h"
 #include "../Engine/Objects/WeakPointer.h"
@@ -150,6 +151,118 @@ void SmPtrUnitTest()
 	assert(smPtr_6.WeakCount() == 0);
 }
 
+void MatrixUnitTest()
+{
+	//Testing ctors
+	Matrix4 m1 = Matrix4();
+	assert(FloatCalcs::isZero(m1(0, 0)));
+	assert(FloatCalcs::isZero(m1(0, 1)));
+	assert(FloatCalcs::isZero(m1(0, 2)));
+	assert(FloatCalcs::isZero(m1(0, 3)));
+
+	assert(FloatCalcs::isZero(m1(1, 0)));
+	assert(FloatCalcs::isZero(m1(1, 1)));
+	assert(FloatCalcs::isZero(m1(1, 2)));
+	assert(FloatCalcs::isZero(m1(1, 3)));
+
+	assert(FloatCalcs::isZero(m1(2, 0)));
+	assert(FloatCalcs::isZero(m1(2, 1)));
+	assert(FloatCalcs::isZero(m1(2, 2)));
+	assert(FloatCalcs::isZero(m1(2, 3)));
+
+	assert(FloatCalcs::isZero(m1(3, 0)));
+	assert(FloatCalcs::isZero(m1(3, 1)));
+	assert(FloatCalcs::isZero(m1(3, 2)));
+	assert(FloatCalcs::isZero(m1(3, 3)));
+
+	m1(0, 0) = 1.0f;
+	assert(FloatCalcs::relativeEquality(m1(0, 0), 1.0f));
+
+	//Copy and assignment
+	Matrix4 m2(m1);
+	Matrix4 m3 = m1;
+
+	assert(m1 == m2);
+	assert(m2 == m3);
+	assert(m3 == m1);
+
+	//Vector and manual setup ctors
+	Matrix4 m4(0.0f, 1.0f, 2.0f, 3.0f,
+			   4.0f, 5.0f, 6.0f, 7.0f,
+			   8.0f, 9.0f, 10.0f, 11.0f,
+			   12.0f, 13.0f, 14.0f, 15.0f);
+
+	Vector4 v1(0.0f, 4.0f, 8.0f, 12.0f);
+	Vector4 v2(1.0f, 5.0f, 9.0f, 13.0f);
+	Vector4 v3(2.0f, 6.0f, 10.0f, 14.0f);
+	Vector4 v4(3.0f, 7.0f, 11.0f, 15.0f);
+
+	Matrix4 m5(v1, v2, v3, v4);
+
+	assert(m4 == m5);
+
+	//Testing static functions
+	Matrix4 m6(Matrix4::GenerateRotationMatrix(45.0f));
+	Matrix4 m7(Matrix4::GenerateScalingMatrix(2.0f, 2.0f));
+	//u wot m8
+	Matrix4 m8(Matrix4::GenerateTransformMatrix(10.0f, 10.0f, 0.0f));
+
+	//Operator testing
+	Matrix4 m9 = m4;
+	Matrix4 m10 = m4 + m5;
+	m4 += m5;
+	assert(m4 == m10);
+	
+	m4 -= m5;
+	assert(m9 == m4);
+
+	m4 *= 2.0f;
+	assert(m4 == m10);
+	Matrix4 m11 = m4 - m5;
+
+
+	m4 /= 2.0f;
+	assert(m4 == m9);
+	assert(m11 == m4);
+
+	Matrix4 m12 = m4 * 2;
+	assert(m12 == m10);
+
+	Matrix4 m13 = m12 / 2;
+	assert(m13 == m11);
+
+	Matrix4 m14 = 2 * m13;
+	assert(m14 == m12);
+
+	assert(m14 != m4);
+
+	//Inversion and Transposition
+	Matrix4 m15 = m6.GenerateInvert();
+	m6.Invert();
+	assert(m15 == m6);
+
+	m15.Transpose();
+	Matrix4 m16 = m6.GenerateTranspose();
+	assert(m15 == m16);
+
+	m15.Transpose();
+	assert(m6 == m15);
+
+	m15.Invert();
+	m6.Invert();
+	assert(m6 == m15);
+
+	Matrix4 m17 = Matrix4::GenerateHomogenous(10, 10, 45);
+	Vector4 v5 = Vector4(2.0f, 0.0f);
+	Vector4 v6 = m17 * v5;
+
+	m17.Invert();
+	Vector4 v7 = m17 * v6;
+	assert(v7 == v5);
+
+	_CrtDumpMemoryLeaks();
+}
+
 void gameObjHandler(const char* i_fileName)
 {
 	int* controllerType = new int();
@@ -194,8 +307,8 @@ void makeGameObjs(std::vector<const char*> i_fileNames)
 
 int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_lpCmdLine, int i_nCmdShow)
 {
-	_CrtSetBreakAlloc(216);
-
+	//_CrtSetBreakAlloc();
+	MatrixUnitTest();
 	{
 		float playX = 10.0f;
 		float playY = 10.0f;

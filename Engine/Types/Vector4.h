@@ -47,3 +47,5 @@ inline Vector4 operator*(const Vector4& i_v1, const Vector4& i_v2);
 inline Vector4 operator/(const Vector4& i_v1, const float i_scalar);
 inline bool operator==(const Vector4& i_v1, const Vector4& i_v2);
 inline bool operator!=(const Vector4& i_v1, const Vector4& i_v2);
+
+#include "Vector4-inl.h"

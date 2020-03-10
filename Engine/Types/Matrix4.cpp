@@ -1,6 +1,11 @@
+#pragma once
 #include "Matrix4.h"
 #include <cassert>
 #include "../Physics/FloatCalcs.h"
+#include "Vector4.h"
+
+//bruh
+const float PI = 3.14159265358979323846f;
 
 Matrix4::Matrix4()
 	: values()
@@ -8,7 +13,10 @@ Matrix4::Matrix4()
 }
 
 Matrix4::Matrix4(float x11, float x12, float x13, float x14, float x21, float x22, float x23, float x24, float x31, float x32, float x33, float x34, float x41, float x42, float x43, float x44)
-	: values{x11, x12, x13, x14, x21, x22, x23, x24, x31, x32, x33, x34, x41, x42, x43, x44}
+	: values{x11, x12, x13, x14,
+			 x21, x22, x23, x24,
+			 x31, x32, x33, x34,
+			 x41, x42, x43, x44}
 {
 }
 
@@ -17,8 +25,12 @@ Matrix4::Matrix4(const Matrix4& i_matrix)
 {
 }
 
-Matrix4::Matrix4(const Vector4& xx1, const Vector4& xx2, const Vector4& xx3, const Vector4& xx4)
-	: values{ xx1.GetX(), xx1.GetY(), xx1.GetZ(), xx1.GetW(), xx2.GetX(), xx2.GetY(), xx2.GetZ(), xx2.GetW(), xx3.GetX(), xx3.GetY(), xx3.GetZ(), xx3.GetW(), xx4.GetX(), xx4.GetY(), xx4.GetZ(), xx4.GetW() }
+//Constructs from a series of column vectors
+Matrix4::Matrix4(const Vector4& xx0, const Vector4& xx1, const Vector4& xx2, const Vector4& xx3)
+	: values{ xx0.GetX(), xx1.GetX(), xx2.GetX(), xx3.GetX(),
+			  xx0.GetY(), xx1.GetY(), xx2.GetY(), xx3.GetY(),
+			  xx0.GetZ(), xx1.GetZ(), xx2.GetZ(), xx3.GetZ(),
+			  xx0.GetW(), xx1.GetW(), xx2.GetW(), xx3.GetW()}
 {
 }
 
@@ -54,19 +66,21 @@ Matrix4& Matrix4::operator=(Matrix4&& i_matrix) noexcept
 	return *this;
 }
 
+//Rotates counterclockwise, angle given is in degrees?
 Matrix4 Matrix4::GenerateRotationMatrix(const float angle)
 {
-	return Matrix4(cos(angle), -sin(angle), 0.0f, 0.0f,
-					sin(angle), cos(angle), 0.0f, 0.0f,
+	float radians = angle * PI / 180.0f;
+	return Matrix4(cos(radians), -sin(radians), 0.0f, 0.0f,
+					sin(radians), cos(radians), 0.0f, 0.0f,
 					0.0f, 0.0f, 1.0f, 0.0f,
 					0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 Matrix4 Matrix4::GenerateScalingMatrix(const float scale_X, const float scale_Y)
 {
-	return Matrix4(scale_X, 0.0f, 0.0f, 0.0f,
-					0.0f, scale_Y, 0, 0.0f,
-					0.0f, 0.0f, 1.0f, 0.0f,
+	return Matrix4(scale_X, 0.0f, 0.0f, 1.0f,
+					0.0f, scale_Y, 0, 1.0f,
+					0.0f, 0.0f, 1.0f, 1.0f,
 					0.0f, 0.0f, 0.0f, 1.0f);
 }
 
@@ -76,6 +90,16 @@ Matrix4 Matrix4::GenerateTransformMatrix(const float dX, const float dY, const f
 					0.0f, 1.0f, 0.0f, dY,
 					0.0f, 0.0f, 1.0f, dZ,
 					0.0f, 0.0f, 0.0f, 1.0f);
+}
+
+Matrix4 Matrix4::GenerateHomogenous(const float dX, const float dY, const float angle)
+{
+	float radians = angle * PI / 180.0f;
+	return Matrix4(cos(radians), -sin(radians), 0.0f, dX,
+		sin(radians), cos(radians), 0.0f, dY,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f);
+
 }
 
 void Matrix4::Transpose()
@@ -96,6 +120,7 @@ Matrix4 Matrix4::GenerateTranspose() const
 					values[3], values[7], values[11], values[15]);
 }
 
+//Generates an inverse matrix using the shortcut for transformation matrices
 void Matrix4::Invert()
 {
 	assert(FloatCalcs::isZero(values[12]));
