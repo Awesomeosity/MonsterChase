@@ -181,10 +181,10 @@ inline Matrix4 operator*(const Matrix4& i_m1, const Matrix4& i_m2)
 		int x = i % 4;
 		int y = i / 4;
 
-		float v_1 = i_m1.values[y + 0] * i_m2.values[x];
-		float v_2 = i_m1.values[y + 1] * i_m2.values[4 + x];
-		float v_3 = i_m1.values[y + 2] * i_m2.values[8 + x];
-		float v_4 = i_m1.values[y + 3] * i_m2.values[12 + x];
+		float v_1 = i_m1.values[y * 4 + 0] * i_m2.values[x];
+		float v_2 = i_m1.values[y * 4 + 1] * i_m2.values[4 + x];
+		float v_3 = i_m1.values[y * 4 + 2] * i_m2.values[8 + x];
+		float v_4 = i_m1.values[y * 4 + 3] * i_m2.values[12 + x];
 		retMatrix.values[i] = v_1 + v_2 + v_3 + v_4;
 	}
 	return retMatrix;

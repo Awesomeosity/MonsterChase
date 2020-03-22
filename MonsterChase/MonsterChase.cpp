@@ -252,7 +252,11 @@ void MatrixUnitTest()
 	m6.Invert();
 	assert(m6 == m15);
 
+
+	Matrix4 m18 = m8 * m6;
 	Matrix4 m17 = Matrix4::GenerateHomogenous(10, 10, 45);
+	assert(m18 == m17);
+
 	Vector4 v5 = Vector4(2.0f, 0.0f);
 	Vector4 v6 = m17 * v5;
 
