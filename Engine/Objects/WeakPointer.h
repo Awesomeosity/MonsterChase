@@ -36,7 +36,7 @@ public:
 	bool Peek() const;
 
 private:
-	WeakPointer();
+	explicit WeakPointer();
 	void decrement();
 	T* objPtr;
 	ptrCount* countCache;

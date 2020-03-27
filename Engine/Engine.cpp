@@ -23,6 +23,7 @@ namespace Engine
 	Physics* physSystem;
 	Renderable* renderSystem;
 	World* world;
+	SmartPointer<GameObject> player_object;
 
 	void initEngine()
 	{
@@ -36,18 +37,63 @@ namespace Engine
 		const size_t	lenBuffer = 65;
 		char			Buffer[lenBuffer];
 
+		static bool WKey = false;
+		static bool AKey = false;
+		static bool SKey = false;
+		static bool DKey = false;
+
+		switch (i_VKeyID)
+		{
+			//W
+		case 87:
+			WKey = !WKey;
+			break;
+			//S
+		case 83:
+			SKey = !SKey;
+			break;
+			//A
+		case 65:
+			AKey = !AKey;
+			break;
+			//D
+		case 68:
+			DKey = !DKey;
+			break;
+		case 81:
+			//No key being held down.
+		case 0:
+		default:
+			break;
+		}
+
 		sprintf_s(Buffer, lenBuffer, "VKey 0x%04x went %s\n", i_VKeyID, bWentDown ? "down" : "up");
 		OutputDebugStringA(Buffer);
 
-		if (bWentDown)
+		void* voidForcePtr = player_object->GetComponent("Forces");
+		Point2D* forcePtr = reinterpret_cast<Point2D*>(voidForcePtr);
+
+		Point2D tempForces;
+		if (WKey && !SKey)
 		{
-			//TODO: Implement multiple key detection
-			physSystem->currKey = i_VKeyID;
+			tempForces.SetY(1.0f);
 		}
-		else
+		else if (SKey && !WKey)
 		{
-			physSystem->currKey = 0;
+			tempForces.SetY(-1.0f);
 		}
+
+		if (AKey && !DKey)
+		{
+			tempForces.SetX(-1.0f);
+		}
+		else if (!AKey && DKey)
+		{
+			tempForces.SetX(1.0f);
+		}
+
+		(*forcePtr).SetX(tempForces.GetX());
+		(*forcePtr).SetY(tempForces.GetY());
 	}
 
 	void* LoadFile(const char* i_pFilename, size_t& o_sizeFile)
@@ -208,10 +254,15 @@ namespace Engine
 		{
 			assert(obJSON["collision_data"]["mass"].is_number_float());
 			assert(obJSON["collision_data"]["kd"].is_number_float());
+			assert(obJSON["collision_data"]["BB_X"].is_number_float());
+			assert(obJSON["collision_data"]["BB_Y"].is_number_float());
+
 			float actorMass = obJSON["collision_data"]["mass"];
 			float actorKD = obJSON["collision_data"]["kd"];
+			float actorBB_X = obJSON["collision_data"]["BB_X"];
+			float actorBB_Y = obJSON["collision_data"]["BB_Y"];
 
-			physSystem->AddCollidableObject(actorPtr, actorMass, actorKD);
+			physSystem->AddCollidableObject(actorPtr, actorBB_X, actorBB_Y, actorMass, actorKD);
 		}
 
 		if (obJSON.contains("render_data"))
@@ -226,9 +277,6 @@ namespace Engine
 
 		assert(obJSON.contains("name"));
 		assert(obJSON["name"].is_string());
-		//TODO: Return name too? I guess?
-		//std::string name = obJSON["name"];
-		//char* name_c = const_cast<char*>(name.c_str());
 
 
 		if (obJSON.contains("controller"))
@@ -239,6 +287,11 @@ namespace Engine
 			if (conType == "player")
 			{
 				o_controllerType = 0;
+
+				//Kinda a hacky solution...
+				player_object = actorPtr.Promote();
+				Point2D* forcePointer = new Point2D();
+				player_object->AddComponent("Forces", forcePointer);
 			}
 			else if (conType == "normal")
 			{
@@ -287,6 +340,7 @@ namespace Engine
 		delete world;
 		delete physSystem;
 		delete renderSystem;
+		player_object.Reset();
 
 		// IMPORTANT:  Tell GLib to shutdown, releasing resources.
 		GLib::Shutdown();

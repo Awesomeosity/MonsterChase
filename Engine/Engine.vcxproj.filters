@@ -34,6 +34,9 @@
     <Filter Include="JobSystem">
       <UniqueIdentifier>{2dc1d60c-f0e2-4a85-b9a3-80cacd318511}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Collision">
+      <UniqueIdentifier>{2ca9c0a8-88f3-42e8-967c-da329835507c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
