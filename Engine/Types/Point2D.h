@@ -19,7 +19,7 @@ public:
 	void SetX(const float i_x);
 	void SetY(const float i_y);
 
-	void Point2D_UnitTest();
+	static inline void Point2D_UnitTest();
 private:
 	float _X;
 	float _Y;

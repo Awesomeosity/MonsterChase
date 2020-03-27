@@ -110,3 +110,30 @@ inline bool operator!=(const Point2D& i_p1, const Point2D& i_p2)
 	return !(i_p1.GetX() == i_p2.GetX() && i_p1.GetY() == i_p2.GetY());
 }
 
+inline void Point2D::Point2D_UnitTest()
+{
+	Point2D P1(0.0f, 0.0f);
+	Point2D P2(0.0f, 0.0f);
+
+	Point2D P3 = P1 + P2;
+	P3 = P1 - P2;
+
+	Point2D P4 = P1 * 0.5f;
+
+	Point2D P5 = P1 / 2.0f;
+
+	Point2D P6 = -P4;
+
+	P6 *= 2.0f;
+	P5 /= 4.0f;
+
+	P2 += P1;
+	P3 -= P1;
+
+	Point2D P7 = (((P1 + P2) * 2.0f) - -P3) / 2.0f;
+
+#pragma warning (disable: 4189)
+	bool bArentEqual = P6 != P4;
+#pragma warning (disable: 4189)
+
+}
