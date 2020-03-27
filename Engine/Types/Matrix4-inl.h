@@ -136,7 +136,7 @@ inline Matrix4 Matrix4::operator/=(const float i_scalar)
 inline float& Matrix4::operator()(unsigned int x, unsigned int y)
 {
 	assert(y * 4 + x < 16);
-	return values[y * 4 + x];
+	return values[y * (unsigned int)4 + x];
 }
 
 inline Matrix4 operator+(const Matrix4& i_m1, const Matrix4& i_m2)
@@ -181,10 +181,10 @@ inline Matrix4 operator*(const Matrix4& i_m1, const Matrix4& i_m2)
 		int x = i % 4;
 		int y = i / 4;
 
-		float v_1 = i_m1.values[y * 4 + 0] * i_m2.values[x];
-		float v_2 = i_m1.values[y * 4 + 1] * i_m2.values[4 + x];
-		float v_3 = i_m1.values[y * 4 + 2] * i_m2.values[8 + x];
-		float v_4 = i_m1.values[y * 4 + 3] * i_m2.values[12 + x];
+		float v_1 = i_m1.values[y * (unsigned int)4 + (unsigned int)0] * i_m2.values[x];
+		float v_2 = i_m1.values[y * (unsigned int)4 + (unsigned int)1] * i_m2.values[(unsigned int)4 + x];
+		float v_3 = i_m1.values[y * (unsigned int)4 + (unsigned int)2] * i_m2.values[(unsigned int)8 + x];
+		float v_4 = i_m1.values[y * (unsigned int)4 + (unsigned int)3] * i_m2.values[(unsigned int)12 + x];
 		retMatrix.values[i] = v_1 + v_2 + v_3 + v_4;
 	}
 	return retMatrix;
