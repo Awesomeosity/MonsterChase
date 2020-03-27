@@ -76,20 +76,20 @@ namespace Engine
 		Point2D tempForces;
 		if (WKey && !SKey)
 		{
-			tempForces.SetY(1.0f);
+			tempForces.SetY(10.0f);
 		}
 		else if (SKey && !WKey)
 		{
-			tempForces.SetY(-1.0f);
+			tempForces.SetY(-10.0f);
 		}
 
 		if (AKey && !DKey)
 		{
-			tempForces.SetX(-1.0f);
+			tempForces.SetX(-10.0f);
 		}
 		else if (!AKey && DKey)
 		{
-			tempForces.SetX(1.0f);
+			tempForces.SetX(10.0f);
 		}
 
 		(*forcePtr).SetX(tempForces.GetX());

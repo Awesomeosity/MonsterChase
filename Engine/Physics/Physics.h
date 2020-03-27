@@ -31,7 +31,7 @@ public:
 	void AddCollidableObject(WeakPointer<GameObject> newObj, float bound_X, float bound_Y, float mass, float kd);
 	void RunPhysics(float dt_ms);
 	static void calcNewPos(float dt_ms, collidable& data, Point2D forces);
-	static void collisionCheck(collidable& object1, collidable& object2);
+	static bool collisionCheck(collidable& object1, collidable& object2, float dt_ms);
 	void Dispose();
 
 private:
