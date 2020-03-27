@@ -46,6 +46,11 @@ GameObject& GameObject::operator=(GameObject&& i_gameObject) noexcept
 
 GameObject::~GameObject()
 {
+	for (auto it = _components.begin(); it != _components.end(); it++)
+	{
+		delete it->second;
+	}
+	_components.clear();
 }
 
 Point2D GameObject::GetPoint()
@@ -65,5 +70,11 @@ void GameObject::AddComponent(std::string str, void* ptr)
 
 void* GameObject::GetComponent(const std::string str) const
 {
-	return _components.find(str)->second;
+	auto compRef = _components.find(str);
+	if (compRef == _components.end())
+	{
+		return nullptr;
+	}
+
+	return compRef->second;
 }
