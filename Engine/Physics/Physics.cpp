@@ -64,14 +64,61 @@ void Physics::calcNewPos(float dt_ms, collidable& colliData, Point2D forces)
 
 bool Physics::collisionCheck(collidable& object1, collidable& object2, float dt_ms)
 {
+	float AB_Open = 0.0f;
+	float AB_Close = 0.0f;
+	float BA_Open = 0.0f;
+	float BA_Close = 0.0f;
+
+	if (!collisionHelper(object1, object2, dt_ms, AB_Open, AB_Close))
+	{
+		return false;
+	}
+
+	if (!collisionHelper(object2, object1, dt_ms, BA_Open, BA_Close))
+	{
+		return false;
+	}
+	
+	float bestOpen = (AB_Open < BA_Open) ? AB_Open : BA_Open;
+	float bestClose = (AB_Close > BA_Close) ? AB_Close : BA_Close;
+
+	if (bestClose > bestOpen)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+void Physics::Dispose()
+{
+	for (size_t i = 0; i < collidables.size(); i++)
+	{
+		collidables[i]->obj.Reset();
+		collidables[i].Reset();
+	}
+
+	collidables.clear();
+}
+
+bool Physics::collisionHelper(collidable& object1, collidable& object2, float dt_ms, float& o_open, float& o_close)
+{
 	//Setting up matrices
 	Point2D A_Center = object1.obj->GetPoint();
 	A_Center += Point2D(0.0f, object1.bounding_Y);
 	Point2D B_Center = object2.obj->GetPoint();
 	B_Center += Point2D(0.0f, object2.bounding_Y);
 
-	Matrix4 M_AWorld = Matrix4::GenerateTransformMatrix(A_Center.GetX(), A_Center.GetY(), 0.0f);
-	Matrix4 M_BWorld = Matrix4::GenerateTransformMatrix(B_Center.GetX(), B_Center.GetY(), 0.0f);
+	float* A_Rot = reinterpret_cast<float*>(object1.obj->GetComponent("Rotation"));
+	float* B_Rot = reinterpret_cast<float*>(object2.obj->GetComponent("Rotation"));
+
+	assert(A_Rot != nullptr);
+	assert(B_Rot != nullptr);
+
+	Matrix4 M_AWorld = Matrix4::GenerateTransformMatrix(A_Center.GetX(), A_Center.GetY(), 0.0f) * Matrix4::GenerateRotationMatrix(*A_Rot);
+	Matrix4 M_BWorld = Matrix4::GenerateTransformMatrix(B_Center.GetX(), B_Center.GetY(), 0.0f) * Matrix4::GenerateRotationMatrix(*B_Rot);
 
 	Matrix4 M_WorldA = M_AWorld.GenerateInvert();
 	Matrix4 M_WorldB = M_BWorld.GenerateInvert();
@@ -100,7 +147,7 @@ bool Physics::collisionCheck(collidable& object1, collidable& object2, float dt_
 	//Checking X Axis
 	float ACenterB_X = V_ACenterB.GetX();
 	float BCenter_X = B_Center.GetX();
-	
+
 	float BLeft_X = BCenter_X - object2.bounding_X - AProjB_X;
 	float BRight_X = BCenter_X + object2.bounding_X + AProjB_X;
 
@@ -139,7 +186,7 @@ bool Physics::collisionCheck(collidable& object1, collidable& object2, float dt_
 		{
 			return false;
 		}
-		
+
 		//Comparing tClose and tOpen
 		bestClose = tClose;
 		bestOpen = tOpen;
@@ -189,28 +236,12 @@ bool Physics::collisionCheck(collidable& object1, collidable& object2, float dt_
 		}
 
 		//Comparing tClose and tOpen
-		bestClose = (tClose > bestClose) ? tClose : bestClose;
-		bestOpen = (tOpen < bestOpen) ? tOpen : bestOpen;
+		bestClose = (tClose > bestClose || FloatCalcs::isZero(bestClose)) ? tClose : bestClose;
+		bestOpen = (tOpen < bestOpen || FloatCalcs::isZero(bestOpen)) ? tOpen : bestOpen;
 	}
 
-	//Final check
-	if (bestClose > bestOpen)
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
-}
+	o_close = bestClose;
+	o_open = bestOpen;
 
-void Physics::Dispose()
-{
-	for (size_t i = 0; i < collidables.size(); i++)
-	{
-		collidables[i]->obj.Reset();
-		collidables[i].Reset();
-	}
-
-	collidables.clear();
+	return true;
 }

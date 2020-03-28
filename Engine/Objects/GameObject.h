@@ -14,6 +14,7 @@ public:
 	GameObject& operator=(GameObject&& i_gameObject) noexcept;
 	~GameObject();
 	Point2D GetPoint();
+	void SetPoint(float X, float Y);
 	void SetPoint(Point2D i_point);
 	void AddComponent(std::string str, void* ptr);
 	void* GetComponent(const std::string str) const;

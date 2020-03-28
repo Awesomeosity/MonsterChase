@@ -63,6 +63,12 @@ Point2D GameObject::GetPoint()
 	return _point;
 }
 
+void GameObject::SetPoint(float X, float Y)
+{
+	_point.SetX(X);
+	_point.SetY(Y);
+}
+
 void GameObject::SetPoint(Point2D i_point)
 {
 	_point = i_point;

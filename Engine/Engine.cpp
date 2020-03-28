@@ -248,8 +248,13 @@ namespace Engine
 		assert(obJSON["position"].size() == 2);
 		Point2D actorPos = Point2D(obJSON["position"][0], obJSON["position"][1]);
 
-		WeakPointer<GameObject> actorPtr = world->AddObject(actorPos);
+		assert(obJSON.contains("rotation"));
+		assert(obJSON["rotation"].is_number_float());
 
+		WeakPointer<GameObject> actorPtr = world->AddObject(actorPos);
+		float* actorRot = new float(obJSON["rotation"]);
+		actorPtr->AddComponent("Rotation", actorRot);
+			
 		if (obJSON.contains("collision_data"))
 		{
 			assert(obJSON["collision_data"]["mass"].is_number_float());

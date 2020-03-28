@@ -34,6 +34,8 @@ public:
 	void Dispose();
 
 private:
+	static bool collisionHelper(collidable& object1, collidable& object2, float dt_ms, float& o_open, float& o_close);
+
 	std::vector<SmartPointer<collidable>> collidables;
 	mutable CRITICAL_SECTION queueModification;
 };
