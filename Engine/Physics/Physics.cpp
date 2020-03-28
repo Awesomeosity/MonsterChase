@@ -47,6 +47,7 @@ void Physics::RunPhysics(float dt_ms)
 void Physics::calcNewPos(float dt_ms, collidable& colliData, Point2D forces)
 {
 	Point2D currPos = colliData.obj->GetPoint();
+	currPos.SetY(currPos.GetY() + colliData.bounding_Y);
 	Point2D prevPos = colliData.prevPoint;
 	float mass = colliData.mass;
 	//float drag = colliData.kd;
@@ -77,15 +78,15 @@ bool Physics::collisionCheck(collidable& object1, collidable& object2, float dt_
 
 	Matrix4 M_AB = M_WorldB * M_AWorld;
 
-	Vector4 V_ACenterB = M_AB * Vector4(A_Center);
+	Vector4 V_ACenterB = M_AB * Vector4(A_Center, 0.0f, 1.0f);
 
 	//Velocity
-	Point2D AVelocity = object1.obj->GetPoint() - object1.prevPoint;
-	Point2D BVelocity = object2.obj->GetPoint() - object2.prevPoint;
+	Point2D AVelocity = A_Center - object1.prevPoint;
+	Point2D BVelocity = B_Center - object2.prevPoint;
 
 	Point2D VelARelB = AVelocity - BVelocity;
 
-	Vector4 VelAB = M_AB * Vector4(VelARelB);
+	Vector4 VelAB = M_AB * Vector4(VelARelB, 0.0f, 0.0f);
 
 	Vector4 AExtB_X = M_AB * Vector4(object1.bounding_X, 0.0f);
 	Vector4 AExtB_Y = M_AB * Vector4(0.0f, object1.bounding_Y);

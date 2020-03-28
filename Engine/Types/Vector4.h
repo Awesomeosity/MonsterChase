@@ -8,9 +8,9 @@ public:
 	Vector4(float X, float Y, float Z);
 	Vector4(float X, float Y);
 	Vector4(const Vector4& i_vector);
-	Vector4(const Point2D& i_point);
+	Vector4(const Point2D& i_point, float z, float w);
 	Vector4(Vector4&& i_vector) noexcept;
-	Vector4(Point2D&& i_point) noexcept;
+	Vector4(Point2D&& i_point, float z, float w) noexcept;
 	Vector4& operator=(Vector4&& i_vector) noexcept;
 	Vector4& operator=(Point2D&& i_point) noexcept;
 

@@ -7,6 +7,7 @@ class GameObject
 public:
 	GameObject();
 	GameObject(Point2D& i_point);
+	GameObject(float X, float Y);
 	GameObject(GameObject& i_gameObject);
 	GameObject(GameObject&& i_gameObject) noexcept;
 	GameObject& operator=(GameObject& i_gameObject);

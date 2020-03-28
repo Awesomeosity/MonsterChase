@@ -6,7 +6,6 @@
 #include <Windows.h>
 template <class T>
 class SmartPointer;
-
 struct collidable
 {
 	WeakPointer<GameObject> obj;
@@ -16,7 +15,7 @@ struct collidable
 	float kd;
 	Point2D prevPoint;
 	collidable(WeakPointer<GameObject> _obj, float X, float Y, float _mass, float _kd)
-		:obj(_obj), bounding_X(X), bounding_Y(Y), mass(_mass), kd(_kd), prevPoint(_obj->GetPoint().GetX(), _obj->GetPoint().GetY())
+		:obj(_obj), bounding_X(X), bounding_Y(Y), mass(_mass), kd(_kd), prevPoint(_obj->GetPoint().GetX(), _obj->GetPoint().GetY() + Y)
 	{
 		
 	}

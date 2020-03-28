@@ -11,6 +11,11 @@ GameObject::GameObject(Point2D& i_point) : _point(i_point)
 {
 }
 
+GameObject::GameObject(float X, float Y) : _point(X, Y)
+{
+
+}
+
 GameObject::GameObject(GameObject& i_gameObject) : _point(i_gameObject.GetPoint())
 {
 }

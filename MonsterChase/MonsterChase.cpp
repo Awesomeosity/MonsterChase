@@ -267,6 +267,16 @@ void MatrixUnitTest()
 	_CrtDumpMemoryLeaks();
 }
 
+void CollisionUnitTest()
+{
+	//Phase 1: No Velocity
+	SmartPointer<GameObject> ObjA = SmartPointer<GameObject>(new GameObject());
+	collidable* collid_A = new collidable(WeakPointer<GameObject>(ObjA), 50, 50, 0.0, 0.0);
+	SmartPointer<GameObject> ObjB = SmartPointer<GameObject>(new GameObject(500.0f, 500.0f));
+	collidable* collid_B = new collidable(WeakPointer<GameObject>(ObjB), 50, 50, 0.0, 0.0);
+	assert(!Physics::collisionCheck(*collid_A, *collid_B, 1.0f));
+}
+
 void gameObjHandler(const char* i_fileName)
 {
 	int* controllerType = new int();
@@ -313,7 +323,8 @@ void makeGameObjs(std::vector<const char*> i_fileNames)
 int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_lpCmdLine, int i_nCmdShow)
 {
 	//_CrtSetBreakAlloc();
-	MatrixUnitTest();
+	//MatrixUnitTest();
+	CollisionUnitTest();
 	{
 		float playX = 10.0f;
 		float playY = 10.0f;
