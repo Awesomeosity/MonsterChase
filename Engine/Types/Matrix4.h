@@ -49,6 +49,8 @@ public:
 
 	//General access
 	inline float& operator()(unsigned int x, unsigned int y);
+	inline Vector4 getRow(const unsigned int rowNum) const;
+	inline Vector4 getCol(const unsigned int colNum);
 
 private:
 	void swap(int index_1, int index_2);

@@ -139,6 +139,18 @@ inline float& Matrix4::operator()(unsigned int x, unsigned int y)
 	return values[y * (unsigned int)4 + x];
 }
 
+inline Vector4 Matrix4::getRow(const unsigned int rowNum) const
+{
+	assert(rowNum < 4);
+	return Vector4(values[rowNum * 4], values[rowNum * 4 + 1], values[rowNum * 4 + 2], values[rowNum * 4 + 3]);
+}
+
+inline Vector4 Matrix4::getCol(const unsigned int colNum)
+{
+	assert(colNum < 4);
+	return Vector4(values[colNum * 4], values[colNum * 4 + 4], values[colNum * 4 + 8], values[colNum * 4 + 12]);
+}
+
 inline Matrix4 operator+(const Matrix4& i_m1, const Matrix4& i_m2)
 {
 	return Matrix4(i_m1.values[0] + i_m2.values[0], i_m1.values[1] + i_m2.values[1], i_m1.values[2] + i_m2.values[2], i_m1.values[3] + i_m2.values[3], 
