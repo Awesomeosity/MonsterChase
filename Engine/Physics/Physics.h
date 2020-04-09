@@ -3,6 +3,7 @@
 #include "../Objects/GameObject.h"
 #include "../Objects/WeakPointer.h"
 #include "../Types/Point2D.h"
+#include "../Types/Vector4.h"
 #include <Windows.h>
 template <class T>
 class SmartPointer;
@@ -21,6 +22,13 @@ struct collidable
 	}
 };
 
+struct CollisionPair
+{
+	float collisionTime;
+	Vector4 collisionNormal;
+	SmartPointer<collidable> collisionObjs[2];
+};
+
 class Physics
 {
 public:
@@ -34,8 +42,9 @@ public:
 	void Dispose();
 
 private:
+	CollisionPair findEarliestCollision(float dt_ms, Vector4 collisionAxisX, Vector4 collisionAxisY);
+	bool collisionCheck(collidable& object1, collidable& object2, float dt_ms, Vector4 collisionAxisX, Vector4 collisionAxisY, float& o_floatTime, Vector4& o_collisionNormal);
 	static bool collisionHelper(collidable& object1, collidable& object2, float dt_ms, float& o_open, float& o_close);
-
 	std::vector<SmartPointer<collidable>> collidables;
 	mutable CRITICAL_SECTION queueModification;
 };

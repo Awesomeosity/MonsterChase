@@ -28,6 +28,43 @@ void Physics::AddCollidableObject(WeakPointer<GameObject> newObj, float bound_X,
 
 void Physics::RunPhysics(float dt_ms)
 {
+	//TODO: Iterate through all collidable pairs, find earliest collision (if any)
+	//If collision,
+	//1) Progress Physics to that point
+	//2) Resolve Collision by applying Conservation of Momentum & Reflection (if necessary)
+	//Repeat until the timestep is complete
+	//If there is time left over, progress physics using the remaining time.
+
+	if (collidables.size() == 0)
+	{
+		return;
+	}
+
+	float temp_time = dt_ms;
+
+	//Get universal axis of collision
+	float* universalRotation = reinterpret_cast<float*>(collidables[0]->obj->GetComponent("Rotation"));
+	Matrix4 universalAxis = Matrix4::GenerateRotationMatrix(*universalRotation);
+	Vector4 uni_X = universalAxis.getRow(0);
+	Vector4 uni_Y = universalAxis.getRow(1);
+
+	CollisionPair earliestCollision = findEarliestCollision(temp_time, uni_X, uni_Y);
+	while(FloatCalcs::relativeEquality(earliestCollision.collisionTime, temp_time))
+	{
+		//TODO: Move physics forward to earliest collision time
+		//calcNewPos(earliestCollision.collisionTime);
+		
+		//TODO: Resolve collision somehow??
+		//resolveCollision(earliestCollision);
+
+		temp_time -= earliestCollision.collisionTime;
+		earliestCollision = findEarliestCollision(temp_time, uni_X, uni_Y);
+	}
+
+	//TODO: Progress physics using remaining time
+	//calcNewPos(temp_time);
+
+	/*
 	for (size_t i = 0; i < collidables.size(); i++)
 	{
 		void* voidPtr = collidables[i]->obj->GetComponent("Forces");
@@ -41,6 +78,7 @@ void Physics::RunPhysics(float dt_ms)
 			calcNewPos(dt_ms, *(collidables[i]), *forcePtr);
 		}
 	}
+	*/
 }
 
 
@@ -101,6 +139,42 @@ void Physics::Dispose()
 	}
 
 	collidables.clear();
+}
+
+CollisionPair Physics::findEarliestCollision(float dt_ms, Vector4 collisionAxisX, Vector4 collisionAxisY)
+{
+	CollisionPair earliestCollision;
+	earliestCollision.collisionTime = dt_ms;
+
+	for (size_t i = 0; i < collidables.size() - 1; i++)
+	{
+		for (size_t j = i + 1; j < collidables.size(); j++)
+		{
+			float* collisionTime = new float(0.0f);
+			Vector4* collisionNormal = new Vector4();
+			if (collisionCheck(*collidables[i], *collidables[j], dt_ms, collisionAxisX, collisionAxisY, *collisionTime, *collisionNormal))
+			{
+				if (*collisionTime < earliestCollision.collisionTime)
+				{
+					earliestCollision.collisionTime = *collisionTime;
+					earliestCollision.collisionNormal = *collisionNormal;
+					earliestCollision.collisionObjs[0] = collidables[i];
+					earliestCollision.collisionObjs[1] = collidables[j];
+				}
+			}
+
+			delete collisionTime;
+			delete collisionNormal;
+		}
+	}
+
+	return earliestCollision;
+}
+
+bool Physics::collisionCheck(collidable& object1, collidable& object2, float dt_ms, Vector4 collisionAxisX, Vector4 collisionAxisY, float& o_floatTime, Vector4& o_collisionNormal)
+{
+	//TODO Implement this
+	return false;
 }
 
 bool Physics::collisionHelper(collidable& object1, collidable& object2, float dt_ms, float& o_open, float& o_close)
