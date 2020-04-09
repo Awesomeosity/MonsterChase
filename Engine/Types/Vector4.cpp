@@ -75,6 +75,19 @@ Vector4::Vector4(Point2D&& i_point, float z, float w) noexcept
 	i_point.SetY(0);
 }
 
+Vector4& Vector4::operator=(const Vector4& i_vector)
+{
+	if (this != &i_vector)
+	{
+		this->_X = i_vector._X;
+		this->_Y = i_vector._Y;
+		this->_Z = i_vector._Z;
+		this->_W = i_vector._W;
+	}
+
+	return *this;
+}
+
 Vector4& Vector4::operator=(Vector4&& i_vector) noexcept
 {
 	if (this != &i_vector)
