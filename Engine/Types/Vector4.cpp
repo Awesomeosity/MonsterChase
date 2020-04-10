@@ -1,6 +1,7 @@
 #include "Vector4.h"
 #include "../Physics/FloatCalcs.h"
 #include <assert.h>
+#include <cmath>
 
 Vector4::Vector4():
 	_X(0.0f), _Y(0.0f), _Z(0.0f), _W(0.0f)
@@ -147,3 +148,19 @@ void Vector4::SetW(const float value)
 	_W = value;
 }
 
+Vector4 Vector4::Normalize()
+{
+	float d = _X * _X + _Y * _Y + _Z * _Z + _W * _W;
+	float d_inv = 1 / sqrt(d);
+
+	return Vector4(_X / d_inv, _Y / d_inv, _Z / d_inv, _W / d_inv);
+}
+
+float Vector4::dotProd(Vector4 v_1, Vector4 v_2)
+{
+	float total = v_1._X * v_2._X;
+	total += v_1._Y * v_2._Y;
+	total += v_1._Z * v_2._Z;
+	total += v_1._W * v_2._W;
+	return total;
+}

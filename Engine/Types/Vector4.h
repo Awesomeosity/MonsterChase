@@ -32,6 +32,11 @@ public:
 	void SetZ(const float value);
 	void SetW(const float value);
 
+	Vector4 Normalize();
+	
+	static float dotProd(Vector4 v_1, Vector4 v_2);
+	
+
 private:
 	float _X;
 	float _Y;
