@@ -75,20 +75,21 @@ void Physics::calcNewPos(float dt_ms, collidable& colliData, Point2D forces)
 	assert(A_Rot != nullptr);
 
 	Point2D currPos = colliData.obj->GetPoint();
-	currPos += Point2D(colliData.bounding_Y * cos(*A_Rot * PI / 180.0f), colliData.bounding_Y * sin(*A_Rot * PI / 180.0f));
-	//currPos.SetY(currPos.GetY() + Point2D(colliData.bounding_Y);
-	Point2D prevPos = colliData.prevPoint;
+	currPos += Point2D(colliData.bounding_Y * sin(*A_Rot * PI / 180.0f), colliData.bounding_Y * cos(*A_Rot * PI / 180.0f));
+	Point2D velocity_0 = colliData.velocity;
 	float mass = colliData.mass;
-	//float drag = colliData.kd;
 
-	Point2D newPos = (currPos * 2.0f) - prevPos + ((forces / mass) * dt_ms) / 1000.0f;
+	Point2D velocity_1 = velocity_0 + ((forces / mass) * (dt_ms / 1000.0f));
+
+	Point2D newPos = currPos + ((velocity_0 + velocity_1) / 2.0) * (dt_ms / 1000.0f);
+
+	//Readjust pos to correct position for sprite positioning
+	newPos = currPos - Point2D(colliData.bounding_Y * sin(*A_Rot * PI / 180.0f), colliData.bounding_Y * cos(*A_Rot * PI / 180.0f));
 
 	colliData.obj->SetPoint(newPos);
 
-	float currX = currPos.GetX();
-	float currY = currPos.GetY();
-	colliData.prevPoint.SetX(currX);
-	colliData.prevPoint.SetY(currY);
+	colliData.velocity.SetX(velocity_1.GetX());
+	colliData.velocity.SetY(velocity_1.GetY());
 }
 
 bool Physics::collisionCheck(collidable& object1, collidable& object2, float dt_ms)
@@ -139,7 +140,7 @@ CollisionPair Physics::findEarliestCollision(float dt_ms, Vector4 collisionAxisX
 
 	if (collidables.size() <= 1)
 	{
-		return;
+		return earliestCollision;
 	}
 
 	for (size_t i = 0; i < collidables.size() - 1; i++)
@@ -147,27 +148,30 @@ CollisionPair Physics::findEarliestCollision(float dt_ms, Vector4 collisionAxisX
 		for (size_t j = i + 1; j < collidables.size(); j++)
 		{
 			float* collisionTime = new float(0.0f);
-			Vector4* collisionNormal = new Vector4();
-			if (collisionCheck(*collidables[i], *collidables[j], dt_ms, collisionAxisX, collisionAxisY, *collisionTime, *collisionNormal))
+			Vector4* collisionNormalA = new Vector4();
+			Vector4* collisionNormalB = new Vector4();
+			if (collisionCheck(*collidables[i], *collidables[j], dt_ms, collisionAxisX, collisionAxisY, *collisionTime, *collisionNormalA, *collisionNormalB))
 			{
 				if (*collisionTime < earliestCollision.collisionTime)
 				{
 					earliestCollision.collisionTime = *collisionTime;
-					earliestCollision.collisionNormal = *collisionNormal;
+					earliestCollision.collisionNormalA = *collisionNormalA;
+					earliestCollision.collisionNormalB = *collisionNormalB;
 					earliestCollision.collisionObjs[0] = collidables[i];
 					earliestCollision.collisionObjs[1] = collidables[j];
 				}
 			}
 
 			delete collisionTime;
-			delete collisionNormal;
+			delete collisionNormalA;
+			delete collisionNormalB;
 		}
 	}
 
 	return earliestCollision;
 }
 
-bool Physics::collisionCheck(collidable& object1, collidable& object2, float dt_ms, Vector4 collisionAxisX, Vector4 collisionAxisY, float& o_floatTime, Vector4& o_collisionNormal)
+bool Physics::collisionCheck(collidable& object1, collidable& object2, float dt_ms, Vector4 collisionAxisX, Vector4 collisionAxisY, float& o_floatTime, Vector4& o_collisionNormalA, Vector4& o_collisionNormalB)
 {
 	float* A_Rot = reinterpret_cast<float*>(object1.obj->GetComponent("Rotation"));
 	float* B_Rot = reinterpret_cast<float*>(object2.obj->GetComponent("Rotation"));
@@ -176,15 +180,15 @@ bool Physics::collisionCheck(collidable& object1, collidable& object2, float dt_
 
 	//Adjust centers to match true center
 	Point2D A_Center = object1.obj->GetPoint();
-	A_Center += Point2D(object1.bounding_Y * cos(*A_Rot * PI / 180.0f), object1.bounding_Y * sin(*A_Rot * PI / 180.0f));
+	A_Center += Point2D(object1.bounding_Y * sin(*A_Rot * PI / 180.0f), object1.bounding_Y * cos(*A_Rot * PI / 180.0f));
 	Point2D B_Center = object2.obj->GetPoint();
-	B_Center += Point2D(object2.bounding_Y * cos(*B_Rot * PI / 180.0f), object2.bounding_Y * sin(*B_Rot * PI / 180.0f));
+	B_Center += Point2D(object2.bounding_Y * sin(*B_Rot * PI / 180.0f), object2.bounding_Y * cos(*B_Rot * PI / 180.0f));
 
 	Matrix4 ARotation = Matrix4::GenerateRotationMatrix(*A_Rot);
 	Matrix4 BRotation = Matrix4::GenerateRotationMatrix(*B_Rot);
 
-	Point2D AVelocity = A_Center - object1.prevPoint;
-	Point2D BVelocity = B_Center - object2.prevPoint;
+	Point2D AVelocity = object1.velocity;
+	Point2D BVelocity = object2.velocity;
 
 	float bestClose = 0.0f;
 	float bestOpen = dt_ms / 1000;
@@ -244,7 +248,16 @@ bool Physics::collisionCheck(collidable& object1, collidable& object2, float dt_
 			bestClose = tClose > bestClose ? tClose : bestClose;
 			bestOpen = tOpen < bestOpen ? tOpen : bestOpen;
 
-			o_collisionNormal = swapped ? -BRotation.getCol(1) : BRotation.getCol(1);
+			if (ACenterWorldX - BCenterWorldX >= 0)
+			{
+				o_collisionNormalA = collisionAxisX;
+				o_collisionNormalB = -collisionAxisX;
+			}
+			else
+			{
+				o_collisionNormalA = -collisionAxisX;
+				o_collisionNormalB = collisionAxisX;
+			}
 		}
 	}
 
@@ -302,14 +315,22 @@ bool Physics::collisionCheck(collidable& object1, collidable& object2, float dt_
 
 			if (bestClose < tClose)
 			{
-				o_collisionNormal = swapped ? -BRotation.getCol(0) : BRotation.getCol(0);
+				bestClose = tClose;
+
+				if (ACenterWorldX - BCenterWorldX >= 0)
+				{
+					o_collisionNormalA = collisionAxisY;
+					o_collisionNormalB = -collisionAxisY;
+				}
+				else
+				{
+					o_collisionNormalA = -collisionAxisY;
+					o_collisionNormalB = collisionAxisY;
+				}
 			}
 
-			bestClose = tClose > bestClose ? tClose : bestClose;
 			bestOpen = tOpen < bestOpen ? tOpen : bestOpen;
-
 		}
-
 	}
 
 	if (bestClose > bestOpen)
@@ -347,8 +368,8 @@ bool Physics::collisionHelper(collidable& object1, collidable& object2, float dt
 	Vector4 V_ACenterB = M_AB * Vector4(A_Center, 0.0f, 1.0f);
 
 	//Velocity
-	Point2D AVelocity = A_Center - object1.prevPoint;
-	Point2D BVelocity = B_Center - object2.prevPoint;
+	Point2D AVelocity = object1.velocity;
+	Point2D BVelocity = object2.velocity;
 
 	Point2D VelARelB = AVelocity - BVelocity;
 
@@ -485,4 +506,15 @@ void Physics::calcAllPos(float dt_ms)
 
 void Physics::resolveCollision(CollisionPair collPair)
 {
+	//TODO: When a collision occurs, Use Conservation of Momentum primarily.
+	Point2D velocityA = collPair.collisionObjs[0]->velocity;
+	Point2D velocityB = collPair.collisionObjs[1]->velocity;
+	float massA = collPair.collisionObjs[0]->mass;
+	float massB = collPair.collisionObjs[1]->mass;
+
+	Point2D newVelocityA = ((massA - massB) / (massA + massB)) * velocityA + ((2 * massB) / (massA + massB)) * velocityB;
+	Point2D newVelocityB = ((massB - massA) / (massB + massA)) * velocityB + ((2 * massA) / (massB + massA)) * velocityA;
+
+	collPair.collisionObjs[0]->velocity = newVelocityA;
+	collPair.collisionObjs[1]->velocity = newVelocityB;
 }

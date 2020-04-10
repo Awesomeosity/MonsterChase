@@ -148,7 +148,7 @@ inline Vector4 Matrix4::getRow(const unsigned int rowNum) const
 inline Vector4 Matrix4::getCol(const unsigned int colNum)
 {
 	assert(colNum < 4);
-	return Vector4(values[colNum * 4], values[colNum * 4 + 4], values[colNum * 4 + 8], values[colNum * 4 + 12]);
+	return Vector4(values[colNum], values[colNum + 4], values[colNum + 8], values[colNum + 12]);
 }
 
 inline Matrix4 operator+(const Matrix4& i_m1, const Matrix4& i_m2)

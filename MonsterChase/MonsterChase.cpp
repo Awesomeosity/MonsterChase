@@ -280,59 +280,59 @@ void CollisionUnitTest()
 	assert(!Physics::collisionCheck(*collid_A, *collid_B, 1000.0f));
 
 	ObjB->SetPoint(0.0f, 500.0f);
-	collid_B->prevPoint = Point2D(0.0f, 550.0f);
+	collid_B->velocity = Point2D(0.0f, 550.0f);
 	assert(!Physics::collisionCheck(*collid_A, *collid_B, 1000.0f));
 
 	ObjB->SetPoint(500.0f, 0.0f);
-	collid_B->prevPoint = Point2D(500.0f, 50.0f);
+	collid_B->velocity = Point2D(500.0f, 50.0f);
 	assert(!Physics::collisionCheck(*collid_A, *collid_B, 1000.0f));
 
 	//These should collide
 	ObjB->SetPoint(0.0f, 25.0f);
-	collid_B->prevPoint = Point2D(0.0f, 75.0f);
+	collid_B->velocity = Point2D(0.0f, 75.0f);
 	assert(Physics::collisionCheck(*collid_A, *collid_B, 1000.0f));
 
 	ObjB->SetPoint(25.0f, 0.0f);
-	collid_B->prevPoint = Point2D(25.0f, 50.0f);
+	collid_B->velocity = Point2D(25.0f, 50.0f);
 	assert(Physics::collisionCheck(*collid_A, *collid_B, 1000.0f));
 	
 	ObjB->SetPoint(0.0f, 0.0f);
-	collid_B->prevPoint = Point2D(0.0f, 50.0f);
+	collid_B->velocity = Point2D(0.0f, 50.0f);
 	assert(Physics::collisionCheck(*collid_A, *collid_B, 1000.0f));
 
 	//Phase 2: Velocity
 	//We manipulate velocity by setting the previous point of the collidable.
 	ObjB->SetPoint(500.0f, 500.0f);
-	collid_B->prevPoint = Point2D(450.0f, 550.0f); //Moving in X+
+	collid_B->velocity = Point2D(450.0f, 550.0f); //Moving in X+
 	assert(!Physics::collisionCheck(*collid_A, *collid_B, 1000.0f));
 
 	ObjB->SetPoint(0.0f, 500.0f);
-	collid_B->prevPoint = Point2D(0.0f, 600.0f); //Y-
+	collid_B->velocity = Point2D(0.0f, 600.0f); //Y-
 	assert(!Physics::collisionCheck(*collid_A, *collid_B, 1000.0f));
 
 	ObjB->SetPoint(0.0f, 500.0f);
-	collid_B->prevPoint = Point2D(0.0f, 500.0f); //Y+
+	collid_B->velocity = Point2D(0.0f, 500.0f); //Y+
 	assert(!Physics::collisionCheck(*collid_A, *collid_B, 1000.0f));
 
 	ObjB->SetPoint(500.0f, 0.0f);
-	collid_B->prevPoint = Point2D(450.0f, 50.0f); //X+
+	collid_B->velocity = Point2D(450.0f, 50.0f); //X+
 	assert(!Physics::collisionCheck(*collid_A, *collid_B, 1000.0f));
 
 	ObjB->SetPoint(500.0f, 0.0f);
-	collid_B->prevPoint = Point2D(550.0f, 50.0f); //X-
+	collid_B->velocity = Point2D(550.0f, 50.0f); //X-
 	assert(!Physics::collisionCheck(*collid_A, *collid_B, 1000.0f));
 
 	//These ones should collide
 	ObjB->SetPoint(100.0f, 0.0f);
-	collid_B->prevPoint = Point2D(200.0f, 50.0f); //X-
+	collid_B->velocity = Point2D(200.0f, 50.0f); //X-
 	assert(Physics::collisionCheck(*collid_A, *collid_B, 1000.0f));
 
 	ObjB->SetPoint(0.0f, -100.0f);
-	collid_B->prevPoint = Point2D(0.0f, -200.0f); //Y+
+	collid_B->velocity = Point2D(0.0f, -200.0f); //Y+
 	assert(Physics::collisionCheck(*collid_A, *collid_B, 1000.0f));
 
 	ObjB->SetPoint(-100.0f, -100.0f);
-	collid_B->prevPoint = Point2D(-200.0f, -200.0f); //X+, Y+
+	collid_B->velocity = Point2D(-200.0f, -200.0f); //X+, Y+
 	assert(Physics::collisionCheck(*collid_A, *collid_B, 1000.0f));
 
 
@@ -389,7 +389,7 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 {
 	//_CrtSetBreakAlloc();
 	//MatrixUnitTest();
-	CollisionUnitTest();
+	//CollisionUnitTest();
 	{
 		float playX = 10.0f;
 		float playY = 10.0f;
