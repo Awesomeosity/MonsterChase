@@ -5,6 +5,9 @@
 #include "../Types/Matrix4.h"
 #include "../Types/Vector4.h"
 
+//bruh
+const float PI = 3.14159265358979323846f;
+
 Physics::Physics()
 {
 	InitializeCriticalSection(&queueModification);
@@ -45,47 +48,35 @@ void Physics::RunPhysics(float dt_ms)
 	//Get universal axis of collision
 	float* universalRotation = reinterpret_cast<float*>(collidables[0]->obj->GetComponent("Rotation"));
 	Matrix4 universalAxis = Matrix4::GenerateRotationMatrix(*universalRotation);
-	Vector4 uni_X = universalAxis.getRow(0);
-	Vector4 uni_Y = universalAxis.getRow(1);
+	Vector4 uni_X = universalAxis.getCol(0);
+	Vector4 uni_Y = universalAxis.getCol(1);
 
 	CollisionPair earliestCollision = findEarliestCollision(temp_time, uni_X, uni_Y);
-	while(FloatCalcs::relativeEquality(earliestCollision.collisionTime, temp_time))
+	while(!FloatCalcs::relativeEquality(earliestCollision.collisionTime, temp_time))
 	{
-		//TODO: Move physics forward to earliest collision time
-		//calcNewPos(earliestCollision.collisionTime);
-		
+		//Progress physics to collision time
+		calcAllPos(earliestCollision.collisionTime);
+
 		//TODO: Resolve collision somehow??
-		//resolveCollision(earliestCollision);
+		resolveCollision(earliestCollision);
 
 		temp_time -= earliestCollision.collisionTime;
 		earliestCollision = findEarliestCollision(temp_time, uni_X, uni_Y);
 	}
 
-	//TODO: Progress physics using remaining time
-	//calcNewPos(temp_time);
-
-	/*
-	for (size_t i = 0; i < collidables.size(); i++)
-	{
-		void* voidPtr = collidables[i]->obj->GetComponent("Forces");
-		if (voidPtr == nullptr)
-		{
-			calcNewPos(dt_ms, *(collidables[i]), Point2D(0, 0));
-		}
-		else
-		{
-			Point2D* forcePtr = reinterpret_cast<Point2D*>(voidPtr);
-			calcNewPos(dt_ms, *(collidables[i]), *forcePtr);
-		}
-	}
-	*/
+	//Progress physics using remaining time
+	calcAllPos(temp_time);
 }
 
 
 void Physics::calcNewPos(float dt_ms, collidable& colliData, Point2D forces)
 {
+	float* A_Rot = reinterpret_cast<float*>(colliData.obj->GetComponent("Rotation"));
+	assert(A_Rot != nullptr);
+
 	Point2D currPos = colliData.obj->GetPoint();
-	currPos.SetY(currPos.GetY() + colliData.bounding_Y);
+	currPos += Point2D(colliData.bounding_Y * cos(*A_Rot * PI / 180.0f), colliData.bounding_Y * sin(*A_Rot * PI / 180.0f));
+	//currPos.SetY(currPos.GetY() + Point2D(colliData.bounding_Y);
 	Point2D prevPos = colliData.prevPoint;
 	float mass = colliData.mass;
 	//float drag = colliData.kd;
@@ -146,6 +137,11 @@ CollisionPair Physics::findEarliestCollision(float dt_ms, Vector4 collisionAxisX
 	CollisionPair earliestCollision;
 	earliestCollision.collisionTime = dt_ms;
 
+	if (collidables.size() <= 1)
+	{
+		return;
+	}
+
 	for (size_t i = 0; i < collidables.size() - 1; i++)
 	{
 		for (size_t j = i + 1; j < collidables.size(); j++)
@@ -173,23 +169,172 @@ CollisionPair Physics::findEarliestCollision(float dt_ms, Vector4 collisionAxisX
 
 bool Physics::collisionCheck(collidable& object1, collidable& object2, float dt_ms, Vector4 collisionAxisX, Vector4 collisionAxisY, float& o_floatTime, Vector4& o_collisionNormal)
 {
-	//TODO Implement this
-	return false;
+	float* A_Rot = reinterpret_cast<float*>(object1.obj->GetComponent("Rotation"));
+	float* B_Rot = reinterpret_cast<float*>(object2.obj->GetComponent("Rotation"));
+	assert(A_Rot != nullptr);
+	assert(B_Rot != nullptr);
+
+	//Adjust centers to match true center
+	Point2D A_Center = object1.obj->GetPoint();
+	A_Center += Point2D(object1.bounding_Y * cos(*A_Rot * PI / 180.0f), object1.bounding_Y * sin(*A_Rot * PI / 180.0f));
+	Point2D B_Center = object2.obj->GetPoint();
+	B_Center += Point2D(object2.bounding_Y * cos(*B_Rot * PI / 180.0f), object2.bounding_Y * sin(*B_Rot * PI / 180.0f));
+
+	Matrix4 ARotation = Matrix4::GenerateRotationMatrix(*A_Rot);
+	Matrix4 BRotation = Matrix4::GenerateRotationMatrix(*B_Rot);
+
+	Point2D AVelocity = A_Center - object1.prevPoint;
+	Point2D BVelocity = B_Center - object2.prevPoint;
+
+	float bestClose = 0.0f;
+	float bestOpen = dt_ms / 1000;
+
+	//X Axis
+	{
+		float ACenterWorldX = Vector4::dotProd(collisionAxisX, Vector4(A_Center, 0.0f, 0.0f));
+		float BCenterWorldX = Vector4::dotProd(collisionAxisX, Vector4(B_Center, 0.0f, 0.0f));
+
+		float AExtWorldX = Vector4::dotProd(collisionAxisX, (ARotation.getCol(0).Normalize() * object1.bounding_X)) + Vector4::dotProd(collisionAxisX, (ARotation.getCol(1).Normalize() * object1.bounding_Y));
+		float BExtWorldX = Vector4::dotProd(collisionAxisX, (BRotation.getCol(0).Normalize() * object2.bounding_X)) + Vector4::dotProd(collisionAxisX, (BRotation.getCol(1).Normalize() * object2.bounding_Y));
+
+		float AVelWorldX = Vector4::dotProd(collisionAxisX, Vector4(AVelocity, 0.0f, 0.0f));
+		float BVelWorldX = Vector4::dotProd(collisionAxisX, Vector4(BVelocity, 0.0f, 0.0f));
+
+		float BExtX = AExtWorldX + BExtWorldX;
+		float BLeftX = BCenterWorldX - BExtX;
+		float BRightX = BCenterWorldX + BExtX;
+
+		if (FloatCalcs::isZero(AVelWorldX - BVelWorldX))
+		{
+			//Handle 0 Velocity edge case
+			if ((ACenterWorldX < BLeftX) || (ACenterWorldX > BRightX))
+			{
+				return false;
+			}
+		}
+		else
+		{
+			float DClose = BLeftX - ACenterWorldX;
+			float DOpen = BRightX - ACenterWorldX;
+
+			float tClose = DClose / (AVelWorldX - BVelWorldX);
+			float tOpen = DOpen / (AVelWorldX - BVelWorldX);
+
+			bool swapped = false;
+
+			//Swap if velocity is going in opposite direction
+			if (tOpen < tClose)
+			{
+				float tempTime = tOpen;
+				tOpen = tClose;
+				tClose = tempTime;
+				swapped = true;
+			}
+
+			if (tClose * 1000 > dt_ms)
+			{
+				return false;
+			}
+
+			if (tClose < 0)
+			{
+				return false;
+			}
+
+			bestClose = tClose > bestClose ? tClose : bestClose;
+			bestOpen = tOpen < bestOpen ? tOpen : bestOpen;
+
+			o_collisionNormal = swapped ? -BRotation.getCol(1) : BRotation.getCol(1);
+		}
+	}
+
+	//Y Axis
+	{
+		float ACenterWorldX = Vector4::dotProd(collisionAxisY, Vector4(A_Center, 0.0f, 0.0f));
+		float BCenterWorldX = Vector4::dotProd(collisionAxisY, Vector4(B_Center, 0.0f, 0.0f));
+
+		float AExtWorldX = Vector4::dotProd(collisionAxisY, (ARotation.getCol(0).Normalize() * object1.bounding_X)) + Vector4::dotProd(collisionAxisY, (ARotation.getCol(1).Normalize() * object1.bounding_Y));
+		float BExtWorldX = Vector4::dotProd(collisionAxisY, (BRotation.getCol(0).Normalize() * object2.bounding_X)) + Vector4::dotProd(collisionAxisY, (BRotation.getCol(1).Normalize() * object2.bounding_Y));
+
+		float AVelWorldX = Vector4::dotProd(collisionAxisY, Vector4(AVelocity, 0.0f, 0.0f));
+		float BVelWorldX = Vector4::dotProd(collisionAxisY, Vector4(BVelocity, 0.0f, 0.0f));
+
+		float BExtX = AExtWorldX + BExtWorldX;
+		float BLeftX = BCenterWorldX - BExtX;
+		float BRightX = BCenterWorldX + BExtX;
+
+		if (FloatCalcs::isZero(AVelWorldX - BVelWorldX))
+		{
+			//Handle 0 Velocity edge case
+			if ((ACenterWorldX < BLeftX) || (ACenterWorldX > BRightX))
+			{
+				return false;
+			}
+		}
+		else
+		{
+			float DClose = BLeftX - ACenterWorldX;
+			float DOpen = BRightX - ACenterWorldX;
+
+			float tClose = DClose / (AVelWorldX - BVelWorldX);
+			float tOpen = DOpen / (AVelWorldX - BVelWorldX);
+
+			bool swapped = false;
+
+			//Swap if velocity is going in opposite direction
+			if (tOpen < tClose)
+			{
+				float tempTime = tOpen;
+				tOpen = tClose;
+				tClose = tempTime;
+				swapped = true;
+			}
+
+			if (tClose * 1000 > dt_ms)
+			{
+				return false;
+			}
+
+			if (tClose < 0)
+			{
+				return false;
+			}
+
+			if (bestClose < tClose)
+			{
+				o_collisionNormal = swapped ? -BRotation.getCol(0) : BRotation.getCol(0);
+			}
+
+			bestClose = tClose > bestClose ? tClose : bestClose;
+			bestOpen = tOpen < bestOpen ? tOpen : bestOpen;
+
+		}
+
+	}
+
+	if (bestClose > bestOpen)
+	{
+		return false;
+	}
+	else
+	{
+		o_floatTime = bestClose;
+		return true;
+	}
 }
 
 bool Physics::collisionHelper(collidable& object1, collidable& object2, float dt_ms, float& o_open, float& o_close)
 {
-	//Setting up matrices
-	Point2D A_Center = object1.obj->GetPoint();
-	A_Center += Point2D(0.0f, object1.bounding_Y);
-	Point2D B_Center = object2.obj->GetPoint();
-	B_Center += Point2D(0.0f, object2.bounding_Y);
-
 	float* A_Rot = reinterpret_cast<float*>(object1.obj->GetComponent("Rotation"));
 	float* B_Rot = reinterpret_cast<float*>(object2.obj->GetComponent("Rotation"));
-
 	assert(A_Rot != nullptr);
 	assert(B_Rot != nullptr);
+
+	//Setting up matrices
+	Point2D A_Center = object1.obj->GetPoint();
+	A_Center += Point2D(object1.bounding_Y * cos(*A_Rot * PI / 180.0f), object1.bounding_Y * sin(*A_Rot * PI / 180.0f));
+	Point2D B_Center = object2.obj->GetPoint();
+	B_Center += Point2D(object2.bounding_Y * cos(*B_Rot * PI / 180.0f), object2.bounding_Y * sin(*B_Rot * PI / 180.0f));
 
 	Matrix4 M_AWorld = Matrix4::GenerateTransformMatrix(A_Center.GetX(), A_Center.GetY(), 0.0f) * Matrix4::GenerateRotationMatrix(*A_Rot);
 	Matrix4 M_BWorld = Matrix4::GenerateTransformMatrix(B_Center.GetX(), B_Center.GetY(), 0.0f) * Matrix4::GenerateRotationMatrix(*B_Rot);
@@ -318,4 +463,26 @@ bool Physics::collisionHelper(collidable& object1, collidable& object2, float dt
 	o_open = bestOpen;
 
 	return true;
+}
+
+void Physics::calcAllPos(float dt_ms)
+{
+	for (size_t i = 0; i < collidables.size(); i++)
+	{
+		void* voidPtr = collidables[i]->obj->GetComponent("Forces");
+		if (voidPtr == nullptr)
+		{
+			calcNewPos(dt_ms, *(collidables[i]), Point2D(0, 0));
+		}
+		else
+		{
+			Point2D* forcePtr = reinterpret_cast<Point2D*>(voidPtr);
+			calcNewPos(dt_ms, *(collidables[i]), *forcePtr);
+		}
+	}
+
+}
+
+void Physics::resolveCollision(CollisionPair collPair)
+{
 }

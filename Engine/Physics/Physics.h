@@ -43,8 +43,17 @@ public:
 
 private:
 	CollisionPair findEarliestCollision(float dt_ms, Vector4 collisionAxisX, Vector4 collisionAxisY);
+	
+	//This version uses a given universal collision axis.
 	bool collisionCheck(collidable& object1, collidable& object2, float dt_ms, Vector4 collisionAxisX, Vector4 collisionAxisY, float& o_floatTime, Vector4& o_collisionNormal);
+	
+	//Standard Collision Helper for the standard collision check.
 	static bool collisionHelper(collidable& object1, collidable& object2, float dt_ms, float& o_open, float& o_close);
+	
+	void calcAllPos(float dt_ms);
+
+	void resolveCollision(CollisionPair collPair);
+
 	std::vector<SmartPointer<collidable>> collidables;
 	mutable CRITICAL_SECTION queueModification;
 };
