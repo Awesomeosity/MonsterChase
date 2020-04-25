@@ -4,8 +4,6 @@
 
 namespace GLib
 {
-	typedef void(*KeyStateChange)(unsigned int i_VKeyID, bool i_bDown);
-
 	struct Point2D
 	{
 		float			x;
@@ -22,22 +20,19 @@ namespace GLib
 		uint8_t			r, g, b, a;
 	};
 
-	namespace Sprites
+	typedef struct _SpriteEdges
 	{
-		typedef struct _SpriteEdges
-		{
-			float			Left;
-			float			Top;
-			float			Right;
-			float			Bottom;
-		} SpriteEdges;
+		float			Left;
+		float			Top;
+		float			Right;
+		float			Bottom;
+	} SpriteEdges;
 
-		typedef struct _SpriteUVs
-		{
-			UV				TopLeft;
-			UV				TopRight;
-			UV				BottomLeft;
-			UV				BottomRight;
-		} SpriteUVs;
-	} // namespace Sprites
+	typedef struct _SpriteUVs
+	{
+		UV				TopLeft;
+		UV				TopRight;
+		UV				BottomLeft;
+		UV				BottomRight;
+	} SpriteUVs;
 } // namespace GLib

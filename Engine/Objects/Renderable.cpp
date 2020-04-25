@@ -14,7 +14,7 @@ Renderable::~Renderable()
 	renderables.clear();
 }
 
-void Renderable::AddRenderable(WeakPointer<GameObject> gameObj, GLib::Sprites::Sprite* sprPtr)
+void Renderable::AddRenderable(WeakPointer<GameObject> gameObj, GLib::Sprite* sprPtr)
 {
 	EnterCriticalSection(&queueModification);
 	renderables.push_back(SmartPointer<renders>(new renders(WeakPointer<GameObject>(gameObj), sprPtr)));
@@ -27,14 +27,13 @@ void Renderable::ReleaseSprites()
 	{
 		if (renderables[i]->sprPtr)
 		{
-			GLib::Sprites::Release(renderables[i]->sprPtr);
+			GLib::Release(renderables[i]->sprPtr);
 		}
 	}
 }
 
 void Renderable::RenderAll()
 {
-	GLib::BeginRendering();
 	GLib::Sprites::BeginRendering();
 	for (size_t i = 0; i < renderables.size(); i++)
 	{
@@ -45,7 +44,7 @@ void Renderable::RenderAll()
 
 		GLib::Point2D	Offset = { spritePos_X, spritePos_Y };
 
-		GLib::Sprites::RenderSprite(*(renderables[i]->sprPtr), Offset, 0);
+		GLib::Render(*(renderables[i]->sprPtr), Offset, 0);
 	}
 
 	GLib::Sprites::EndRendering();
@@ -56,7 +55,7 @@ void Renderable::Dispose()
 {
 	for (size_t i = 0; i < renderables.size(); i++)
 	{
-		GLib::Sprites::Release(renderables[i]->sprPtr);
+		GLib::Release(renderables[i]->sprPtr);
 		renderables[i]->gameObj.Reset();
 		renderables[i].Reset();
 	}
