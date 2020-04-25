@@ -342,7 +342,7 @@ void CollisionUnitTest()
 	ObjB.Reset();
 }
 
-void gameObjHandler(const char* i_fileName)
+void gameObjHandler(std::string i_fileName)
 {
 	int* controllerType = new int();
 	WeakPointer<GameObject> newObj = Engine::CreateActor(i_fileName, *controllerType);
@@ -364,15 +364,17 @@ void gameObjHandler(const char* i_fileName)
 	delete controllerType;
 }
 
-void makeGameObjs(std::vector<const char*> i_fileNames)
+void makeGameObjs(std::vector < std::string > i_fileNames)
 {
 	Engine::JobSystem::CreateQueue("OBJMaker", 4);
 
 	for (size_t i = 0; i < i_fileNames.size(); i++)
 	{
-		const char* fileName = i_fileNames[i];
+		std::string fileName = i_fileNames[i];
 		Engine::JobSystem::RunJob("OBJMaker", [fileName]() {
+			OutputDebugStringA("Thread started.\n");
 			gameObjHandler(fileName);
+			OutputDebugStringA("Thread ended.\n");
 		});
 	}
 
@@ -382,6 +384,7 @@ void makeGameObjs(std::vector<const char*> i_fileNames)
 	} while (Engine::JobSystem::HasJobs("OBJMaker"));
 
 	Engine::JobSystem::RequestShutdown();
+	OutputDebugStringA("All threads complete.\n");
 }
 
 
@@ -400,9 +403,8 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 		bool bSuccess = GLib::Initialize(i_hInstance, i_nCmdShow, "Monster Mash", ID, static_cast<unsigned int>(playX) * 50 * 2, static_cast<unsigned int>(playY) * 50 * 2);
 
 
-		std::vector<const char*> charArray;
+		std::vector < std::string > charArray;
 		charArray.push_back("data\\Player.json");
-
 		charArray.push_back("data\\Enemy.json");
 
 		makeGameObjs(charArray);
