@@ -77,20 +77,20 @@ namespace Engine
 		Point2D tempForces;
 		if (WKey && !SKey)
 		{
-			tempForces.SetY(10.0f);
+			tempForces.SetY(100.0f);
 		}
 		else if (SKey && !WKey)
 		{
-			tempForces.SetY(-10.0f);
+			tempForces.SetY(-100.0f);
 		}
 
 		if (AKey && !DKey)
 		{
-			tempForces.SetX(-10.0f);
+			tempForces.SetX(-100.0f);
 		}
 		else if (!AKey && DKey)
 		{
-			tempForces.SetX(10.0f);
+			tempForces.SetX(100.0f);
 		}
 
 		(*forcePtr).SetX(tempForces.GetX());
@@ -275,25 +275,25 @@ namespace Engine
 
 		do
 		{
-			const size_t	lenBuffer = 65;
-			char			Buffer[lenBuffer];
+			//const size_t	lenBuffer = 65;
+			//char			Buffer[lenBuffer];
 
 			//Timing
 			long dt = Timing::deltaTime();
 			float dt_ms = (float)dt / 1000.0f;
 
 
-			sprintf_s(Buffer, lenBuffer, "DEBUG: Frame time: %2.5f microseconds.\n", dt_ms);
-			OutputDebugStringA(Buffer);
+			//sprintf_s(Buffer, lenBuffer, "DEBUG: Frame time: %2.5f milliseconds.\n", dt_ms);
+			//OutputDebugStringA(Buffer);
 
 			GLib::Service(bQuit);
 
 			if (!bQuit)
 			{
-				OutputDebugStringA("DEBUG: Starting system ticks.\n");
+				//OutputDebugStringA("DEBUG: Starting system ticks.\n");
 				physSystem->RunPhysics(dt_ms);
 				renderSystem->RenderAll();
-				OutputDebugStringA("DEBUG: Ending system ticks.\n");
+				//OutputDebugStringA("DEBUG: Ending system ticks.\n");
 			}
 
 		} while (bQuit == false);

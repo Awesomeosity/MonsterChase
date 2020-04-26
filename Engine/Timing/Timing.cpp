@@ -22,5 +22,5 @@ long Timing::deltaTime()
 
 	lastTick = currentTick;
 
-	return (long)diffTick.QuadPart / 1000;
+	return (long)diffTick.QuadPart;
 }
