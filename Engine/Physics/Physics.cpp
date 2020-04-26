@@ -31,7 +31,7 @@ void Physics::AddCollidableObject(WeakPointer<GameObject> newObj, float bound_X,
 
 void Physics::RunPhysics(float dt_ms)
 {
-	OutputDebugStringA("DEBUG: Starting Physics ticks.\n");
+	//OutputDebugStringA("DEBUG: Starting Physics ticks.\n");
 
 	if (collidables.size() == 0)
 	{
@@ -79,7 +79,7 @@ void Physics::calcNewPos(float dt_ms, collidable& colliData, Point2D forces)
 	Point2D newPos = currPos + ((velocity_0 + velocity_1) / 2.0) * (dt_ms / 1000.0f);
 
 	//Readjust pos to correct position for sprite positioning
-	newPos = currPos - Point2D(colliData.bounding_Y * sin(*A_Rot * PI / 180.0f), colliData.bounding_Y * cos(*A_Rot * PI / 180.0f));
+	newPos -= Point2D(colliData.bounding_Y * sin(*A_Rot * PI / 180.0f), colliData.bounding_Y * cos(*A_Rot * PI / 180.0f));
 
 	colliData.obj->SetPoint(newPos);
 
