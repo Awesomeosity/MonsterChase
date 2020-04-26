@@ -31,12 +31,7 @@ void Physics::AddCollidableObject(WeakPointer<GameObject> newObj, float bound_X,
 
 void Physics::RunPhysics(float dt_ms)
 {
-	//TODO: Iterate through all collidable pairs, find earliest collision (if any)
-	//If collision,
-	//1) Progress Physics to that point
-	//2) Resolve Collision by applying Conservation of Momentum & Reflection (if necessary)
-	//Repeat until the timestep is complete
-	//If there is time left over, progress physics using the remaining time.
+	OutputDebugStringA("DEBUG: Starting Physics ticks.\n");
 
 	if (collidables.size() == 0)
 	{
@@ -152,6 +147,12 @@ CollisionPair Physics::findEarliestCollision(float dt_ms, Vector4 collisionAxisX
 			Vector4* collisionNormalB = new Vector4();
 			if (collisionCheck(*collidables[i], *collidables[j], dt_ms, collisionAxisX, collisionAxisY, *collisionTime, *collisionNormalA, *collisionNormalB))
 			{
+				const size_t	lenBuffer = 65;
+				char			Buffer[lenBuffer];
+
+				sprintf_s(Buffer, lenBuffer, "DEBUG: Found collision at %2.5f microseconds.\n", dt_ms);
+				OutputDebugStringA(Buffer);
+
 				if (*collisionTime < earliestCollision.collisionTime)
 				{
 					earliestCollision.collisionTime = *collisionTime;

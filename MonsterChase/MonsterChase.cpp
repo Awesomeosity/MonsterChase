@@ -372,9 +372,9 @@ void makeGameObjs(std::vector < std::string > i_fileNames)
 	{
 		std::string fileName = i_fileNames[i];
 		Engine::JobSystem::RunJob("OBJMaker", [fileName]() {
-			OutputDebugStringA("Thread started.\n");
+			OutputDebugStringA("DEBUG: Thread started.\n");
 			gameObjHandler(fileName);
-			OutputDebugStringA("Thread ended.\n");
+			OutputDebugStringA("DEBUG: Thread ended.\n");
 		});
 	}
 
@@ -384,7 +384,7 @@ void makeGameObjs(std::vector < std::string > i_fileNames)
 	} while (Engine::JobSystem::HasJobs("OBJMaker"));
 
 	Engine::JobSystem::RequestShutdown();
-	OutputDebugStringA("All threads complete.\n");
+	OutputDebugStringA("DEBUG: All threads complete.\n");
 }
 
 
@@ -402,6 +402,15 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 		Engine::initEngine();
 		bool bSuccess = GLib::Initialize(i_hInstance, i_nCmdShow, "Monster Mash", ID, static_cast<unsigned int>(playX) * 50 * 2, static_cast<unsigned int>(playY) * 50 * 2);
 
+		if (bSuccess)
+		{
+			OutputDebugStringA("DEBUG: bSuccess confirmed.\n");
+		}
+		else
+		{
+			OutputDebugStringA("DEBUG: bSuccess failed.\n");
+		}
+
 
 		std::vector < std::string > charArray;
 		charArray.push_back("data\\Player.json");
@@ -417,5 +426,5 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 		charArray.clear();
 	}
 	_CrtDumpMemoryLeaks();
-
+	OutputDebugStringA("DEBUG: ENGINE END.\n");
 }

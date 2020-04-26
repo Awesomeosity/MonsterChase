@@ -27,6 +27,7 @@ namespace Engine
 
 	void initEngine()
 	{
+		OutputDebugStringA("DEBUG: Starting systems.\n");
 		world = new World();
 		physSystem = new Physics();
 		renderSystem = new Renderable();
@@ -67,7 +68,7 @@ namespace Engine
 			break;
 		}
 
-		sprintf_s(Buffer, lenBuffer, "VKey 0x%04x went %s\n", i_VKeyID, bWentDown ? "down" : "up");
+		sprintf_s(Buffer, lenBuffer, "DEBUG: VKey 0x%04x went %s\n", i_VKeyID, bWentDown ? "down" : "up");
 		OutputDebugStringA(Buffer);
 
 		void* voidForcePtr = player_object->GetComponent("Forces");
@@ -147,7 +148,7 @@ namespace Engine
 
 		if (pTexture == nullptr)
 		{
-			OutputDebugStringA("Texture loading failed.\n");
+			OutputDebugStringA("DEBUG: Texture loading failed.\n");
 			return NULL;
 		}
 		else
@@ -176,24 +177,8 @@ namespace Engine
 			// Bind the texture to sprite
 			GLib::SetTexture(*pSprite, pTexture);
 
+			OutputDebugStringA("DEBUG: Texture loading success.\n");
 			return pSprite;
-		}
-	}
-
-	void GetName(char* name)
-	{
-		while (true)
-		{
-			std::cin.getline(name, 256);
-			if (std::cin.fail())
-			{
-				std::cin.clear();
-				std::cout << "Invalid input. Please try entering a string.\n";
-			}
-			else
-			{
-				return;
-			}
 		}
 	}
 
@@ -230,6 +215,7 @@ namespace Engine
 			float actorBB_Y = obJSON["collision_data"]["BB_Y"];
 
 			physSystem->AddCollidableObject(actorPtr, actorBB_X, actorBB_Y, actorMass, actorKD);
+			OutputDebugStringA("DEBUG: Added Collidable object.\n");
 		}
 
 		if (obJSON.contains("render_data"))
@@ -240,6 +226,7 @@ namespace Engine
 
 			GLib::Sprite* pSprite = CreateSprite(sprite);
 			renderSystem->AddRenderable(actorPtr, pSprite);
+			OutputDebugStringA("DEBUG: Added Renderable object.\n");
 		}
 
 		assert(obJSON.contains("name"));
@@ -259,6 +246,7 @@ namespace Engine
 				player_object = actorPtr.Promote();
 				Point2D* forcePointer = new Point2D();
 				player_object->AddComponent("Forces", forcePointer);
+				OutputDebugStringA("DEBUG: Added Player object.\n");
 			}
 			else if (conType == "normal")
 			{
@@ -287,21 +275,30 @@ namespace Engine
 
 		do
 		{
+			const size_t	lenBuffer = 65;
+			char			Buffer[lenBuffer];
+
 			//Timing
 			long dt = Timing::deltaTime();
 			float dt_ms = (float)dt / 1000.0f;
+
+
+			sprintf_s(Buffer, lenBuffer, "DEBUG: Frame time: %2.5f microseconds.\n", dt_ms);
+			OutputDebugStringA(Buffer);
 
 			GLib::Service(bQuit);
 
 			if (!bQuit)
 			{
+				OutputDebugStringA("DEBUG: Starting system ticks.\n");
 				physSystem->RunPhysics(dt_ms);
-
 				renderSystem->RenderAll();
+				OutputDebugStringA("DEBUG: Ending system ticks.\n");
 			}
 
 		} while (bQuit == false);
 
+		OutputDebugStringA("DEBUG: Beginning shutdown.\n");
 		physSystem->Dispose();
 		renderSystem->Dispose();
 		delete world;
@@ -311,5 +308,6 @@ namespace Engine
 
 		// IMPORTANT:  Tell GLib to shutdown, releasing resources.
 		GLib::Shutdown();
+		OutputDebugStringA("DEBUG: Ending shutdown.\n");
 	}
 }
