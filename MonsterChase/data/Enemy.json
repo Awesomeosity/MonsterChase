@@ -1,6 +1,6 @@
 {
 	"name": "UWU",
-	"position": [ 200.0, 200.0 ],
+	"position": [ 0.0, -50.0 ],
 	  "rotation": 0.0,
 	  "collision_data": {
     "mass": 1.0,
