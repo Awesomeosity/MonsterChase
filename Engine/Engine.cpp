@@ -23,7 +23,8 @@ namespace Engine
 	Physics* physSystem;
 	Renderable* renderSystem;
 	World* world;
-	SmartPointer<GameObject> player_object;
+	SmartPointer<GameObject> player_object_0;
+	SmartPointer<GameObject> player_object_1;
 
 	void initEngine()
 	{
@@ -38,10 +39,13 @@ namespace Engine
 		const size_t	lenBuffer = 65;
 		char			Buffer[lenBuffer];
 
+		//P1 Controls
 		static bool WKey = false;
-		static bool AKey = false;
 		static bool SKey = false;
-		static bool DKey = false;
+
+		//P2 Controls
+		static bool UpKey = false;
+		static bool DownKey = false;
 
 		switch (i_VKeyID)
 		{
@@ -54,12 +58,18 @@ namespace Engine
 			SKey = !SKey;
 			break;
 			//A
-		case 65:
-			AKey = !AKey;
-			break;
+		//case 65:
+		//	AKey = !AKey;
+		//	break;
 			//D
-		case 68:
-			DKey = !DKey;
+		//case 68:
+		//	DKey = !DKey;
+		//	break;
+		case 73:
+			UpKey = !UpKey;
+			break;
+		case 75:
+			DownKey = !DownKey;
 			break;
 		case 81:
 			//No key being held down.
@@ -71,30 +81,39 @@ namespace Engine
 		sprintf_s(Buffer, lenBuffer, "DEBUG: VKey 0x%04x went %s\n", i_VKeyID, bWentDown ? "down" : "up");
 		OutputDebugStringA(Buffer);
 
-		void* voidForcePtr = player_object->GetComponent("Forces");
-		Point2D* forcePtr = reinterpret_cast<Point2D*>(voidForcePtr);
-
-		Point2D tempForces;
 		if (WKey && !SKey)
 		{
-			tempForces.SetY(100.0f);
+			physSystem->setVelocity(Point2D(0.0f, 10.0f), player_object_0);
 		}
 		else if (SKey && !WKey)
 		{
-			tempForces.SetY(-100.0f);
+			physSystem->setVelocity(Point2D(0.0f, -10.0f), player_object_0);
+		}
+		else if (WKey && SKey)
+		{
+			physSystem->setVelocity(Point2D(0.0f, 0.0f), player_object_0);
+		}
+		else if (!WKey && !SKey)
+		{
+			physSystem->setVelocity(Point2D(0.0f, 0.0f), player_object_0);
 		}
 
-		if (AKey && !DKey)
+		if (UpKey && !DownKey)
 		{
-			tempForces.SetX(-100.0f);
+			physSystem->setVelocity(Point2D(0.0f, 10.0f), player_object_1);
 		}
-		else if (!AKey && DKey)
+		else if (DownKey && !UpKey)
 		{
-			tempForces.SetX(100.0f);
+			physSystem->setVelocity(Point2D(0.0f, -10.0f), player_object_1);
 		}
-
-		(*forcePtr).SetX(tempForces.GetX());
-		(*forcePtr).SetY(tempForces.GetY());
+		else if (UpKey && DownKey)
+		{
+			physSystem->setVelocity(Point2D(0.0f, 0.0f), player_object_1);
+		}
+		else if (!UpKey && !DownKey)
+		{
+			physSystem->setVelocity(Point2D(0.0f, 0.0f), player_object_1);
+		}
 	}
 
 	std::vector<uint8_t> LoadFileToBuffer(std::string i_pFilename)
@@ -239,15 +258,21 @@ namespace Engine
 			assert(obJSON["controller"].is_string());
 			std::string conType = obJSON["controller"];
 
-			if (conType == "player")
+			if (conType == "player_0")
 			{
 				o_controllerType = 0;
 
 				//Kinda a hacky solution...
-				player_object = actorPtr.Promote();
-				Point2D* forcePointer = new Point2D();
-				player_object->AddComponent("Forces", forcePointer);
-				OutputDebugStringA("DEBUG: Added Player object.\n");
+				player_object_0 = actorPtr.Promote();
+				OutputDebugStringA("DEBUG: Added Player_0 object.\n");
+			}
+			else if (conType == "player_1")
+			{
+				o_controllerType = 0;
+
+				//Kinda a hacky solution...
+				player_object_1 = actorPtr.Promote();
+				OutputDebugStringA("DEBUG: Added Player_1 object.\n");
 			}
 			else if (conType == "normal")
 			{
@@ -276,16 +301,16 @@ namespace Engine
 
 		do
 		{
-			const size_t	lenBuffer = 65;
-			char			Buffer[lenBuffer];
+			//const size_t	lenBuffer = 65;
+			//char			Buffer[lenBuffer];
 
 			//Timing
 			long dt = Timing::deltaTime();
 			float dt_ms = (float)dt / 1000.0f;
 
 
-			sprintf_s(Buffer, lenBuffer, "DEBUG: Frame time: %2.5f milliseconds.\n", dt_ms);
-			OutputDebugStringA(Buffer);
+			//sprintf_s(Buffer, lenBuffer, "DEBUG: Frame time: %2.5f milliseconds.\n", dt_ms);
+			//OutputDebugStringA(Buffer);
 
 			GLib::Service(bQuit);
 
@@ -305,7 +330,8 @@ namespace Engine
 		delete world;
 		delete physSystem;
 		delete renderSystem;
-		player_object.Reset();
+		player_object_0.Reset();
+		player_object_1.Reset();
 
 		// IMPORTANT:  Tell GLib to shutdown, releasing resources.
 		GLib::Shutdown();

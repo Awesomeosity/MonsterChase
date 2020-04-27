@@ -1,6 +1,6 @@
 {
   "name": "Joe",
-  "position": [ -100.0, -150.0 ],
+  "position": [ 100.0, -150.0 ],
   "rotation": 0.0,
   "collision_data": {
     "mass": 1.0,
@@ -11,5 +11,5 @@
   "render_data": {
     "sprite": "data\\GoodGuy.dds"
   },
-  "controller" : "player_0"
+  "controller" : "player_1"
 }
