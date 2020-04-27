@@ -15,8 +15,9 @@ struct collidable
 	float mass;
 	float kd;
 	Point2D velocity;
-	collidable(WeakPointer<GameObject> _obj, float X, float Y, float _mass, float _kd)
-		:obj(_obj), bounding_X(X), bounding_Y(Y), mass(_mass), kd(_kd), velocity(0.0f, 0.0f)
+	int type;
+	collidable(WeakPointer<GameObject> _obj, float X, float Y, float _mass, float _kd, int _type)
+		:obj(_obj), bounding_X(X), bounding_Y(Y), mass(_mass), kd(_kd), velocity(0.0f, 0.0f), type(_type)
 	{
 		
 	}
@@ -36,7 +37,7 @@ public:
 	Physics();
 	~Physics();
 
-	void AddCollidableObject(WeakPointer<GameObject> newObj, float bound_X, float bound_Y, float mass, float kd);
+	void AddCollidableObject(WeakPointer<GameObject> newObj, float bound_X, float bound_Y, float mass, float kd, int type);
 	void RunPhysics(float dt_ms);
 	static void calcNewPos(float dt_ms, collidable& data, Point2D forces);
 	static bool collisionCheck(collidable& object1, collidable& object2, float dt_ms);

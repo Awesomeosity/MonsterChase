@@ -228,13 +228,15 @@ namespace Engine
 			assert(obJSON["collision_data"]["kd"].is_number_float());
 			assert(obJSON["collision_data"]["BB_X"].is_number_float());
 			assert(obJSON["collision_data"]["BB_Y"].is_number_float());
+			assert(obJSON["collision_data"]["type"].is_number_integer());
 
 			float actorMass = obJSON["collision_data"]["mass"];
 			float actorKD = obJSON["collision_data"]["kd"];
 			float actorBB_X = obJSON["collision_data"]["BB_X"];
 			float actorBB_Y = obJSON["collision_data"]["BB_Y"];
+			int type = obJSON["collision_data"]["type"];
 
-			physSystem->AddCollidableObject(actorPtr, actorBB_X, actorBB_Y, actorMass, actorKD);
+			physSystem->AddCollidableObject(actorPtr, actorBB_X, actorBB_Y, actorMass, actorKD, type);
 			OutputDebugStringA("DEBUG: Added Collidable object.\n");
 		}
 

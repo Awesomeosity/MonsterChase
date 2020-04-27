@@ -273,10 +273,10 @@ void CollisionUnitTest()
 	//These should not collide
 	SmartPointer<GameObject> ObjA = SmartPointer<GameObject>(new GameObject());
 	ObjA->AddComponent("Rotation", new float(0.0f));
-	collidable* collid_A = new collidable(WeakPointer<GameObject>(ObjA), 50, 50, 0.0, 0.0);
+	collidable* collid_A = new collidable(WeakPointer<GameObject>(ObjA), 50, 50, 0.0, 0.0, 1);
 	SmartPointer<GameObject> ObjB = SmartPointer<GameObject>(new GameObject(500.0f, 500.0f));
 	ObjB->AddComponent("Rotation", new float(0.0f));
-	collidable* collid_B = new collidable(WeakPointer<GameObject>(ObjB), 50, 50, 0.0, 0.0);
+	collidable* collid_B = new collidable(WeakPointer<GameObject>(ObjB), 50, 50, 0.0, 0.0, 1);
 	assert(!Physics::collisionCheck(*collid_A, *collid_B, 1000.0f));
 
 	ObjB->SetPoint(0.0f, 500.0f);

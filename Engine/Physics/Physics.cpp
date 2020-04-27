@@ -21,10 +21,10 @@ Physics::~Physics()
 	}
 }
 
-void Physics::AddCollidableObject(WeakPointer<GameObject> newObj, float bound_X, float bound_Y, float mass, float kd)
+void Physics::AddCollidableObject(WeakPointer<GameObject> newObj, float bound_X, float bound_Y, float mass, float kd, int type)
 {
 	EnterCriticalSection(&queueModification);
-	SmartPointer<collidable> newCollid = SmartPointer<collidable>(new collidable(WeakPointer<GameObject>(newObj), bound_X, bound_Y, mass, kd));
+	SmartPointer<collidable> newCollid = SmartPointer<collidable>(new collidable(WeakPointer<GameObject>(newObj), bound_X, bound_Y, mass, kd, type));
 	collidables.push_back(newCollid);
 	LeaveCriticalSection(&queueModification);
 }
