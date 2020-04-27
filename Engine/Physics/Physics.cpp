@@ -118,6 +118,25 @@ bool Physics::collisionCheck(collidable& object1, collidable& object2, float dt_
 	}
 }
 
+void Physics::setVelocity(Point2D newVelocity, SmartPointer<GameObject> objRef)
+{
+	SmartPointer<collidable> targCollidable;
+	for (SmartPointer<collidable> currCollid : collidables)
+	{
+		if (currCollid->obj == objRef)
+		{
+			targCollidable = currCollid;
+		}
+	}
+
+	if (targCollidable->obj == nullptr)
+	{
+		return;
+	}
+
+	targCollidable->velocity = newVelocity;
+}
+
 void Physics::Dispose()
 {
 	for (size_t i = 0; i < collidables.size(); i++)

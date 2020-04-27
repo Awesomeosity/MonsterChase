@@ -40,6 +40,7 @@ public:
 	void RunPhysics(float dt_ms);
 	static void calcNewPos(float dt_ms, collidable& data, Point2D forces);
 	static bool collisionCheck(collidable& object1, collidable& object2, float dt_ms);
+	void setVelocity(Point2D newVelocity, SmartPointer<GameObject> objRef);
 	void Dispose();
 
 private:
