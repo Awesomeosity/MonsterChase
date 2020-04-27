@@ -415,6 +415,8 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 		charArray.push_back("data\\Enemy.json");
 		charArray.push_back("data\\TopWall.json");
 		charArray.push_back("data\\BottomWall.json");
+		charArray.push_back("data\\LeftWall.json");
+		charArray.push_back("data\\RightWall.json");
 
 
 		makeGameObjs(charArray);

@@ -1,12 +1,12 @@
 {
   "name": "Joe",
-  "position": [ 500.0, -25.0 ],
+  "position": [ 400.0, -25.0 ],
   "rotation": 0.0,
   "collision_data": {
     "mass": 1.0,
     "kd": 0.001,
-	"BB_X": 50.0,
-	"BB_Y": 50.0,
+	"BB_X": 1.0,
+	"BB_Y": 100.0,
 	"type": 0
   },
   "render_data": {

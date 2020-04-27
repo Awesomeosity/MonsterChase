@@ -162,30 +162,36 @@ CollisionPair Physics::findEarliestCollision(float dt_ms, Vector4 collisionAxisX
 	{
 		for (size_t j = i + 1; j < collidables.size(); j++)
 		{
-			float* collisionTime = new float(0.0f);
-			Vector4* collisionNormalA = new Vector4();
-			Vector4* collisionNormalB = new Vector4();
-			if (collisionCheck(*collidables[i], *collidables[j], dt_ms, collisionAxisX, collisionAxisY, *collisionTime, *collisionNormalA, *collisionNormalB))
+			//ignore collisions between non-movables.
+			if (collidables[i]->type == 1 || collidables[j]->type == 1)
 			{
-				const size_t	lenBuffer = 65;
-				char			Buffer[lenBuffer];
-
-				sprintf_s(Buffer, lenBuffer, "DEBUG: Found collision at %2.5f milliseconds.\n", dt_ms);
-				OutputDebugStringA(Buffer);
-
-				if (*collisionTime < earliestCollision.collisionTime)
+				float* collisionTime = new float(0.0f);
+				Vector4* collisionNormalA = new Vector4();
+				Vector4* collisionNormalB = new Vector4();
+				bool collided = collisionCheck(*collidables[i], *collidables[j], dt_ms, collisionAxisX, collisionAxisY, *collisionTime, *collisionNormalA, *collisionNormalB);
+				if (collided)
 				{
-					earliestCollision.collisionTime = *collisionTime;
-					earliestCollision.collisionNormalA = *collisionNormalA;
-					earliestCollision.collisionNormalB = *collisionNormalB;
-					earliestCollision.collisionObjs[0] = collidables[i];
-					earliestCollision.collisionObjs[1] = collidables[j];
-				}
-			}
+					const size_t	lenBuffer = 65;
+					char			Buffer[lenBuffer];
 
-			delete collisionTime;
-			delete collisionNormalA;
-			delete collisionNormalB;
+					sprintf_s(Buffer, lenBuffer, "DEBUG: Found collision at %2.5f milliseconds.\n", dt_ms);
+					OutputDebugStringA(Buffer);
+
+					if (*collisionTime < earliestCollision.collisionTime)
+					{
+						earliestCollision.collisionTime = *collisionTime;
+						earliestCollision.collisionNormalA = *collisionNormalA;
+						earliestCollision.collisionNormalB = *collisionNormalB;
+						earliestCollision.collisionObjs[0] = collidables[i];
+						earliestCollision.collisionObjs[1] = collidables[j];
+					}
+				}
+
+				delete collisionTime;
+				delete collisionNormalA;
+				delete collisionNormalB;
+
+			}
 		}
 	}
 
