@@ -238,6 +238,14 @@ namespace Engine
 			OutputDebugStringA("DEBUG: Added Collidable object.\n");
 		}
 
+		if (obJSON.contains("velocity"))
+		{
+			assert(obJSON["velocity"].is_array());
+			assert(obJSON["velocity"].size() == 2);
+			physSystem->setVelocity(Point2D(obJSON["velocity"][0], obJSON["velocity"][1]), actorPtr.Promote());
+		}
+
+
 		if (obJSON.contains("render_data"))
 		{
 			assert(obJSON["render_data"]["sprite"].is_string());
@@ -251,7 +259,6 @@ namespace Engine
 
 		assert(obJSON.contains("name"));
 		assert(obJSON["name"].is_string());
-
 
 		if (obJSON.contains("controller"))
 		{
