@@ -527,15 +527,41 @@ void Physics::calcAllPos(float dt_ms)
 
 void Physics::resolveCollision(CollisionPair collPair)
 {
-	//TODO: When a collision occurs, Use Conservation of Momentum primarily.
-	Point2D velocityA = collPair.collisionObjs[0]->velocity;
-	Point2D velocityB = collPair.collisionObjs[1]->velocity;
-	float massA = collPair.collisionObjs[0]->mass;
-	float massB = collPair.collisionObjs[1]->mass;
+	//Both movable objs, conservation of momentum
+	if (collPair.collisionObjs[0]->type == 1 && collPair.collisionObjs[1]->type == 1)
+	{
+		Point2D velocityA = collPair.collisionObjs[0]->velocity;
+		Point2D velocityB = collPair.collisionObjs[1]->velocity;
+		float massA = collPair.collisionObjs[0]->mass;
+		float massB = collPair.collisionObjs[1]->mass;
 
-	Point2D newVelocityA = ((massA - massB) / (massA + massB)) * velocityA + ((2 * massB) / (massA + massB)) * velocityB;
-	Point2D newVelocityB = ((massB - massA) / (massB + massA)) * velocityB + ((2 * massA) / (massB + massA)) * velocityA;
+		Point2D newVelocityA = ((massA - massB) / (massA + massB)) * velocityA + ((2 * massB) / (massA + massB)) * velocityB;
+		Point2D newVelocityB = ((massB - massA) / (massB + massA)) * velocityB + ((2 * massA) / (massB + massA)) * velocityA;
 
-	collPair.collisionObjs[0]->velocity = newVelocityA;
-	collPair.collisionObjs[1]->velocity = newVelocityB;
+		collPair.collisionObjs[0]->velocity = newVelocityA;
+		collPair.collisionObjs[1]->velocity = newVelocityB;
+
+	}
+
+	//At least one non-movable obj, reflection on the movable object
+	else if(collPair.collisionObjs[0]->type == 1 || collPair.collisionObjs[1]->type == 1)
+	{
+		Vector4 collisionNormal;
+		if (collPair.collisionObjs[0]->type == 1)
+		{
+			collisionNormal = collPair.collisionNormalB.Normalize();
+			Point2D oldVelocity = collPair.collisionObjs[0]->velocity;
+			Vector4 newVelocity = Vector4(oldVelocity, 0.0f, 0.0f) - 2 * (Vector4::dotProd(Vector4(oldVelocity, 0.0f, 0.0f), collisionNormal)) * collisionNormal;
+			Point2D newVelocityP(newVelocity.GetX(), newVelocity.GetY());
+			collPair.collisionObjs[0]->velocity = newVelocityP;
+		}
+		else
+		{
+			collisionNormal = collPair.collisionNormalA.Normalize();
+			Point2D oldVelocity = collPair.collisionObjs[1]->velocity;
+			Vector4 newVelocity = Vector4(oldVelocity, 0.0f, 0.0f) - 2 * (Vector4::dotProd(Vector4(oldVelocity, 0.0f, 0.0f), collisionNormal)) * collisionNormal;
+			Point2D newVelocityP(newVelocity.GetX(), newVelocity.GetY());
+			collPair.collisionObjs[1]->velocity = newVelocityP;
+		}
+	}
 }
