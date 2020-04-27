@@ -39,6 +39,7 @@ void Physics::RunPhysics(float dt_ms)
 	}
 
 	float temp_time = dt_ms;
+	
 
 	//Get universal axis of collision
 	float* universalRotation = reinterpret_cast<float*>(collidables[0]->obj->GetComponent("Rotation"));
@@ -150,7 +151,7 @@ CollisionPair Physics::findEarliestCollision(float dt_ms, Vector4 collisionAxisX
 				const size_t	lenBuffer = 65;
 				char			Buffer[lenBuffer];
 
-				sprintf_s(Buffer, lenBuffer, "DEBUG: Found collision at %2.5f microseconds.\n", dt_ms);
+				sprintf_s(Buffer, lenBuffer, "DEBUG: Found collision at %2.5f milliseconds.\n", dt_ms);
 				OutputDebugStringA(Buffer);
 
 				if (*collisionTime < earliestCollision.collisionTime)
@@ -181,9 +182,9 @@ bool Physics::collisionCheck(collidable& object1, collidable& object2, float dt_
 
 	//Adjust centers to match true center
 	Point2D A_Center = object1.obj->GetPoint();
-	A_Center += Point2D(object1.bounding_Y * sin(*A_Rot * PI / 180.0f), object1.bounding_Y * cos(*A_Rot * PI / 180.0f));
+	A_Center += Point2D(object1.bounding_Y * cos(*A_Rot * PI / 180.0f), object1.bounding_Y * sin(*A_Rot * PI / 180.0f));
 	Point2D B_Center = object2.obj->GetPoint();
-	B_Center += Point2D(object2.bounding_Y * sin(*B_Rot * PI / 180.0f), object2.bounding_Y * cos(*B_Rot * PI / 180.0f));
+	B_Center += Point2D(object2.bounding_Y * cos(*B_Rot * PI / 180.0f), object2.bounding_Y * sin(*B_Rot * PI / 180.0f));
 
 	Matrix4 ARotation = Matrix4::GenerateRotationMatrix(*A_Rot);
 	Matrix4 BRotation = Matrix4::GenerateRotationMatrix(*B_Rot);
@@ -241,7 +242,7 @@ bool Physics::collisionCheck(collidable& object1, collidable& object2, float dt_
 				return false;
 			}
 
-			if (tClose < 0)
+			if (tOpen < 0)
 			{
 				return false;
 			}
@@ -309,7 +310,7 @@ bool Physics::collisionCheck(collidable& object1, collidable& object2, float dt_
 				return false;
 			}
 
-			if (tClose < 0)
+			if (tOpen < 0)
 			{
 				return false;
 			}
@@ -417,13 +418,13 @@ bool Physics::collisionHelper(collidable& object1, collidable& object2, float dt
 		}
 
 		//Catching guaranteed noncollision next frame
-		if (tClose > dt_ms / 1000)
+		if (tClose * 1000 > dt_ms)
 		{
 			return false;
 		}
 
 		//Catching guaranteed noncollision from previous frame
-		if (tClose < 0)
+		if (tOpen < 0)
 		{
 			return false;
 		}
@@ -465,13 +466,13 @@ bool Physics::collisionHelper(collidable& object1, collidable& object2, float dt
 		}
 
 		//Catching guaranteed noncollision next frame
-		if (tClose > dt_ms / 1000)
+		if (tClose * 1000 > dt_ms)
 		{
 			return false;
 		}
 
 		//Catching guaranteed noncollision from previous frame
-		if (tClose < 0)
+		if (tOpen < 0)
 		{
 			return false;
 		}

@@ -275,16 +275,16 @@ namespace Engine
 
 		do
 		{
-			//const size_t	lenBuffer = 65;
-			//char			Buffer[lenBuffer];
+			const size_t	lenBuffer = 65;
+			char			Buffer[lenBuffer];
 
 			//Timing
 			long dt = Timing::deltaTime();
 			float dt_ms = (float)dt / 1000.0f;
 
 
-			//sprintf_s(Buffer, lenBuffer, "DEBUG: Frame time: %2.5f milliseconds.\n", dt_ms);
-			//OutputDebugStringA(Buffer);
+			sprintf_s(Buffer, lenBuffer, "DEBUG: Frame time: %2.5f milliseconds.\n", dt_ms);
+			OutputDebugStringA(Buffer);
 
 			GLib::Service(bQuit);
 
