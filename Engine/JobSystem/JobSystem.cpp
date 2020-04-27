@@ -62,12 +62,14 @@ namespace Engine
 
 		void RunJob(const std::string i_queueName, std::function<void()> i_jobFunction)
 		{
+			OutputDebugStringA("DEBUG (JobSys): Adding new job.\n");
 			auto iter = allQueues->find(i_queueName);
 			iter->second->queue.AddJobs(new Job(i_jobFunction));
 		}
 
 		void RequestShutdown()
 		{
+			OutputDebugStringA("DEBUG (JobSys): Starting shutdown.\n");
 			*shutdownSet = true;
 			std::vector<HANDLE> allThreads;
 
@@ -129,6 +131,7 @@ namespace Engine
 
 			delete shutdownSet;
 			delete allQueues;
+			OutputDebugStringA("DEBUG (JobSys): Ending shutdown.\n");
 		}
 
 		bool ShutdownRequested()

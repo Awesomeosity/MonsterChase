@@ -19,15 +19,17 @@ namespace Engine
 				struct Job* newJob = threadQueue->GetNewJob();
 				if (newJob)
 				{
+					OutputDebugStringA("DEBUG (JobRunner): Starting new job.\n");
 					newJob->Function();
 					delete newJob;
-					
+					OutputDebugStringA("DEBUG (JobRunner): Finished job.\n");
 					//Report to queue that job was finished
 					threadQueue->ReportFinished();
 				}
 
-				finished = ShutdownRequested();
+				finished = threadQueue->ShutdownRequestCheck();
 			} while (!finished);
+			OutputDebugStringA("DEBUG (JobRunner): Exiting loop.\n");
 			return 0;
 		}
 	} //namespace JobSystem

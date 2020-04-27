@@ -30,6 +30,7 @@ namespace Engine
 				WakeConditionVariable(&checkForJobs);
 			}
 
+			OutputDebugStringA("DEBUG (JobQueue): Adding new job.\n");
 			return added;
 		}
 
@@ -74,7 +75,7 @@ namespace Engine
 
 			runningJob = true;
 			LeaveCriticalSection(&queueModification);
-
+			OutputDebugStringA("DEBUG (JobQueue): Retrieved new job.\n");
 			return retJob;
 		}
 
