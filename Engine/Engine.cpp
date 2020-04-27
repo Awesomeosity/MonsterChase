@@ -86,11 +86,11 @@ namespace Engine
 
 		if (WKey && !SKey)
 		{
-			physSystem->setVelocity(Point2D(0.0f, 10.0f), playerObject_0);
+			physSystem->setVelocity(Point2D(0.0f, 100.0f), playerObject_0);
 		}
 		else if (SKey && !WKey)
 		{
-			physSystem->setVelocity(Point2D(0.0f, -10.0f), playerObject_0);
+			physSystem->setVelocity(Point2D(0.0f, -100.0f), playerObject_0);
 		}
 		else if (WKey && SKey)
 		{
@@ -103,11 +103,11 @@ namespace Engine
 
 		if (UpKey && !DownKey)
 		{
-			physSystem->setVelocity(Point2D(0.0f, 10.0f), playerObject_1);
+			physSystem->setVelocity(Point2D(0.0f, 100.0f), playerObject_1);
 		}
 		else if (DownKey && !UpKey)
 		{
-			physSystem->setVelocity(Point2D(0.0f, -10.0f), playerObject_1);
+			physSystem->setVelocity(Point2D(0.0f, -100.0f), playerObject_1);
 		}
 		else if (UpKey && DownKey)
 		{
