@@ -167,18 +167,19 @@ namespace Engine
 			GLib::RGBA							Color = { 255, 255, 255, 255 };
 
 			// Create the sprite
-			GLib::Sprite* pSprite = GLib::CreateSprite(Edges, 0.1f, Color, UVs);
-			if (pSprite == nullptr)
+			GLib::Sprite* pSprite = GLib::CreateSprite(Edges, 0.1f, Color, UVs, pTexture);
+			GLib::Release(pTexture);
+			if (pSprite)
 			{
-				GLib::Release(pTexture);
+				OutputDebugStringA("DEBUG: Texture loading success.\n");
+				return pSprite;
+
+			}
+			else
+			{
+				OutputDebugStringA("DEBUG: Texture loading failed.\n");
 				return nullptr;
 			}
-
-			// Bind the texture to sprite
-			GLib::SetTexture(*pSprite, pTexture);
-
-			OutputDebugStringA("DEBUG: Texture loading success.\n");
-			return pSprite;
 		}
 	}
 

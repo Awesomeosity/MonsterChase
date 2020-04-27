@@ -35,6 +35,8 @@ void Renderable::ReleaseSprites()
 void Renderable::RenderAll()
 {
 	//OutputDebugStringA("DEBUG: Starting rendering ticks.\n");
+	static float ClearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	GLib::BeginRendering(ClearColor);
 	GLib::Sprites::BeginRendering();
 	for (size_t i = 0; i < renderables.size(); i++)
 	{

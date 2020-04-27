@@ -387,7 +387,7 @@ void makeGameObjs(std::vector < std::string > i_fileNames)
 
 int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_lpCmdLine, int i_nCmdShow)
 {
-	//_CrtSetBreakAlloc();
+	//_CrtSetBreakAlloc(571);
 	//MatrixUnitTest();
 	//CollisionUnitTest();
 	{
@@ -423,5 +423,5 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 		charArray.clear();
 	}
 	_CrtDumpMemoryLeaks();
-	OutputDebugStringA("DEBUG: ENGINE END.\n");
+	OutputDebugStringA("DEBUG: GAME END.\n");
 }
