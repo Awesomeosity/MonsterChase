@@ -1,5 +1,5 @@
 {
-  "name": "Joe",
+  "name": "player_1",
   "position": [ 400.0, -25.0 ],
   "rotation": 0.0,
   "collision_data": {

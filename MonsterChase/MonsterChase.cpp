@@ -341,24 +341,7 @@ void CollisionUnitTest()
 
 void gameObjHandler(std::string i_fileName)
 {
-	int* controllerType = new int();
-	WeakPointer<GameObject> newObj = Engine::CreateActor(i_fileName, *controllerType);
-	assert(*controllerType != -1);
-
-	//TODO set up controllers to add to AI Engine
-	switch (*controllerType)
-	{
-	case 0:
-		break;
-	case 1:
-		break;
-	case 2:
-		break;
-	default:
-		break;
-	}
-
-	delete controllerType;
+	WeakPointer<GameObject> newObj = Engine::CreateActor(i_fileName);
 }
 
 void makeGameObjs(std::vector < std::string > i_fileNames)

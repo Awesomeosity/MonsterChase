@@ -23,8 +23,8 @@ namespace Engine
 	Physics* physSystem;
 	Renderable* renderSystem;
 	World* world;
-	SmartPointer<GameObject> player_object_0;
-	SmartPointer<GameObject> player_object_1;
+	//SmartPointer<GameObject> player_object_0;
+	//SmartPointer<GameObject> player_object_1;
 
 	void initEngine()
 	{
@@ -46,6 +46,9 @@ namespace Engine
 		//P2 Controls
 		static bool UpKey = false;
 		static bool DownKey = false;
+
+		SmartPointer<GameObject> playerObject_0 = world->GetObjectByName("player_0").Promote();
+		SmartPointer<GameObject> playerObject_1 = world->GetObjectByName("player_1").Promote();
 
 		switch (i_VKeyID)
 		{
@@ -83,36 +86,36 @@ namespace Engine
 
 		if (WKey && !SKey)
 		{
-			physSystem->setVelocity(Point2D(0.0f, 10.0f), player_object_0);
+			physSystem->setVelocity(Point2D(0.0f, 10.0f), playerObject_0);
 		}
 		else if (SKey && !WKey)
 		{
-			physSystem->setVelocity(Point2D(0.0f, -10.0f), player_object_0);
+			physSystem->setVelocity(Point2D(0.0f, -10.0f), playerObject_0);
 		}
 		else if (WKey && SKey)
 		{
-			physSystem->setVelocity(Point2D(0.0f, 0.0f), player_object_0);
+			physSystem->setVelocity(Point2D(0.0f, 0.0f), playerObject_0);
 		}
 		else if (!WKey && !SKey)
 		{
-			physSystem->setVelocity(Point2D(0.0f, 0.0f), player_object_0);
+			physSystem->setVelocity(Point2D(0.0f, 0.0f), playerObject_0);
 		}
 
 		if (UpKey && !DownKey)
 		{
-			physSystem->setVelocity(Point2D(0.0f, 10.0f), player_object_1);
+			physSystem->setVelocity(Point2D(0.0f, 10.0f), playerObject_1);
 		}
 		else if (DownKey && !UpKey)
 		{
-			physSystem->setVelocity(Point2D(0.0f, -10.0f), player_object_1);
+			physSystem->setVelocity(Point2D(0.0f, -10.0f), playerObject_1);
 		}
 		else if (UpKey && DownKey)
 		{
-			physSystem->setVelocity(Point2D(0.0f, 0.0f), player_object_1);
+			physSystem->setVelocity(Point2D(0.0f, 0.0f), playerObject_1);
 		}
 		else if (!UpKey && !DownKey)
 		{
-			physSystem->setVelocity(Point2D(0.0f, 0.0f), player_object_1);
+			physSystem->setVelocity(Point2D(0.0f, 0.0f), playerObject_1);
 		}
 	}
 
@@ -202,7 +205,7 @@ namespace Engine
 		}
 	}
 
-	WeakPointer<GameObject> CreateActor(std::string i_pScriptFilename, int& o_controllerType)
+	WeakPointer<GameObject> CreateActor(std::string i_pScriptFilename)
 	{
 		using json = nlohmann::json;
 		std::vector<uint8_t> data = LoadFileToBuffer(i_pScriptFilename);
@@ -218,7 +221,10 @@ namespace Engine
 		assert(obJSON.contains("rotation"));
 		assert(obJSON["rotation"].is_number_float());
 
-		WeakPointer<GameObject> actorPtr = world->AddObject(actorPos);
+		assert(obJSON.contains("name"));
+		assert(obJSON["name"].is_string());
+
+		WeakPointer<GameObject> actorPtr = world->AddObject(actorPos, obJSON["name"]);
 		float* actorRot = new float(obJSON["rotation"]);
 		actorPtr->AddComponent("Rotation", actorRot);
 			
@@ -259,43 +265,41 @@ namespace Engine
 			OutputDebugStringA("DEBUG: Added Renderable object.\n");
 		}
 
-		assert(obJSON.contains("name"));
-		assert(obJSON["name"].is_string());
 
-		if (obJSON.contains("controller"))
-		{
-			assert(obJSON["controller"].is_string());
-			std::string conType = obJSON["controller"];
+		//if (obJSON.contains("controller"))
+		//{
+		//	assert(obJSON["controller"].is_string());
+		//	std::string conType = obJSON["controller"];
 
-			if (conType == "player_0")
-			{
-				o_controllerType = 0;
+		//	if (conType == "player_0")
+		//	{
+		//		o_controllerType = 0;
 
-				//Kinda a hacky solution...
-				player_object_0 = actorPtr.Promote();
-				OutputDebugStringA("DEBUG: Added Player_0 object.\n");
-			}
-			else if (conType == "player_1")
-			{
-				o_controllerType = 0;
+		//		//Kinda a hacky solution...
+		//		player_object_0 = actorPtr.Promote();
+		//		OutputDebugStringA("DEBUG: Added Player_0 object.\n");
+		//	}
+		//	else if (conType == "player_1")
+		//	{
+		//		o_controllerType = 0;
 
-				//Kinda a hacky solution...
-				player_object_1 = actorPtr.Promote();
-				OutputDebugStringA("DEBUG: Added Player_1 object.\n");
-			}
-			else if (conType == "normal")
-			{
-				o_controllerType = 1;
-			}
-			else if (conType == "random")
-			{
-				o_controllerType = 2;
-			}
-			else
-			{
-				o_controllerType = -1;
-			}
-		}
+		//		//Kinda a hacky solution...
+		//		player_object_1 = actorPtr.Promote();
+		//		OutputDebugStringA("DEBUG: Added Player_1 object.\n");
+		//	}
+		//	else if (conType == "normal")
+		//	{
+		//		o_controllerType = 1;
+		//	}
+		//	else if (conType == "random")
+		//	{
+		//		o_controllerType = 2;
+		//	}
+		//	else
+		//	{
+		//		o_controllerType = -1;
+		//	}
+		//}
 
 		return actorPtr;
 	}
@@ -339,8 +343,8 @@ namespace Engine
 		delete world;
 		delete physSystem;
 		delete renderSystem;
-		player_object_0.Reset();
-		player_object_1.Reset();
+		//player_object_0.Reset();
+		//player_object_1.Reset();
 
 		// IMPORTANT:  Tell GLib to shutdown, releasing resources.
 		GLib::Shutdown();
