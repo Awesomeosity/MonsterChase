@@ -8,9 +8,5 @@
     "BB_X": 1100.0,
 	"BB_Y": 1.0,
     "type": 0
-  },
-  "render_data": {
-    "sprite": "data\\BadGuy.dds"
   }
-
 }

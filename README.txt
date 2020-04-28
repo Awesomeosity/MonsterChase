@@ -1,15 +1,10 @@
+ABOUT GAMEPLAY:
+You move the left paddle with 'W' and 'S', and the right paddle with 'I' and 'K'.
+Once either player has scored 5 points, the game closes.
+
 Notable things:
-Both FSA and the Heap Allocator put in fill values as well as guard bands.
-Heap Allocator's implementation of fill values and guard bands can be found in ./Mallocate/HeapManager.cpp
-Initial setup fills the entire allocated heap with guard bands (lines 21-24) and fill values (lines 28-33), and while allocating new memory and making a new block, also performs it on the leftover blocks (line 87 and 106)
-
-FixedSizeAllocator performs a cleaner version of this setup, using memsetPattern in order to fill in given areas of code with the same values.
-This can be found on creation (./Mallocate/FixedSizeAllocator.cpp, lines 25-28) and whenever blocks are freed (line 67)
-
-All of the various Controllers for Monster Chase have move constructors set up, which can be found in their respective files, in ./MonsterChase/XXXController.cpp
-
-The Final Exam's sample unit test is found in ./Final/main.cpp.
-
-There's a unit test for the Bit Array class, found in ./Mallocate/Mallocate.cpp, lines 314-360.
-
-By default, all of Mallocate, FinalExamSampleProject, and MonsterChase have been set as startup projects.
+Collision Callbacks used in lines 316 - 366 of Engine.cpp, called when colliding with objects.
+World system that stores all objects used, and hands out references to systems that ask for them. (World.cpp and World.h)
+Collision system that discriminates objects based on whether or not they're non-movable or movable (Physics.cpp line 241).
+Differing collision response based on type of objects that collide (Physics.cpp lines 609-660).
+Collision system that can use both universal axis of collision or object-axis-based collision (Physics.cpp collisionCheck functions, private vs public).
