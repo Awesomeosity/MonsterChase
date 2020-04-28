@@ -380,6 +380,11 @@ namespace Engine
 				//OutputDebugStringA("DEBUG: Ending system ticks.\n");
 			}
 
+			if (player_0_pts == 5 || player_1_pts == 5)
+			{
+				bQuit = true;
+			}
+
 		} while (bQuit == false);
 
 		OutputDebugStringA("DEBUG: Beginning shutdown.\n");
