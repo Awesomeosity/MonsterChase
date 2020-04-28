@@ -101,6 +101,23 @@ void Physics::calcNewPos(float dt_ms, collidable& colliData, Point2D forces)
 	//Readjust pos to correct position for sprite positioning
 	newPos -= Point2D(colliData.bounding_Y * sin(*A_Rot * PI / 180.0f), colliData.bounding_Y * cos(*A_Rot * PI / 180.0f));
 
+	if (newPos.GetX() > 500.0f)
+	{
+		newPos.SetX(500.0f);
+	}
+	if (newPos.GetX() < -500.0f)
+	{
+		newPos.SetX(-500.0f);
+	}
+	if (newPos.GetY() > 500.0f)
+	{
+		newPos.SetY(500.0f);
+	}
+	if (newPos.GetY() < -500.0f)
+	{
+		newPos.SetY(-500.0f);
+	}
+
 	colliData.obj->SetPoint(newPos);
 
 	colliData.velocity.SetX(velocity_1.GetX());

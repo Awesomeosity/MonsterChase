@@ -357,7 +357,7 @@ namespace Engine
 				WeakPointer<GameObject> ball = world->GetObjectByName("ball");
 
 				Point2D vel = physSystem->getVelocity(ball.Promote());
-				int randVel = (rand() % 20) - 10;
+				int randVel = (rand() % 100) - 50;
 				vel += Point2D(0.0f, static_cast<float>(randVel));
 				physSystem->setVelocity(vel, ball.Promote());
 			};
