@@ -47,6 +47,7 @@ public:
 	static bool collisionCheck(collidable& object1, collidable& object2, float dt_ms);
 
 	void setVelocity(Point2D newVelocity, SmartPointer<GameObject> objRef);
+	Point2D getVelocity(SmartPointer<GameObject> objRef);
 	void setPosition(Point2D newPosition, SmartPointer<GameObject> objRef);
 
 	void Dispose();

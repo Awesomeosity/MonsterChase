@@ -156,6 +156,25 @@ void Physics::setVelocity(Point2D newVelocity, SmartPointer<GameObject> objRef)
 	targCollidable->velocity = newVelocity;
 }
 
+Point2D Physics::getVelocity(SmartPointer<GameObject> objRef)
+{
+	SmartPointer<collidable> targCollidable;
+	for (SmartPointer<collidable> currCollid : collidables)
+	{
+		if (currCollid->obj == objRef)
+		{
+			targCollidable = currCollid;
+		}
+	}
+
+	if (targCollidable->obj == nullptr)
+	{
+		return Point2D(0.0f, 0.0f);
+	}
+
+	return targCollidable->velocity;
+}
+
 void Physics::setPosition(Point2D newPosition, SmartPointer<GameObject> objRef)
 {
 	SmartPointer<collidable> targCollidable;

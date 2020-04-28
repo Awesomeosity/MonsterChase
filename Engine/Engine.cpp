@@ -351,6 +351,19 @@ namespace Engine
 			WeakPointer<GameObject> rightWall = world->GetObjectByName("wall_right");
 			physSystem->AddCollisionCallback(rightWall.Promote(), collideRightWall);
 
+			auto randomizeDeflection = []()
+			{
+				OutputDebugStringA("DEBUG: Randomizing ball trajectory.\n");
+				WeakPointer<GameObject> ball = world->GetObjectByName("ball");
+
+				Point2D vel = physSystem->getVelocity(ball.Promote());
+				int randVel = (rand() % 20) - 10;
+				vel += Point2D(0.0f, static_cast<float>(randVel));
+				physSystem->setVelocity(vel, ball.Promote());
+			};
+
+			WeakPointer<GameObject> ball = world->GetObjectByName("ball");
+			physSystem->AddCollisionCallback(ball.Promote(), randomizeDeflection);
 		}
 
 		Timing::startTime();
