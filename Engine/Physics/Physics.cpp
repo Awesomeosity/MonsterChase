@@ -207,9 +207,9 @@ bool Physics::collisionCheck(collidable& object1, collidable& object2, float dt_
 
 	//Adjust centers to match true center
 	Point2D A_Center = object1.obj->GetPoint();
-	A_Center += Point2D(object1.bounding_Y * cos(*A_Rot * PI / 180.0f), object1.bounding_Y * sin(*A_Rot * PI / 180.0f));
+	A_Center += Point2D(object1.bounding_Y * sin(*A_Rot * PI / 180.0f), object1.bounding_Y * cos(*A_Rot * PI / 180.0f));
 	Point2D B_Center = object2.obj->GetPoint();
-	B_Center += Point2D(object2.bounding_Y * cos(*B_Rot * PI / 180.0f), object2.bounding_Y * sin(*B_Rot * PI / 180.0f));
+	B_Center += Point2D(object2.bounding_Y * sin(*B_Rot * PI / 180.0f), object2.bounding_Y * cos(*B_Rot * PI / 180.0f));
 
 	Matrix4 ARotation = Matrix4::GenerateRotationMatrix(*A_Rot);
 	Matrix4 BRotation = Matrix4::GenerateRotationMatrix(*B_Rot);
@@ -380,9 +380,9 @@ bool Physics::collisionHelper(collidable& object1, collidable& object2, float dt
 
 	//Setting up matrices
 	Point2D A_Center = object1.obj->GetPoint();
-	A_Center += Point2D(object1.bounding_Y * cos(*A_Rot * PI / 180.0f), object1.bounding_Y * sin(*A_Rot * PI / 180.0f));
+	A_Center += Point2D(object1.bounding_Y * sin(*A_Rot * PI / 180.0f), object1.bounding_Y * cos(*A_Rot * PI / 180.0f));
 	Point2D B_Center = object2.obj->GetPoint();
-	B_Center += Point2D(object2.bounding_Y * cos(*B_Rot * PI / 180.0f), object2.bounding_Y * sin(*B_Rot * PI / 180.0f));
+	B_Center += Point2D(object2.bounding_Y * sin(*B_Rot * PI / 180.0f), object2.bounding_Y * cos(*B_Rot * PI / 180.0f));
 
 	Matrix4 M_AWorld = Matrix4::GenerateTransformMatrix(A_Center.GetX(), A_Center.GetY(), 0.0f) * Matrix4::GenerateRotationMatrix(*A_Rot);
 	Matrix4 M_BWorld = Matrix4::GenerateTransformMatrix(B_Center.GetX(), B_Center.GetY(), 0.0f) * Matrix4::GenerateRotationMatrix(*B_Rot);
