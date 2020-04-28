@@ -9,7 +9,7 @@
 	"BB_Y": 100.0,
     "type": 1
   },
-	"velocity": [ 0.0, 100.0 ],
+	"velocity": [ -100.0, 0.0 ],
   "render_data": {
     "sprite": "data\\BadGuy.dds"
   }

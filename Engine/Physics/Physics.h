@@ -5,6 +5,8 @@
 #include "../Types/Point2D.h"
 #include "../Types/Vector4.h"
 #include <Windows.h>
+#include <functional>
+
 template <class T>
 class SmartPointer;
 struct collidable
@@ -16,8 +18,9 @@ struct collidable
 	float kd;
 	Point2D velocity;
 	int type;
+	std::function<void()> collisionCallback;
 	collidable(WeakPointer<GameObject> _obj, float X, float Y, float _mass, float _kd, int _type)
-		:obj(_obj), bounding_X(X), bounding_Y(Y), mass(_mass), kd(_kd), velocity(0.0f, 0.0f), type(_type)
+		:obj(_obj), bounding_X(X), bounding_Y(Y), mass(_mass), kd(_kd), velocity(0.0f, 0.0f), type(_type), collisionCallback()
 	{
 		
 	}
@@ -38,10 +41,14 @@ public:
 	~Physics();
 
 	void AddCollidableObject(WeakPointer<GameObject> newObj, float bound_X, float bound_Y, float mass, float kd, int type);
+	void AddCollisionCallback(SmartPointer<GameObject> objRef, std::function<void()> func);
 	void RunPhysics(float dt_ms);
 	static void calcNewPos(float dt_ms, collidable& data, Point2D forces);
 	static bool collisionCheck(collidable& object1, collidable& object2, float dt_ms);
+
 	void setVelocity(Point2D newVelocity, SmartPointer<GameObject> objRef);
+	void setPosition(Point2D newPosition, SmartPointer<GameObject> objRef);
+
 	void Dispose();
 
 private:

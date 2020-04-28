@@ -6,11 +6,10 @@
     "mass": 1.0,
     "kd": 0.001,
 	"BB_X": 1.0,
-	"BB_Y": 100.0,
+	"BB_Y": 50.0,
 	"type": 0
   },
   "render_data": {
     "sprite": "data\\GoodGuy.dds"
-  },
-  "controller" : "player_1"
+  }
 }

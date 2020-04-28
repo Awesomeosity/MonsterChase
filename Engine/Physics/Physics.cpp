@@ -29,6 +29,25 @@ void Physics::AddCollidableObject(WeakPointer<GameObject> newObj, float bound_X,
 	LeaveCriticalSection(&queueModification);
 }
 
+void Physics::AddCollisionCallback(SmartPointer<GameObject> objRef, std::function<void()> func)
+{
+	SmartPointer<collidable> targCollidable;
+	for (SmartPointer<collidable> currCollid : collidables)
+	{
+		if (currCollid->obj == objRef)
+		{
+			targCollidable = currCollid;
+		}
+	}
+
+	if (targCollidable->obj == nullptr)
+	{
+		return;
+	}
+
+	targCollidable->collisionCallback = func;
+}
+
 void Physics::RunPhysics(float dt_ms)
 {
 	//OutputDebugStringA("DEBUG: Starting Physics ticks.\n");
@@ -135,6 +154,26 @@ void Physics::setVelocity(Point2D newVelocity, SmartPointer<GameObject> objRef)
 	}
 
 	targCollidable->velocity = newVelocity;
+}
+
+void Physics::setPosition(Point2D newPosition, SmartPointer<GameObject> objRef)
+{
+	SmartPointer<collidable> targCollidable;
+	for (SmartPointer<collidable> currCollid : collidables)
+	{
+		if (currCollid->obj == objRef)
+		{
+			targCollidable = currCollid;
+		}
+	}
+
+	if (targCollidable->obj == nullptr)
+	{
+		return;
+	}
+
+	targCollidable->obj->SetPoint(newPosition);
+
 }
 
 void Physics::Dispose()
@@ -570,4 +609,15 @@ void Physics::resolveCollision(CollisionPair collPair)
 			collPair.collisionObjs[1]->velocity = newVelocityP;
 		}
 	}
+
+	if (collPair.collisionObjs[0]->collisionCallback)
+	{
+		collPair.collisionObjs[0]->collisionCallback();
+	}
+
+	if (collPair.collisionObjs[1]->collisionCallback)
+	{
+		collPair.collisionObjs[1]->collisionCallback();
+	}
+
 }

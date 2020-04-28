@@ -26,6 +26,10 @@ namespace Engine
 	//SmartPointer<GameObject> player_object_0;
 	//SmartPointer<GameObject> player_object_1;
 
+	static int player_0_pts = 0;
+	static int player_1_pts = 0;
+
+
 	void initEngine()
 	{
 		OutputDebugStringA("DEBUG: Starting systems.\n");
@@ -307,6 +311,47 @@ namespace Engine
 	void Run()
 	{
 		GLib::SetKeyStateChangeCallback(TestKeyCallback);
+
+		{
+			auto collideLeftWall = []()
+			{
+				OutputDebugStringA("DEBUG: Left Wall Collision begin.\n");
+				WeakPointer<GameObject> ball = world->GetObjectByName("ball");
+				WeakPointer<GameObject> left_paddle = world->GetObjectByName("player_0");
+				WeakPointer<GameObject> right_paddle = world->GetObjectByName("player_1");
+
+				physSystem->setVelocity(Point2D(-100.0f, 0.0f), ball.Promote());
+				physSystem->setPosition(Point2D(0.0f, 0.0f), ball.Promote());
+				physSystem->setPosition(Point2D(-400.0f, -25.0), left_paddle.Promote());
+				physSystem->setPosition(Point2D(400.0f, -25.0), right_paddle.Promote());
+
+				player_1_pts++;
+				OutputDebugStringA("DEBUG: Left Wall Collision end.\n");
+			};
+
+			auto collideRightWall = []()
+			{
+				OutputDebugStringA("DEBUG: Right Wall Collision begin.\n");
+				WeakPointer<GameObject> ball = world->GetObjectByName("ball");
+				WeakPointer<GameObject> left_paddle = world->GetObjectByName("player_0");
+				WeakPointer<GameObject> right_paddle = world->GetObjectByName("player_1");
+
+				physSystem->setVelocity(Point2D(100.0f, 0.0f), ball.Promote());
+				physSystem->setPosition(Point2D(0.0f, 0.0f), ball.Promote());
+				physSystem->setPosition(Point2D(-400.0f, -25.0), left_paddle.Promote());
+				physSystem->setPosition(Point2D(400.0f, -25.0), right_paddle.Promote());
+
+				player_0_pts++;
+				OutputDebugStringA("DEBUG: Right Wall Collision end.\n");
+			};
+
+			WeakPointer<GameObject> leftWall = world->GetObjectByName("wall_left");
+			physSystem->AddCollisionCallback(leftWall.Promote(), collideLeftWall);
+
+			WeakPointer<GameObject> rightWall = world->GetObjectByName("wall_right");
+			physSystem->AddCollisionCallback(rightWall.Promote(), collideRightWall);
+
+		}
 
 		Timing::startTime();
 
