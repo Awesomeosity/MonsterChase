@@ -1,0 +1,12 @@
+{
+	"name": "wall_right",
+	"position": [ 500.0, 0.0 ],
+	  "rotation": 0.0,
+	  "collision_data": {
+    "mass": 1.0,
+    "kd": 0.001,
+    "BB_X": 1.0,
+	"BB_Y": 1100.0,
+    "type": 0
+  }
+}

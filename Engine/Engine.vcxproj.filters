@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Memory">
+      <UniqueIdentifier>{47779f36-f031-474c-807a-05e18b371139}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{f68d22c5-08c3-4ac7-9aa8-6043ba2618dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Containers">
+      <UniqueIdentifier>{bdbb1d80-a0a5-4608-bc0d-eff3a3557e0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Types">
+      <UniqueIdentifier>{dab71c20-a5b3-4859-9431-779fe91b3ec5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Timing">
+      <UniqueIdentifier>{e6042e9a-83ae-4072-8fb8-c7ff13ca8dbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{08e9d619-9901-443b-ac9c-86f3f1e2fde2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JobSystem">
+      <UniqueIdentifier>{2dc1d60c-f0e2-4a85-b9a3-80cacd318511}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collision">
+      <UniqueIdentifier>{2ca9c0a8-88f3-42e8-967c-da329835507c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\HeapManagerProxy.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\HeapManager.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\FixedSizeAllocator-inl.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\FixedSizeAllocator.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\GameObject.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\IGameObjectController.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Containers\BitArray.h">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Point2D.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Point2D-inl.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="GLib\BasicTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLib\GLib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Timing\Timing.h">
+      <Filter>Timing</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Physics.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\PhysicsData.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\FloatCalcs.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\FloatCalcs-inl.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\SmartPointer.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\WeakPointer.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\World.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\SmartPointer-inl.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\WeakPointer-inl.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="External\nlohmann\json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Renderable.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="JobSystem\JobSystem.h">
+      <Filter>JobSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="JobSystem\JobQueue.h">
+      <Filter>JobSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="JobSystem\JobRunner.h">
+      <Filter>JobSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Vector4.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Vector4-inl.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Matrix4.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Types\Matrix4-inl.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\FixedSizeAllocator.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\HeapManager.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\HeapManagerProxy.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\GameObject.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Containers\BitArray.cpp">
+      <Filter>Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Types\Point2D.cpp">
+      <Filter>Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Timing\Timing.cpp">
+      <Filter>Timing</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Physics.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\PhysicsData.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\FloatCalcs.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\SmartPointer.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\WeakPointer.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\World.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Renderable.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="JobSystem\JobSystem.cpp">
+      <Filter>JobSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="JobSystem\JobQueue.cpp">
+      <Filter>JobSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="JobSystem\\JobRunner.cpp">
+      <Filter>JobSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Types\Vector4.cpp">
+      <Filter>Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Types\Matrix4.cpp">
+      <Filter>Types</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
